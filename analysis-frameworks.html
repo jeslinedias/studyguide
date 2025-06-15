@@ -22,7 +22,7 @@
             height: 24px;
             animation: spin 1s linear infinite;
             display: inline-block;
-            vertical-align: middle;
+            vertical-align: middle; 
             margin-left: 8px;
         }
         @keyframes spin {
@@ -105,8 +105,14 @@
 
     <div class="container mx-auto px-4 py-8">
         
-        <header class="text-center mb-8">
-            <h1 class="text-3xl md:text-4xl font-bold text-slate-900">Strategic Analysis Frameworks</h1>
+        <header class="text-center mb-8 relative">
+            <a href="./portal-home.html" class="absolute top-0 left-0 bg-slate-200 text-slate-700 px-4 py-2 rounded-lg hover:bg-slate-300 transition flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+                </svg>
+                Back to Home
+            </a>
+            <h1 class="text-3xl md:text-4xl font-bold text-slate-900">Strategic Analysis Frameworks & AI Tools</h1>
             <p class="text-lg text-slate-600 mt-2">Leverage AI to perform in-depth analyses using established strategic models.</p>
         </header>
 
@@ -147,6 +153,11 @@
                 <div class="mt-6 bg-white p-6 rounded-lg shadow-md">
                     <div class="flex flex-col md:flex-row items-center justify-center gap-4 mb-6">
                         <input type="text" id="swot-input" placeholder="e.g., Netflix, Renewable Energy Sector" class="w-full md:w-1/2 p-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
+                        <select id="swot-level-select" class="w-full md:w-1/4 p-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
+                            <option value="high-level">High-level</option>
+                            <option value="detailed">Detailed</option>
+                            <option value="brief">Brief</option>
+                        </select>
                         <button id="generate-swot-btn" class="bg-sky-700 text-white font-bold py-3 px-6 rounded-lg hover:bg-sky-600 transition flex items-center justify-center">
                             Generate SWOT
                             <span id="swot-loading" class="llm-loading hidden"></span>
@@ -405,10 +416,18 @@
                 }
                 let html = `<h4 class="font-bold text-xl text-slate-800 mb-3">SWOT Analysis for ${data.context || 'Unknown'}</h4>`;
                 if (data.swot && data.swot.length > 0) {
+                    const categoryMap = {
+                        "Strengths": "Strength",
+                        "Weaknesses": "Weakness",
+                        "Opportunities": "Opportunity",
+                        "Threats": "Threat"
+                    };
                     data.swot.forEach(category => {
+                        const displayType = categoryMap[category.type] || category.type; // Use mapped name or original
                         html += `
                             <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm mb-4">
-                                <h5 class="llm-section-title !mt-0 !mb-1">${category.type} - ${category.title || 'N/A'}</h5>
+                                <!-- Re-added category.title to the heading -->
+                                <h5 class="llm-section-title !mt-0 !mb-1">${displayType} - ${category.title || 'N/A'}</h5>
                                 <ul class="llm-section-content">`;
                         category.items.forEach(item => {
                             html += `<li>${item}</li>`;
@@ -454,6 +473,7 @@
             // LLM Features for this page
             // SWOT Analysis LLM
             const swotInput = document.getElementById('swot-input');
+            const swotLevelSelect = document.getElementById('swot-level-select'); // New element
             const generateSwotBtn = document.getElementById('generate-swot-btn');
             const swotOutput = document.getElementById('swot-output');
             const swotLoading = document.getElementById('swot-loading');
@@ -468,7 +488,7 @@
                             type: "OBJECT",
                             properties: {
                                 type: { type: "STRING" }, // e.g., "Strengths", "Weaknesses", etc.
-                                title: { type: "STRING" },
+                                title: { type: "STRING" }, // e.g., "Internal Capabilities"
                                 items: {
                                     type: "ARRAY",
                                     items: { type: "STRING" }
@@ -484,6 +504,7 @@
 
             generateSwotBtn.addEventListener('click', async () => {
                 const inputContext = swotInput.value.trim();
+                const analysisLevel = swotLevelSelect.value; // Get selected level
                 if (!inputContext) {
                     swotOutput.innerHTML = "<p class='text-center italic'>Please enter a company or industry for SWOT analysis.</p>";
                     return;
@@ -492,7 +513,8 @@
                 swotOutput.innerHTML = "<p class='text-center italic'>Generating SWOT Analysis...</p>";
                 swotLoading.classList.remove('hidden');
 
-                const prompt = `Perform a high-level SWOT analysis (Strengths, Weaknesses, Opportunities, Threats) for ${inputContext}. Provide the analysis in JSON format according to this schema: ${JSON.stringify(swotAnalysisSchema)}. For each SWOT category, provide a 'title' summarizing the area (e.g., "Internal Capabilities") and a list of 2-3 key 'items' (bullet points).`;
+                // Modified prompt to emphasize distinct titles for each SWOT item
+                const prompt = `Perform a ${analysisLevel} SWOT analysis (Strengths, Weaknesses, Opportunities, Threats) for ${inputContext}. Provide the analysis in JSON format according to this schema: ${JSON.stringify(swotAnalysisSchema)}. For each SWOT category (e.g., "Strengths"), provide a 'title' that specifically highlights a key area within that category (e.g., "Market Leadership" for a Strength, or "Supply Chain Vulnerabilities" for a Weakness), and a list of 2-3 key 'items' (bullet points) for that specific area.`;
                 const swotData = await callGeminiAPI(prompt, swotAnalysisSchema);
                 
                 renderSwotAnalysisOutput(swotData, swotOutput);
@@ -634,7 +656,7 @@
                     return;
                 }
 
-                pestelOutput.innerHTML = "<p class='text-center italic'>Generating PESTEL Analysis...</p>";
+                pestelOutput.innerHTML = "<p class class='text-center italic'>Generating PESTEL Analysis...</p>";
                 pestelLoading.classList.remove('hidden');
 
                 const prompt = `Perform a PESTEL analysis (Political, Economic, Social, Technological, Environmental, Legal factors) for the "${industry}" industry. For each factor, provide a brief explanation and 2-3 key implications for the industry. Respond strictly in JSON format according to this schema: ${JSON.stringify(pestelAnalysisSchema)}.`;
