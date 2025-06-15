@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strategic Analysis Frameworks</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .active-nav { color: #0284c7; border-bottom-color: #0284c7; }
+        .nav-link { border-bottom: 2px solid transparent; transition: all 0.3s ease; }
+        .nav-link:hover { color: #0369a1; border-bottom-color: #0369a1; }
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+        .llm-loading {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 8px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .highlight {
+            background-color: #ffe082; /* Light yellow */
+            padding: 2px 0;
+            border-radius: 3px;
+        }
+        .active-highlight {
+            border: 2px solid #ef4444; /* Red border for active highlight */
+            box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+        }
+        .llm-output-container {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            line-height: 1.6;
+            text-align: left;
+            padding: 1rem;
+        }
+        .llm-section-title {
+            font-weight: 600;
+            color: #334155;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            font-size: 1.125rem;
+            border-bottom: 1px solid #cbd5e1;
+            padding-bottom: 0.25rem;
+        }
+        .llm-section-content p {
+            margin-bottom: 0.75rem;
+        }
+        .llm-section-content ul {
+            list-style-type: disc;
+            margin-left: 1.5rem;
+            padding-left: 0;
+            margin-bottom: 0.75rem;
+        }
+        .llm-section-content li {
+            margin-bottom: 0.25rem;
+        }
+
+        /* Styles for the new search box functionality */
+        .search-container {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .search-box {
+            display: flex;
+            flex-direction: column;
+            width: 250px;
+            opacity: 0;
+            transform: scale(0.9);
+            transform-origin: top right;
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+            pointer-events: none;
+            margin-top: 0.5rem;
+            background-color: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+
+        .search-box.active {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-slate-800">
+
+    <div class="container mx-auto px-4 py-8">
+        
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-slate-900">Strategic Analysis Frameworks</h1>
+            <p class="text-lg text-slate-600 mt-2">Leverage AI to perform in-depth analyses using established strategic models.</p>
+        </header>
+
+        <!-- Search Container -->
+        <div class="search-container">
+            <button id="search-toggle-btn" class="bg-sky-700 text-white p-3 rounded-full shadow-lg hover:bg-sky-600 transition flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                </svg>
+            </button>
+            <div id="search-box" class="search-box">
+                <input type="text" id="search-input" placeholder="Search content..." class="w-full p-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 mb-2">
+                <div class="flex flex-col gap-2">
+                    <button id="search-button" class="bg-slate-700 text-white font-bold py-2 px-4 rounded-lg hover:bg-slate-600 transition">Search</button>
+                    <button id="next-match-button" class="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 transition">Next Match</button>
+                    <button id="clear-search-button" class="bg-red-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-600 transition">Clear Search</button>
+                </div>
+            </div>
+        </div>
+
+        <nav class="bg-white/80 backdrop-blur-sm sticky top-0 z-10 shadow-sm rounded-lg mb-8">
+            <ul class="flex items-center justify-center border-b border-slate-200">
+                <li><a href="#swot-analysis" class="nav-link active-nav p-4 inline-block text-sm md:text-base font-medium text-slate-600" data-target="swot-analysis">SWOT Analysis</a></li>
+                <li><a href="#competitive-advantage" class="nav-link p-4 inline-block text-sm md:text-base font-medium text-slate-600" data-target="competitive-advantage">Competitive Advantage</a></li>
+                <li><a href="#porters-five-forces" class="nav-link p-4 inline-block text-sm md:text-base font-medium text-slate-600" data-target="porters-five-forces">Porter's 5 Forces</a></li>
+                <li><a href="#pestel-analysis" class="nav-link p-4 inline-block text-sm md:text-base font-medium text-slate-600" data-target="pestel-analysis">PESTEL Analysis</a></li>
+                <li><a href="#risk-assessment" class="nav-link p-4 inline-block text-sm md:text-base font-medium text-slate-600" data-target="risk-assessment">Risk Assessment</a></li>
+            </ul>
+        </nav>
+
+        <main id="main-content-area">
+            <!-- SWOT Analysis Section -->
+            <section id="swot-analysis" class="content-section active">
+                <div class="text-center mb-12">
+                    <h2 class="text-2xl font-bold text-slate-800">1. SWOT Analysis Generator ✨</h2>
+                    <p class="mt-2 max-w-3xl mx-auto text-slate-600">Get a high-level SWOT (Strengths, Weaknesses, Opportunities, Threats) analysis for any company or industry, powered by LLM.</p>
+                </div>
+                <div class="mt-6 bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex flex-col md:flex-row items-center justify-center gap-4 mb-6">
+                        <input type="text" id="swot-input" placeholder="e.g., Netflix, Renewable Energy Sector" class="w-full md:w-1/2 p-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
+                        <button id="generate-swot-btn" class="bg-sky-700 text-white font-bold py-3 px-6 rounded-lg hover:bg-sky-600 transition flex items-center justify-center">
+                            Generate SWOT
+                            <span id="swot-loading" class="llm-loading hidden"></span>
+                        </button>
+                    </div>
+                    <div id="swot-output" class="mt-6 p-4 bg-stone-100 rounded-lg text-slate-700 llm-output-container">
+                        <p class="text-center italic">Your SWOT analysis will appear here.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Competitive Advantage Brainstormer Section -->
+            <section id="competitive-advantage" class="content-section">
+                <div class="text-center mb-12">
+                    <h2 class="text-2xl font-bold text-slate-800">2. Competitive Advantage Brainstormer ✨</h2>
+                    <p class="mt-2 max-w-3xl mx-auto text-slate-600">Brainstorm ways a company can gain or sustain a competitive advantage, given its current context.</p>
+                </div>
+                <div class="mt-6 bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex flex-col gap-4 mb-6">
+                        <input type="text" id="company-input-ca" placeholder="Company Name (e.g., Peloton)" class="w-full p-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
+                        <input type="text" id="strategy-input-ca" placeholder="Current Strategy (e.g., premium home fitness equipment)" class="w-full p-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
+                        <button id="brainstorm-advantage-btn" class="bg-sky-700 text-white font-bold py-3 px-6 rounded-lg hover:bg-sky-600 transition flex items-center justify-center">
+                            Brainstorm Advantage
+                            <span id="competitive-advantage-loading" class="llm-loading hidden"></span>
+                        </button>
+                    </div>
+                    <div id="competitive-advantage-output" class="mt-6 p-4 bg-stone-100 rounded-lg text-slate-700 llm-output-container">
+                        <p class="text-center italic">Competitive advantage ideas will appear here.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Porter's Five Forces Analysis Section -->
+            <section id="porters-five-forces" class="content-section">
+                <div class="text-center mb-12">
+                    <h2 class="text-2xl font-bold text-slate-800">3. Porter's Five Forces Analysis ✨</h2>
+                    <p class="mt-2 max-w-3xl mx-auto text-slate-600">Analyze the competitive intensity and attractiveness of an industry using Porter's Five Forces framework, powered by LLM.</p>
+                </div>
+                <div class="mt-6 bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex flex-col md:flex-row items-center justify-center gap-4 mb-6">
+                        <input type="text" id="five-forces-input" placeholder="e.g., Airline Industry, Smartphone Manufacturing" class="w-full md:w-1/2 p-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
+                        <button id="analyze-five-forces-btn" class="bg-sky-700 text-white font-bold py-3 px-6 rounded-lg hover:bg-sky-600 transition flex items-center justify-center">
+                            Analyze Industry
+                            <span id="five-forces-loading" class="llm-loading hidden"></span>
+                        </button>
+                    </div>
+                    <div id="five-forces-output" class="mt-6 p-4 bg-stone-100 rounded-lg text-slate-700 llm-output-container">
+                        <p class="text-center italic">Porter's Five Forces analysis will appear here.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PESTEL Analysis Section -->
+            <section id="pestel-analysis" class="content-section">
+                <div class="text-center mb-12">
+                    <h2 class="text-2xl font-bold text-slate-800">4. PESTEL Analysis ✨</h2>
+                    <p class="mt-2 max-w-3xl mx-auto text-slate-600">Analyze the macro-environmental factors affecting an industry using the PESTEL framework (Political, Economic, Social, Technological, Environmental, Legal).</p>
+                </div>
+                <div class="mt-6 bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex flex-col md:flex-row items-center justify-center gap-4 mb-6">
+                        <input type="text" id="pestel-input" placeholder="e.g., Electric Vehicle Industry, Fast Food" class="w-full md:w-1/2 p-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
+                        <button id="analyze-pestel-btn" class="bg-sky-700 text-white font-bold py-3 px-6 rounded-lg hover:bg-sky-600 transition flex items-center justify-center">
+                            Analyze PESTEL
+                            <span id="pestel-loading" class="llm-loading hidden"></span>
+                        </button>
+                    </div>
+                    <div id="pestel-output" class="mt-6 p-4 bg-stone-100 rounded-lg text-slate-700 llm-output-container">
+                        <p class="text-center italic">PESTEL analysis will appear here.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Risk Assessment Section -->
+            <section id="risk-assessment" class="content-section">
+                <div class="text-center mb-12">
+                    <h2 class="text-2xl font-bold text-slate-800">5. Risk Assessment ✨</h2>
+                    <p class="mt-2 max-w-3xl mx-auto text-slate-600">Identify potential risks and suggest mitigation strategies for a given company or project.</p>
+                </div>
+                <div class="mt-6 bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex flex-col gap-4 mb-6">
+                        <input type="text" id="risk-entity-input" placeholder="Company/Project Name (e.g., New AI Startup)" class="w-full p-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
+                        <textarea id="risk-context-input" rows="3" placeholder="Briefly describe the context/industry (e.g., 'developing AI for healthcare, facing strict regulations')" class="w-full p-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500"></textarea>
+                        <button id="assess-risk-btn" class="bg-sky-700 text-white font-bold py-3 px-6 rounded-lg hover:bg-sky-600 transition flex items-center justify-center">
+                            Assess Risks
+                            <span id="risk-assessment-loading" class="llm-loading hidden"></span>
+                        </button>
+                    </div>
+                    <div id="risk-assessment-output" class="mt-6 p-4 bg-stone-100 rounded-lg text-slate-700 llm-output-container">
+                        <p class="text-center italic">Risk assessment results will appear here.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const contentSections = document.querySelectorAll('.content-section');
+            
+            // Main Navigation for this page (internal to analysis frameworks)
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.dataset.target;
+
+                    navLinks.forEach(l => l.classList.remove('active-nav'));
+                    link.classList.add('active-nav');
+
+                    contentSections.forEach(section => {
+                        if (section.id === targetId) {
+                            section.classList.add('active');
+                        } else {
+                            section.classList.remove('active');
+                        }
+                    });
+                });
+            });
+
+            // LLM Integration Functions
+            const apiKey = "AIzaSyB2OQkmPmEcJM1FX6r8kOm0WWmKq2cTOCM"; // API key will be provided at runtime by Canvas
+
+            async function callGeminiAPI(prompt, responseSchema = null) {
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                let chatHistory = [];
+                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                
+                const payload = { contents: chatHistory };
+                if (responseSchema) {
+                    payload.generationConfig = {
+                        responseMimeType: "application/json",
+                        responseSchema: responseSchema
+                    };
+                }
+
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    const result = await response.json();
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        const textContent = result.candidates[0].content.parts[0].text;
+                        try {
+                            return responseSchema ? JSON.parse(textContent) : textContent;
+                        } catch (e) {
+                            console.warn("Failed to parse JSON from LLM, returning raw text. Error:", e);
+                            return { error: "LLM output was not valid JSON, displaying raw text: " + textContent, raw: textContent };
+                        }
+                    } else {
+                        throw new Error("Could not retrieve valid response from LLM.");
+                    }
+                } catch (error) {
+                    console.error("LLM API Call Error:", error);
+                    return { error: `Error: ${error.message}. Please check your input or network connection.`, raw: null };
+                }
+            }
+
+            // --- LLM Output Rendering Functions (moved to this file) ---
+            function renderPortersFiveForcesOutput(data, container) {
+                if (data.error) {
+                    container.innerHTML = `<p class='text-center text-red-700'>${data.error}</p>${data.raw ? `<pre class="mt-4 p-2 bg-red-50 text-red-800 text-xs overflow-auto">${data.raw}</pre>` : ''}`;
+                    return;
+                }
+                let html = `<h4 class="font-bold text-xl text-slate-800 mb-3">Porter's Five Forces for the ${data.industry || 'Unknown'} Industry</h4>`;
+                if (data.forces && data.forces.length > 0) {
+                    html += `<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">`;
+                    data.forces.forEach(force => {
+                        let strengthColorClass = '';
+                        if (force.strength) {
+                            const strengthLower = force.strength.toLowerCase();
+                            if (strengthLower.includes('high')) strengthColorClass = 'text-red-700';
+                            else if (strengthLower.includes('medium')) strengthColorClass = 'text-amber-700';
+                            else if (strengthLower.includes('low')) strengthColorClass = 'text-green-700';
+                        }
+                        html += `
+                            <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
+                                <h5 class="font-bold text-lg text-slate-800 mb-2">${force.type || 'N/A'}</h5>
+                                <p class="text-sm text-slate-600 mb-2">Strength: <strong class="${strengthColorClass}">${force.strength || 'N/A'}</strong></p>
+                                <p class="text-slate-600 text-sm mb-2">${force.explanation || 'No explanation provided.'}</p>
+                        `;
+                        if (force.keyFactors && force.keyFactors.length > 0) {
+                            html += `<p class="font-semibold text-xs text-slate-700 mb-1">Key Factors:</p><ul class="list-disc list-inside text-xs text-slate-600 ml-4">`;
+                            force.keyFactors.forEach(factor => {
+                                html += `<li>${factor}</li>`;
+                            });
+                            html += `</ul>`;
+                        }
+                        html += `</div>`;
+                    });
+                    html += `</div>`;
+                } else {
+                    html += `<p class="text-center italic">No Porter's Five Forces analysis generated.</p>`;
+                }
+                container.innerHTML = html;
+            }
+
+            function renderPestelAnalysisOutput(data, container) {
+                if (data.error) {
+                    container.innerHTML = `<p class='text-center text-red-700'>${data.error}</p>${data.raw ? `<pre class="mt-4 p-2 bg-red-50 text-red-800 text-xs overflow-auto">${data.raw}</pre>` : ''}`;
+                    return;
+                }
+                let html = `<h4 class="font-bold text-xl text-slate-800 mb-3">PESTEL Analysis for the ${data.industry || 'Unknown'} Industry</h4>`;
+                if (data.factors && data.factors.length > 0) {
+                    html += `<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">`;
+                    data.factors.forEach(factor => {
+                        html += `
+                            <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
+                                <h5 class="font-bold text-lg text-slate-800 mb-2">${factor.type || 'N/A'}</h5>
+                                <p class="text-slate-600 text-sm mb-2">${factor.explanation || 'No explanation provided.'}</p>
+                        `;
+                        if (factor.implications && factor.implications.length > 0) {
+                            html += `<p class="font-semibold text-xs text-slate-700 mb-1">Key Implications:</p><ul class="list-disc list-inside text-xs text-slate-600 ml-4">`;
+                            factor.implications.forEach(implication => {
+                                html += `<li>${implication}</li>`;
+                            });
+                            html += `</ul>`;
+                        }
+                        html += `</div>`;
+                    });
+                    html += `</div>`;
+                } else {
+                    html += `<p class="text-center italic">No PESTEL analysis generated.</p>`;
+                }
+                container.innerHTML = html;
+            }
+
+            function renderRiskAssessmentOutput(data, container) {
+                if (data.error) {
+                    container.innerHTML = `<p class='text-center text-red-700'>${data.error}</p>${data.raw ? `<pre class="mt-4 p-2 bg-red-50 text-red-800 text-xs overflow-auto">${data.raw}</pre>` : ''}`;
+                    return;
+                }
+                let html = `<h4 class="font-bold text-xl text-slate-800 mb-3">Risk Assessment for ${data.entity || 'Unknown'}</h4>`;
+                if (data.risks && data.risks.length > 0) {
+                    data.risks.forEach(risk => {
+                        html += `
+                            <div class="bg-white p-4 rounded-lg border border-red-200 shadow-sm mb-4">
+                                <h5 class="font-bold text-lg text-red-700 mb-2">${risk.category || 'N/A'}: ${risk.risk || 'N/A'}</h5>
+                                <p class="text-slate-600 text-sm mb-2"><strong>Impact:</strong> ${risk.impact || 'N/A'}</p>
+                                <p class="text-slate-600 text-sm mb-2"><strong>Mitigation:</strong> ${risk.mitigation || 'No mitigation suggested.'}</p>
+                            </div>`;
+                    });
+                } else {
+                    html += `<p class="text-center italic">No risks identified for this context.</p>`;
+                }
+                container.innerHTML = html;
+            }
+
+            function renderSwotAnalysisOutput(data, container) {
+                if (data.error) {
+                    container.innerHTML = `<p class='text-center text-red-700'>${data.error}</p>${data.raw ? `<pre class="mt-4 p-2 bg-red-50 text-red-800 text-xs overflow-auto">${data.raw}</pre>` : ''}`;
+                    return;
+                }
+                let html = `<h4 class="font-bold text-xl text-slate-800 mb-3">SWOT Analysis for ${data.context || 'Unknown'}</h4>`;
+                if (data.swot && data.swot.length > 0) {
+                    data.swot.forEach(category => {
+                        html += `
+                            <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm mb-4">
+                                <h5 class="llm-section-title !mt-0 !mb-1">${category.type} - ${category.title || 'N/A'}</h5>
+                                <ul class="llm-section-content">`;
+                        category.items.forEach(item => {
+                            html += `<li>${item}</li>`;
+                        });
+                        html += `</ul></div>`;
+                    });
+                } else {
+                    html += `<p class="text-center italic">No SWOT analysis generated.</p>`;
+                }
+                container.innerHTML = html;
+            }
+
+            function renderCompetitiveAdvantageOutput(data, container) {
+                if (data.error) {
+                    container.innerHTML = `<p class='text-center text-red-700'>${data.error}</p>${data.raw ? `<pre class="mt-4 p-2 bg-red-50 text-red-800 text-xs overflow-auto">${data.raw}</pre>` : ''}`;
+                    return;
+                }
+                let html = `<h4 class="font-bold text-xl text-slate-800 mb-3">Competitive Advantage for ${data.company || 'Unknown'}</h4>`;
+                if (data.suggestions && data.suggestions.length > 0) {
+                    html += `<h5 class="llm-section-title">Suggestions</h5><div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">`;
+                    data.suggestions.forEach(suggestion => {
+                        html += `
+                            <div class="bg-white p-4 rounded-lg border border-blue-200 shadow-sm">
+                                <h6 class="font-bold text-base text-blue-700 mb-1">${suggestion.title}</h6>
+                                <p class="text-slate-600 text-sm">${suggestion.description}</p>
+                            </div>`;
+                    });
+                    html += `</div>`;
+                }
+                if (data.keyConsiderations && data.keyConsiderations.length > 0) {
+                    html += `<h5 class="llm-section-title">Key Considerations</h5><ul class="llm-section-content">`;
+                    data.keyConsiderations.forEach(consideration => {
+                        html += `<li>${consideration}</li>`;
+                    });
+                    html += `</ul>`;
+                }
+                if (!data.suggestions.length && !data.keyConsiderations.length) {
+                    html += `<p class="text-center italic">No competitive advantage ideas generated.</p>`;
+                }
+                container.innerHTML = html;
+            }
+
+            // LLM Features for this page
+            // SWOT Analysis LLM
+            const swotInput = document.getElementById('swot-input');
+            const generateSwotBtn = document.getElementById('generate-swot-btn');
+            const swotOutput = document.getElementById('swot-output');
+            const swotLoading = document.getElementById('swot-loading');
+
+            const swotAnalysisSchema = {
+                type: "OBJECT",
+                properties: {
+                    context: { type: "STRING" }, // Company or Industry name
+                    swot: {
+                        type: "ARRAY",
+                        items: {
+                            type: "OBJECT",
+                            properties: {
+                                type: { type: "STRING" }, // e.g., "Strengths", "Weaknesses", etc.
+                                title: { type: "STRING" },
+                                items: {
+                                    type: "ARRAY",
+                                    items: { type: "STRING" }
+                                }
+                            },
+                            required: ["type", "title", "items"]
+                        }
+                    }
+                },
+                required: ["context", "swot"],
+                propertyOrdering: ["context", "swot"]
+            };
+
+            generateSwotBtn.addEventListener('click', async () => {
+                const inputContext = swotInput.value.trim();
+                if (!inputContext) {
+                    swotOutput.innerHTML = "<p class='text-center italic'>Please enter a company or industry for SWOT analysis.</p>";
+                    return;
+                }
+
+                swotOutput.innerHTML = "<p class='text-center italic'>Generating SWOT Analysis...</p>";
+                swotLoading.classList.remove('hidden');
+
+                const prompt = `Perform a high-level SWOT analysis (Strengths, Weaknesses, Opportunities, Threats) for ${inputContext}. Provide the analysis in JSON format according to this schema: ${JSON.stringify(swotAnalysisSchema)}. For each SWOT category, provide a 'title' summarizing the area (e.g., "Internal Capabilities") and a list of 2-3 key 'items' (bullet points).`;
+                const swotData = await callGeminiAPI(prompt, swotAnalysisSchema);
+                
+                renderSwotAnalysisOutput(swotData, swotOutput);
+                swotLoading.classList.add('hidden');
+            });
+
+            // Competitive Advantage Brainstormer LLM
+            const companyInputCa = document.getElementById('company-input-ca');
+            const strategyInputCa = document.getElementById('strategy-input-ca');
+            const brainstormAdvantageBtn = document.getElementById('brainstorm-advantage-btn');
+            const competitiveAdvantageOutput = document.getElementById('competitive-advantage-output');
+            const competitiveAdvantageLoading = document.getElementById('competitive-advantage-loading');
+
+            const competitiveAdvantageSchema = {
+                type: "OBJECT",
+                properties: {
+                    company: { type: "STRING" },
+                    currentStrategy: { type: "STRING" },
+                    suggestions: {
+                        type: "ARRAY",
+                        items: {
+                            type: "OBJECT",
+                            properties: {
+                                title: { type: "STRING" },
+                                description: { type: "STRING" }
+                            },
+                            required: ["title", "description"]
+                        }
+                    },
+                    keyConsiderations: {
+                        type: "ARRAY",
+                        items: { type: "STRING" }
+                    }
+                },
+                required: ["company", "currentStrategy", "suggestions", "keyConsiderations"],
+                propertyOrdering: ["company", "currentStrategy", "suggestions", "keyConsiderations"]
+            };
+
+            brainstormAdvantageBtn.addEventListener('click', async () => {
+                const company = companyInputCa.value.trim();
+                const currentStrategy = strategyInputCa.value.trim();
+                if (!company || !currentStrategy) {
+                    competitiveAdvantageOutput.innerHTML = "<p class='text-center italic'>Please enter both company name and current strategy.</p>";
+                    return;
+                }
+
+                competitiveAdvantageOutput.innerHTML = "<p class='text-center italic'>Brainstorming competitive advantages...</p>";
+                competitiveAdvantageLoading.classList.remove('hidden');
+
+                const prompt = `Given the company "${company}" with its current strategy: "${currentStrategy}", brainstorm 3-4 distinct ways it can gain or sustain a competitive advantage. For each suggestion, provide a concise title and a brief description (approx. 30-40 words). Also, list 2-3 key considerations for implementing these advantages. Respond strictly in JSON format according to this schema: ${JSON.stringify(competitiveAdvantageSchema)}.`;
+                const advantageData = await callGeminiAPI(prompt, competitiveAdvantageSchema);
+
+                renderCompetitiveAdvantageOutput(advantageData, competitiveAdvantageOutput);
+                competitiveAdvantageLoading.classList.add('hidden');
+            });
+
+            // Porter's Five Forces LLM
+            const fiveForcesInput = document.getElementById('five-forces-input');
+            const analyzeFiveForcesBtn = document.getElementById('analyze-five-forces-btn');
+            const fiveForcesOutput = document.getElementById('five-forces-output');
+            const fiveForcesLoading = document.getElementById('five-forces-loading');
+
+            const portersFiveForcesSchema = {
+                type: "OBJECT",
+                properties: {
+                    industry: { type: "STRING" },
+                    forces: {
+                        type: "ARRAY",
+                        items: {
+                            type: "OBJECT",
+                            properties: {
+                                type: { type: "STRING" }, // e.g., "Threat of New Entrants"
+                                strength: { type: "STRING" }, // e.g., "High", "Medium", "Low"
+                                explanation: { type: "STRING" },
+                                keyFactors: {
+                                    type: "ARRAY",
+                                    items: { type: "STRING" }
+                                }
+                            },
+                            required: ["type", "strength", "explanation", "keyFactors"]
+                        }
+                    }
+                },
+                required: ["industry", "forces"],
+                propertyOrdering: ["industry", "forces"]
+            };
+
+            analyzeFiveForcesBtn.addEventListener('click', async () => {
+                const industry = fiveForcesInput.value.trim();
+                if (!industry) {
+                    fiveForcesOutput.innerHTML = "<p class='text-center italic'>Please enter an industry for analysis.</p>";
+                    return;
+                }
+
+                fiveForcesOutput.innerHTML = "<p class='text-center italic'>Analyzing Porter's Five Forces...</p>";
+                fiveForcesLoading.classList.remove('hidden');
+
+                const prompt = `Perform an analysis of Porter's Five Forces for the "${industry}" industry. For each of the five forces (Threat of New Entrants, Bargaining Power of Buyers, Bargaining Power of Suppliers, Threat of Substitute Products or Services, Rivalry Among Existing Competitors), describe its strength (High, Medium, or Low), provide a brief explanation, and list 2-3 key factors influencing that strength. Respond strictly in JSON format according to this schema: ${JSON.stringify(portersFiveForcesSchema)}.`;
+                const fiveForcesData = await callGeminiAPI(prompt, portersFiveForcesSchema);
+                
+                renderPortersFiveForcesOutput(fiveForcesData, fiveForcesOutput);
+                fiveForcesLoading.classList.add('hidden');
+            });
+
+            // PESTEL Analysis LLM
+            const pestelInput = document.getElementById('pestel-input');
+            const analyzePestelBtn = document.getElementById('analyze-pestel-btn');
+            const pestelOutput = document.getElementById('pestel-output');
+            const pestelLoading = document.getElementById('pestel-loading');
+
+            const pestelAnalysisSchema = {
+                type: "OBJECT",
+                properties: {
+                    industry: { type: "STRING" },
+                    factors: {
+                        type: "ARRAY",
+                        items: {
+                            type: "OBJECT",
+                            properties: {
+                                type: { type: "STRING" }, // e.g., "Political", "Economic", etc.
+                                explanation: { type: "STRING" },
+                                implications: {
+                                    type: "ARRAY",
+                                    items: { type: "STRING" }
+                                }
+                            },
+                            required: ["type", "explanation", "implications"]
+                        }
+                    }
+                },
+                required: ["industry", "factors"],
+                propertyOrdering: ["industry", "factors"]
+            };
+
+            analyzePestelBtn.addEventListener('click', async () => {
+                const industry = pestelInput.value.trim();
+                if (!industry) {
+                    pestelOutput.innerHTML = "<p class='text-center italic'>Please enter an industry for PESTEL analysis.</p>";
+                    return;
+                }
+
+                pestelOutput.innerHTML = "<p class='text-center italic'>Generating PESTEL Analysis...</p>";
+                pestelLoading.classList.remove('hidden');
+
+                const prompt = `Perform a PESTEL analysis (Political, Economic, Social, Technological, Environmental, Legal factors) for the "${industry}" industry. For each factor, provide a brief explanation and 2-3 key implications for the industry. Respond strictly in JSON format according to this schema: ${JSON.stringify(pestelAnalysisSchema)}.`;
+                const pestelData = await callGeminiAPI(prompt, pestelAnalysisSchema);
+                
+                renderPestelAnalysisOutput(pestelData, pestelOutput);
+                pestelLoading.classList.add('hidden');
+            });
+
+            // Risk Assessment LLM
+            const riskEntityInput = document.getElementById('risk-entity-input');
+            const riskContextInput = document.getElementById('risk-context-input');
+            const assessRiskBtn = document.getElementById('assess-risk-btn');
+            const riskAssessmentOutput = document.getElementById('risk-assessment-output');
+            const riskAssessmentLoading = document.getElementById('risk-assessment-loading');
+
+            const riskAssessmentSchema = {
+                type: "OBJECT",
+                properties: {
+                    entity: { type: "STRING" }, // Company or Project Name
+                    context: { type: "STRING" }, // Brief context
+                    risks: {
+                        type: "ARRAY",
+                        items: {
+                            type: "OBJECT",
+                            properties: {
+                                category: { type: "STRING" }, // e.g., "Operational", "Financial", "Market"
+                                risk: { type: "STRING" }, // Specific risk identified
+                                impact: { type: "STRING" }, // Potential impact
+                                mitigation: { type: "STRING" } // Suggested mitigation strategy
+                            },
+                            required: ["category", "risk", "impact", "mitigation"]
+                        }
+                    }
+                },
+                required: ["entity", "context", "risks"],
+                propertyOrdering: ["entity", "context", "risks"]
+            };
+
+            assessRiskBtn.addEventListener('click', async () => {
+                const entity = riskEntityInput.value.trim();
+                const context = riskContextInput.value.trim();
+                if (!entity || !context) {
+                    riskAssessmentOutput.innerHTML = "<p class='text-center italic'>Please enter both company/project name and context for risk assessment.</p>";
+                    return;
+                }
+
+                riskAssessmentOutput.innerHTML = "<p class='text-center italic'>Assessing risks...</p>";
+                riskAssessmentLoading.classList.remove('hidden');
+
+                const prompt = `Perform a risk assessment for "${entity}", considering its context: "${context}". Identify 3-4 key potential risks, categorize them (e.g., Operational, Financial, Market, Strategic, Reputational, Regulatory, Technological), describe their potential impact, and suggest a brief mitigation strategy for each. Respond strictly in JSON format according to this schema: ${JSON.stringify(riskAssessmentSchema)}.`;
+                const riskData = await callGeminiAPI(prompt, riskAssessmentSchema);
+
+                renderRiskAssessmentOutput(riskData, riskAssessmentOutput);
+                riskAssessmentLoading.classList.add('hidden');
+            });
+
+
+            // Search Functionality (local to this page)
+            const searchInput = document.getElementById('search-input');
+            const searchButton = document.getElementById('search-button');
+            const nextMatchButton = document.getElementById('next-match-button');
+            const clearSearchButton = document.getElementById('clear-search-button');
+            const mainContentArea = document.getElementById('main-content-area');
+
+            let highlightedElements = [];
+            let currentHighlightIndex = -1;
+
+            function removeHighlights() {
+                document.querySelectorAll('.highlight').forEach(span => {
+                    const parent = span.parentNode;
+                    span.classList.remove('active-highlight');
+                    if (parent.childNodes.length > 1) {
+                         const tempText = document.createTextNode(span.textContent);
+                         parent.replaceChild(tempText, span);
+                         parent.normalize(); 
+                    } else {
+                        parent.replaceChild(document.createTextNode(span.textContent), span);
+                    }
+                });
+                highlightedElements = [];
+                currentHighlightIndex = -1;
+                nextMatchButton.classList.add('hidden');
+            }
+
+            function highlightText(node, query) {
+                const lowerCaseText = node.nodeValue.toLowerCase();
+                const lowerCaseQuery = query.toLowerCase();
+                let lastIndex = 0;
+                const fragment = document.createDocumentFragment();
+
+                while (true) {
+                    const startIndex = lowerCaseText.indexOf(lowerCaseQuery, lastIndex);
+                    if (startIndex === -1) {
+                        fragment.appendChild(document.createTextNode(node.nodeValue.substring(lastIndex)));
+                        break;
+                    }
+
+                    fragment.appendChild(document.createTextNode(node.nodeValue.substring(lastIndex, startIndex)));
+                    const highlightSpan = document.createElement('span');
+                    highlightSpan.className = 'highlight';
+                    highlightSpan.textContent = node.nodeValue.substring(startIndex, startIndex + query.length);
+                    fragment.appendChild(highlightSpan);
+                    highlightedElements.push(highlightSpan);
+
+                    lastIndex = startIndex + query.length;
+                }
+                node.parentNode.replaceChild(fragment, node);
+            }
+
+            searchButton.addEventListener('click', () => {
+                removeHighlights();
+                const query = searchInput.value.trim();
+                if (!query) {
+                    return;
+                }
+
+                const walk = document.createTreeWalker(mainContentArea, NodeFilter.SHOW_TEXT, null, false);
+                let node;
+                while ((node = walk.nextNode())) {
+                    if (node.nodeValue.toLowerCase().includes(query.toLowerCase()) && 
+                        node.parentNode.tagName !== 'SCRIPT' && 
+                        node.parentNode.tagName !== 'STYLE' && 
+                        !node.parentNode.classList.contains('llm-loading') &&
+                        !node.parentNode.classList.contains('highlight') &&
+                        !node.parentNode.closest('.search-container')) {
+                        highlightText(node, query);
+                    }
+                }
+
+                if (highlightedElements.length > 0) {
+                    currentHighlightIndex = 0;
+                    highlightedElements[currentHighlightIndex].classList.add('active-highlight');
+                    highlightedElements[currentHighlightIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    nextMatchButton.classList.remove('hidden');
+                } else {
+                    const messageElement = document.createElement('div');
+                    messageElement.textContent = `No matches found for "${query}"`;
+                    messageElement.className = 'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-red-100 text-red-700 p-4 rounded-lg shadow-lg z-50';
+                    document.body.appendChild(messageElement);
+                    setTimeout(() => messageElement.remove(), 3000);
+                }
+            });
+
+            nextMatchButton.addEventListener('click', () => {
+                if (highlightedElements.length === 0) return;
+
+                if (currentHighlightIndex !== -1) {
+                    highlightedElements[currentHighlightIndex].classList.remove('active-highlight');
+                }
+
+                currentHighlightIndex = (currentHighlightIndex + 1) % highlightedElements.length;
+                
+                highlightedElements[currentHighlightIndex].classList.add('active-highlight');
+                highlightedElements[currentHighlightIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
+
+            clearSearchButton.addEventListener('click', () => {
+                searchInput.value = '';
+                removeHighlights();
+            });
+
+            // Hotkey Integration: Listen for Enter key on specific input fields
+            searchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    searchButton.click();
+                }
+            });
+
+            swotInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    generateSwotBtn.click();
+                }
+            });
+
+            companyInputCa.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    brainstormAdvantageBtn.click();
+                }
+            });
+
+            strategyInputCa.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    brainstormAdvantageBtn.click();
+                }
+            });
+
+            fiveForcesInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    analyzeFiveForcesBtn.click();
+                }
+            });
+
+            pestelInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    analyzePestelBtn.click();
+                }
+            });
+
+            riskEntityInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    assessRiskBtn.click();
+                }
+            });
+
+            riskContextInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    assessRiskBtn.click();
+                }
+            });
+
+            // Search Toggle Logic
+            const searchToggleButton = document.getElementById('search-toggle-btn');
+            const searchBox = document.getElementById('search-box');
+
+            searchToggleButton.addEventListener('click', () => {
+                searchBox.classList.toggle('active');
+                if (!searchBox.classList.contains('active')) {
+                    removeHighlights();
+                    searchInput.value = '';
+                } else {
+                    searchInput.focus();
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Strategy Concepts</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .active-nav { color: #0284c7; border-bottom-color: #0284c7; }
+        .nav-link { border-bottom: 2px solid transparent; transition: all 0.3s ease; }
+        .nav-link:hover { color: #0369a1; border-bottom-color: #0369a1; }
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+        .strategy-box { transition: all 0.3s ease; cursor: pointer; }
+        .strategy-box.selected { transform: scale(1.05); border-color: #0ea5e9; box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); }
+        .tab.active { background-color: #e2e8f0; color: #1e293b; }
+        .chart-container { position: relative; width: 100%; max-width: 500px; margin: auto; height: 300px; max-height: 350px; }
+        .llm-loading {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 8px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .highlight {
+            background-color: #ffe082; /* Light yellow */
+            padding: 2px 0;
+            border-radius: 3px;
+        }
+        .active-highlight {
+            border: 2px solid #ef4444; /* Red border for active highlight */
+            box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+        }
+        /* Style for LLM output containers to allow expansion */
+        .llm-output-container {
+            word-wrap: break-word; /* Ensures long words break to the next line */
+            overflow-wrap: break-word; /* Ensures long words break to the next line */
+            line-height: 1.6; /* Improved readability for text */
+            text-align: left; /* Align LLM text left by default */
+            padding: 1rem; /* Consistent padding */
+        }
+        .llm-section-title {
+            font-weight: 600; /* semi-bold */
+            color: #334155; /* slate-700 */
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            font-size: 1.125rem; /* text-lg */
+            border-bottom: 1px solid #cbd5e1; /* slate-300 */
+            padding-bottom: 0.25rem;
+        }
+        .llm-section-content p {
+            margin-bottom: 0.75rem;
+        }
+        .llm-section-content ul {
+            list-style-type: disc;
+            margin-left: 1.5rem;
+            padding-left: 0;
+            margin-bottom: 0.75rem;
+        }
+        .llm-section-content li {
+            margin-bottom: 0.25rem;
+        }
+
+        /* Styles for the new search box functionality */
+        .search-container {
+            position: fixed;
+            top: 1rem; /* Adjust as needed */
+            right: 1rem; /* Adjust as needed */
+            z-index: 50; /* Ensure it's on top */
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .search-box {
+            display: flex; /* Always display flex but control visibility with opacity/transform */
+            flex-direction: column;
+            width: 250px; /* Fixed width for the expanded search box */
+            opacity: 0;
+            transform: scale(0.9); /* Start slightly scaled down */
+            transform-origin: top right; /* Scale from top right corner */
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+            pointer-events: none; /* Disable interaction when hidden */
+            margin-top: 0.5rem; /* Space between icon and box */
+            background-color: white; /* Ensure background is solid */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+
+        .search-box.active {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto; /* Enable interaction when active */
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-slate-800">
+
+    <div class="container mx-auto px-4 py-8">
+        
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-slate-900">Business Strategy Concepts</h1>
+            <p class="text-lg text-slate-600 mt-2">Explore core ideas in strategic positioning and renewal.</p>
+        </header>
+
+        <!-- Search Container -->
+        <div class="search-container">
+            <button id="search-toggle-btn" class="bg-sky-700 text-white p-3 rounded-full shadow-lg hover:bg-sky-600 transition flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                </svg>
+            </button>
+            <div id="search-box" class="search-box">
+                <input type="text" id="search-input" placeholder="Search content..." class="w-full p-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 mb-2">
+                <div class="flex flex-col gap-2">
+                    <button id="search-button" class="bg-slate-700 text-white font-bold py-2 px-4 rounded-lg hover:bg-slate-600 transition">Search</button>
+                    <button id="next-match-button" class="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 transition">Next Match</button>
+                    <button id="clear-search-button" class="bg-red-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-600 transition">Clear Search</button>
+                </div>
+            </div>
+        </div>
+
+        <nav class="bg-white/80 backdrop-blur-sm sticky top-0 z-10 shadow-sm rounded-lg mb-8">
+            <ul class="flex items-center justify-center border-b border-slate-200">
+                <li><a href="#positioning" class="nav-link active-nav p-4 inline-block text-sm md:text-base font-medium text-slate-600" data-target="positioning">Strategic Positioning</a></li>
+                <li><a href="#dual" class="nav-link p-4 inline-block text-sm md:text-base font-medium text-slate-600" data-target="dual">Dual Strategies & Risks</a></li>
+                <li><a href="#renewal" class="nav-link p-4 inline-block text-sm md:text-base font-medium text-slate-600" data-target="renewal">Strategic Renewal</a></li>
+                <!-- Removed direct links to analysis sections -->
+            </ul>
+        </nav>
+
+        <main id="main-content-area">
+            <section id="positioning" class="content-section active">
+                <div class="text-center mb-12">
+                    <h2 class="text-2xl font-bold text-slate-800">1. Strategic Positioning: Choosing Your Place in the Market</h2>
+                    <p class="mt-2 max-w-3xl mx-auto text-slate-600">A firm's success depends on its strategic fit—the alignment of its internal strengths with the external environment. This is achieved through a clear strategic position. The framework below shows the four generic strategies based on competitive advantage and market scope. Click on a quadrant to learn more.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                    <div class="grid grid-cols-2 grid-rows-2 gap-4">
+                        <div id="box-cl" class="strategy-box selected bg-white p-6 rounded-lg border-2 border-slate-200 text-center flex items-center justify-center flex-col shadow-md" data-strategy="cl">
+                            <h3 class="font-bold text-lg text-sky-700">Cost Leadership</h3>
+                            <p class="text-sm text-slate-500">(Broad Market)</p>
+                        </div>
+                        <div id="box-d" class="strategy-box bg-white p-6 rounded-lg border-2 border-slate-200 text-center flex items-center justify-center flex-col shadow-md" data-strategy="d">
+                            <h3 class="font-bold text-lg text-green-700">Differentiation</h3>
+                            <p class="text-sm text-slate-500">(Broad Market)</p>
+                        </div>
+                        <div id="box-fcl" class="strategy-box bg-white p-6 rounded-lg border-2 border-slate-200 text-center flex items-center justify-center flex-col shadow-md" data-strategy="fcl">
+                            <h3 class="font-bold text-lg text-sky-700">Focused Low Cost</h3>
+                            <p class="text-sm text-slate-500">(Narrow Market)</p>
+                        </div>
+                        <div id="box-fd" class="strategy-box bg-white p-6 rounded-lg border-2 border-slate-200 text-center flex items-center justify-center flex-col shadow-md" data-strategy="fd">
+                            <h3 class="font-bold text-lg text-green-700">Focused Differentiation</h3>
+                            <p class="text-sm text-slate-500">(Narrow Market)</p>
+                        </div>
+                    </div>
+                    
+                    <div id="strategy-details" class="bg-white p-6 rounded-lg shadow-lg min-h-[300px]">
+                        <!-- Dynamic Content Goes Here -->
+                    </div>
+                </div>
+
+                <div class="mt-12">
+                    <h3 class="text-xl font-bold text-center mb-4 text-slate-800">Understanding the Drivers of Advantage</h3>
+                    <p class="text-center text-slate-600 max-w-2xl mx-auto mb-6">Achieving a strategic position requires mastering specific "drivers." Cost leaders focus on cost drivers, while differentiators focus on value drivers. Select a tab to see what powers each approach.</p>
+                    <div class="flex justify-center mb-4 border-b border-slate-200">
+                        <button class="tab active px-4 py-2 font-medium text-slate-600" data-tab="cost">Cost Drivers</button>
+                        <button class="tab px-4 py-2 font-medium text-slate-600" data-tab="value">Value Drivers</button>
+                    </div>
+                    <div id="cost-drivers-content" class="tab-content">
+                        <ul class="list-disc list-inside bg-white p-6 rounded-lg shadow-md space-y-2 text-slate-700">
+                            <li><b>Scale/Scope Economies:</b> Lowering per-unit cost through large-scale production or shared inputs.</li>
+                            <li><b>Input Costs:</b> Securing cheaper raw materials through bargaining power, location, or supplier relations.</li>
+                            <li><b>Production Techniques:</b> Using automation, TQM, and waste reduction to improve efficiency.</li>
+                            <li><b>Product Design::</b> Simplifying products for manufacturing to reduce complexity and material use.</li>
+                            <li><b>Managerial Efficiency:</b> Eliminating bureaucracy and slow decision-making to cut hidden costs.</li>
+                        </ul>
+                    </div>
+                    <div id="value-drivers-content" class="tab-content hidden">
+                         <ul class="list-disc list-inside bg-white p-6 rounded-lg shadow-md space-y-2 text-slate-700">
+                            <li><b>Product Features:</b> Offering unique, superior functionalities that competitors lack.</li>
+                            <li><b>Customer Service:</b> Providing an exceptional support experience that builds loyalty.</li>
+                            <li><b>Customization:</b> Allowing customers to tailor products to their specific needs (e.g., Starbucks).</li>
+                            <li><b>Complements:</b> Enhancing value through related products or services (e.g., Apple's iPod & iTunes).</li>
+                            <li><b>Brand & Reputation:</b> Building a strong brand image that signals quality and exclusivity.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mt-12 bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-center mb-4 text-slate-800">Analyze Company Strategy ✨</h3>
+                    <p class="text-center text-slate-600 max-w-2xl mx-auto mb-6">Enter a company name to get an LLM-generated assessment of its likely generic business strategy.</p>
+                    <div class="flex flex-col md:flex-row items-center justify-center gap-4">
+                        <input type="text" id="company-name-input" placeholder="e.g., Tesla, Walmart, Ferrari" class="w-full md:w-1/2 p-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
+                        <button id="analyze-company-btn" class="bg-sky-700 text-white font-bold py-3 px-6 rounded-lg hover:bg-sky-600 transition flex items-center justify-center">
+                            Analyze
+                            <span id="company-analysis-loading" class="llm-loading hidden"></span>
+                        </button>
+                    </div>
+                    <div id="company-analysis-output" class="mt-6 p-4 bg-stone-100 rounded-lg text-slate-700 llm-output-container">
+                        <p class="text-center italic">Your company strategy analysis will appear here.</p>
+                    </div>
+                </div>
+
+            </section>
+
+            <section id="dual" class="content-section">
+                <div class="text-center mb-12">
+                    <h2 class="text-2xl font-bold text-slate-800">2. Dual Strategies: The High-Reward, High-Risk Approach</h2>
+                    <p class="mt-2 max-w-3xl mx-auto text-slate-600">Some companies attempt a "dual advantage" strategy—simultaneously pursuing low costs and differentiation. While potentially very profitable, it carries the significant risk of becoming "stuck in the middle," failing at both.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <h3 class="font-bold text-xl mb-4 text-center text-green-700">The Promise: Dual Advantage</h3>
+                        <p class="text-slate-600 mb-4 text-center">The goal is to outperform competitors by creating superior value *and* being more cost-efficient, leading to higher Economic Value Added (EVA).</p>
+                        <div class="chart-container">
+                            <canvas id="dualAdvantageChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="bg-red-50 p-6 rounded-lg shadow-lg border border-red-200">
+                        <h3 class="font-bold text-xl mb-4 text-center text-red-700">The Risk: "Stuck in the Middle"</h3>
+                        <p class="text-slate-600 mb-4">Trying to be everything to everyone can lead to strategic incoherence. Resources that create differentiation (e.g., R&D, high-quality materials) often increase costs, while cost-cutting measures can undermine value. A company that fails to make clear trade-offs ends up with:</p>
+                        <ul class="list-disc list-inside text-slate-700 space-y-2">
+                           <li>Above-average costs for its industry.</li>
+                           <li>Below-average differentiation and value perception.</li>
+                           <li>Confused employees and customers.</li>
+                           <li>A significant competitive disadvantage.</li>
+                        </ul>
+                        <div class="mt-6 text-center">
+                            <button id="saab-case-btn" class="bg-slate-800 text-white font-bold py-2 px-4 rounded-lg hover:bg-slate-700 transition">Read Case Study: The Fall of SAAB</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="saab-case-content" class="hidden mt-8 bg-white p-8 rounded-lg shadow-xl mb-8">
+                    <h4 class="font-bold text-2xl mb-4 text-center">Case Study: SAAB Automobile (1944-2011)</h4>
+                    <p class="text-slate-600 mb-2">SAAB was once a differentiated car brand with a cult-like following for its unique, aerospace-inspired designs and technological sophistication.</p>
+                    <div class="mt-4 border-l-4 border-sky-500 pl-4">
+                        <p class="font-semibold text-slate-800">The Problem:</p>
+                        <p class="text-slate-600">In 1989, General Motors (GM) acquired a stake in the struggling company. GM's strategy was to reduce costs by building new SAABs on common GM platforms (e.g., the Opel Astra platform). This was an attempt at a dual strategy: maintain SAAB's premium brand while cutting costs.</p>
+                    </div>
+                    <div class="mt-4 border-l-4 border-red-500 pl-4">
+                        <p class="font-semibold text-slate-800">The Result: "Stuck in the Middle"</p>
+                        <p class="text-slate-600">The cost-saving measures forced design and performance compromises. The new cars lost their distinct "SAAB-like" character. While initially profitable, the brand's unique differentiation eroded. Loyalists protested, and the brand lost its cachet. SAAB became neither a true cost leader nor a compelling differentiator. This strategic incoherence led to its eventual bankruptcy in 2011.</p>
+                    </div>
+                     <p class="text-center mt-6 text-sm text-slate-500 font-semibold">SAAB's story is a classic example of how pursuing cost reduction can fatally undermine a differentiation advantage.</p>
+                </div>
+
+                <div class="mt-12 bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-center mb-4 text-slate-800">Examples of Successful Dual Strategies</h3>
+                    <p class="text-center text-slate-600 max-w-2xl mx-auto mb-6">While challenging, some companies successfully achieve a dual advantage through innovative business models or managerial approaches.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-green-50 p-6 rounded-lg border border-green-200 shadow-sm">
+                            <h4 class="font-bold text-lg text-green-700 mb-2">Dell (Custom Manufacturing)</h4>
+                            <p class="text-slate-700 text-sm mb-3">Dell achieved dual advantage by building computers to order. This allowed for <strong class="text-green-800">differentiation</strong> through customization, as customers received tailored products. Simultaneously, it enabled <strong class="text-green-800">cost leadership</strong> by avoiding inventory holding costs and manufacturing unsold units, significant advantages in the rapidly depreciating electronics market.</p>
+                        </div>
+                        <div class="bg-green-50 p-6 rounded-lg border border-green-200 shadow-sm">
+                            <h4 class="font-bold text-lg text-green-700 mb-2">Honda/Toyota (Total Quality Management - TQM)</h4>
+                            <p class="text-slate-700 text-sm mb-3">These automotive giants successfully implemented TQM practices. This led to <strong class="text-green-800">differentiation</strong> through high-quality, reliable vehicles, which customers highly valued. It also resulted in <strong class="text-green-800">cost leadership</strong> because "quality is free" – producing products correctly the first time eliminated expensive rework, repairs, and waste, streamlining production and reducing overall costs.</p>
+                        </div>
+                        <div class="bg-green-50 p-6 rounded-lg border border-green-200 shadow-sm">
+                            <h4 class="font-bold text-lg text-green-700 mb-2">Zara (Fast Fashion)</h4>
+                            <p class="text-slate-700 text-sm mb-3">Zara exemplifies dual strategy by offering fashionable clothing (<strong class="text-green-800">differentiation</strong>) at relatively low prices (<strong class="text-green-800">cost leadership</strong>). Their unique vertically integrated supply chain allows them to rapidly design, produce, and distribute new trends, minimizing inventory risk and markdown losses, enabling both responsiveness to demand and cost efficiency.</p>
+                        </div>
+                        <div class="bg-green-50 p-6 rounded-lg border border-green-200 shadow-sm">
+                            <h4 class="font-bold text-lg text-green-700 mb-2">Southwest Airlines (Low Cost, High Service)</h4>
+                            <p class="text-slate-700 text-sm mb-3">Southwest combines <strong class="text-green-800">cost leadership</strong> with a differentiated customer experience. They achieve low costs through a standardized fleet, point-to-point routes, and quick turnarounds. Their differentiation comes from exceptional customer service, friendly staff, and unique brand personality, which fosters strong customer loyalty.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <section id="renewal" class="content-section">
+                 <div class="text-center mb-12">
+                    <h2 class="text-2xl font-bold text-slate-800">3. Strategic Renewal: Adapting to a Changing World</h2>
+                    <p class="mt-2 max-w-3xl mx-auto text-slate-600">Markets are not static. Environmental changes or internal decline can cause a "fundamental misalignment," destroying a firm's competitive advantage. Strategic renewal is the process of realigning the firm through dynamic capabilities.</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-lg mb-8">
+                     <h3 class="text-xl font-bold text-center mb-4 text-slate-800">The 3-P Dynamic Capabilities Framework</h3>
+                     <p class="text-slate-600 mb-6 text-center max-w-2xl mx-auto">This framework helps companies plan for renewal by assessing their "higher-order" capabilities for change. It involves analyzing:</p>
+                    <div class="grid md:grid-cols-3 gap-6 text-center">
+                        <div class="bg-stone-100 p-4 rounded-lg">
+                            <h4 class="font-bold text-lg">Processes</h4>
+                            <p class="text-slate-600 text-sm">Well-developed internal routines and activities that can be deployed for a new strategy.</p>
+                        </div>
+                        <div class="bg-stone-100 p-4 rounded-lg">
+                            <h4 class="font-bold text-lg">Positions</h4>
+                            <p class="text-slate-600 text-sm">Existing resources, like intellectual property or brand reputation, that can be leveraged.</p>
+                        </div>
+                         <div class="bg-stone-100 p-4 rounded-lg">
+                            <h4 class="font-bold text-lg">Paths</h4>
+                            <p class="text-slate-600 text-sm">Strategic options and new market opportunities available to the firm.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-lg shadow-xl">
+                    <h4 class="font-bold text-2xl mb-2 text-center">Case Study: Kodak vs. Fujifilm</h4>
+                    <p class="text-slate-600 mb-6 text-center max-w-3xl mx-auto">When the digital camera revolution created a fundamental misalignment for film companies, Kodak failed to adapt and went bankrupt. Its Japanese twin, Fujifilm, thrived by using its dynamic capabilities to find new paths. The chart below shows Fujifilm's successful diversification.</p>
+                    
+                    <div class="grid md:grid-cols-2 gap-8 items-center">
+                        <div class="chart-container h-[350px] md:h-auto">
+                           <canvas id="fujifilmChart"></canvas>
+                        </div>
+                        <div>
+                             <p class="text-slate-700 font-medium mb-4">Fujifilm leveraged its core competencies to pivot:</p>
+                            <ul class="space-y-3">
+                                <li class="flex items-start">
+                                    <span class="bg-sky-500 text-white rounded-full h-6 w-6 text-center font-bold mr-3 flex-shrink-0">1</span>
+                                    <div>
+                                        <h5 class="font-semibold">Leveraged Chemical Expertise</h5>
+                                        <p class="text-sm text-slate-600">Used knowledge of collagen (in film & skin) and antioxidants to launch the successful "Astalift" cosmetics line.</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start">
+                                     <span class="bg-teal-500 text-white rounded-full h-6 w-6 text-center font-bold mr-3 flex-shrink-0">2</span>
+                                    <div>
+                                        <h5 class="font-semibold">Applied Film Technology</h5>
+                                        <p class="text-sm text-slate-600">Adapted precision film-coating technology to produce high-market-share optical films for LCD screens.</p>
+                                    </div>
+                                </li>
+                                 <li class="flex items-start">
+                                     <span class="bg-amber-500 text-white rounded-full h-6 w-6 text-center font-bold mr-3 flex-shrink-0">3</span>
+                                    <div>
+                                        <h5 class="font-semibold">Repurposed Polymer Science</h5>
+                                        <p class="text-sm text-slate-600">Used its deep understanding of polymers to develop high-performance membranes and filters for industrial use.</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-12 bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-center mb-4 text-slate-800">Generate Renewal Outline ✨</h3>
+                    <p class="text-center text-slate-600 max-w-2xl mx-auto mb-6">Enter an industry or company name to get an LLM-generated strategic renewal outline based on the 3-P Framework.</p>
+                    <div class="flex flex-col md:flex-row items-center justify-center gap-4">
+                        <input type="text" id="renewal-input" placeholder="e.g., Traditional Retail, Automotive, Blockbuster" class="w-full md:w-1/2 p-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
+                        <button id="generate-renewal-btn" class="bg-sky-700 text-white font-bold py-3 px-6 rounded-lg hover:bg-sky-600 transition flex items-center justify-center">
+                            Generate Outline
+                            <span id="renewal-loading" class="llm-loading hidden"></span>
+                        </button>
+                    </div>
+                    <div id="renewal-output" class="mt-6 p-4 bg-stone-100 rounded-lg text-slate-700 llm-output-container">
+                        <p class="text-center italic">Your strategic renewal outline will appear here.</p>
+                    </div>
+                </div>
+
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const contentSections = document.querySelectorAll('.content-section');
+            
+            const strategyData = {
+                cl: {
+                    title: 'Broad Cost Leadership',
+                    description: 'The goal is to produce products or services for a broad market at a lower cost than competitors. This strategy relies on efficiency and scale.',
+                    examples: ['Walmart', 'IKEA (globally)', 'McDonald\'s']
+                },
+                d: {
+                    title: 'Broad Differentiation',
+                    description: 'The goal is to offer unique products or services to a broad market that are perceived as valuable, allowing the firm to charge a premium price.',
+                    examples: ['Apple', 'Nordstrom', 'Coca-Cola']
+                },
+                fcl: {
+                    title: 'Focused Low Cost',
+                    description: 'This strategy targets a narrow market segment and serves them at a lower cost than competitors. It avoids costly-to-serve customers.',
+                    examples: ['Checkers/Rally\'s (drive-thru focus)', 'GEICO (direct channel)', 'Aldi']
+                },
+                fd: {
+                    title: 'Focused Differentiation',
+                    description: 'This strategy targets a narrow market segment with unique products, often creating an aura of exclusivity. Scope is limited to enhance value.',
+                    examples: ['Prada', 'Lamborghini', 'Rolex']
+                }
+            };
+            
+            const strategyDetailsContainer = document.getElementById('strategy-details');
+            const strategyBoxes = document.querySelectorAll('.strategy-box');
+
+            function updateStrategyDetails(strategyKey) {
+                const data = strategyData[strategyKey];
+                strategyDetailsContainer.innerHTML = `
+                    <h4 class="font-bold text-xl mb-3 text-slate-800">${data.title}</h4>
+                    <p class="text-slate-600 mb-4">${data.description}</p>
+                    <p class="font-semibold text-sm text-slate-700 mb-2">Examples:</p>
+                    <div class="flex flex-wrap gap-2">
+                        ${data.examples.map(ex => `<span class="bg-slate-200 text-slate-700 text-xs font-medium px-2.5 py-1 rounded-full">${ex}</span>`).join('')}
+                    </div>
+                `;
+            }
+
+            strategyBoxes.forEach(box => {
+                box.addEventListener('click', () => {
+                    strategyBoxes.forEach(b => b.classList.remove('selected'));
+                    box.classList.add('selected');
+                    const strategyKey = box.dataset.strategy;
+                    updateStrategyDetails(strategyKey);
+                });
+            });
+
+            // Initial load
+            updateStrategyDetails('cl');
+
+            // Main Navigation
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.dataset.target;
+
+                    navLinks.forEach(l => l.classList.remove('active-nav'));
+                    link.classList.add('active-nav');
+
+                    contentSections.forEach(section => {
+                        if (section.id === targetId) {
+                            section.classList.add('active');
+                        } else {
+                            section.classList.remove('active');
+                        }
+                    });
+                });
+            });
+
+            // Drivers Tabs
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const target = tab.dataset.tab;
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+
+                    tabContents.forEach(content => {
+                        if (content.id.startsWith(target)) {
+                            content.classList.remove('hidden');
+                        } else {
+                            content.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+
+            // SAAB Case Study button
+            const saabBtn = document.getElementById('saab-case-btn');
+            const saabContent = document.getElementById('saab-case-content');
+            saabBtn.addEventListener('click', () => {
+                saabContent.classList.toggle('hidden');
+                saabBtn.textContent = saabContent.classList.contains('hidden') ? 'Read Case Study: The Fall of SAAB' : 'Hide Case Study';
+            });
+            
+            // Charts
+            const dualAdvantageCtx = document.getElementById('dualAdvantageChart').getContext('2d');
+            new Chart(dualAdvantageCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Average Competitor', 'Dual Advantage'],
+                    datasets: [{
+                        label: 'Value (V)',
+                        data: [100, 120],
+                        backgroundColor: '#16a34a',
+                        borderColor: '#15803d',
+                        borderWidth: 1
+                    }, {
+                        label: 'Cost (C)',
+                        data: [80, 70],
+                        backgroundColor: '#dc2626',
+                        borderColor: '#b91c1c',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, ticks: { display: false }, grid: { drawOnChartArea: false, drawTicks: false } },
+                        x: { grid: { drawOnChartArea: false } }
+                    },
+                    plugins: {
+                        legend: { position: 'top' },
+                        title: { display: true, text: 'Value Creation vs. Cost' }
+                    }
+                }
+            });
+
+            const fujifilmCtx = document.getElementById('fujifilmChart').getContext('2d');
+            new Chart(fujifilmCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Medical/Cosmetics', 'Optical Devices', 'Industrial Materials', 'Other Imaging'],
+                    datasets: [{
+                        label: 'Business Portfolio Renewal',
+                        data: [35, 30, 25, 10],
+                        backgroundColor: ['#0ea5e9', '#14b8a6', '#f59e0b', '#64748b'],
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right' },
+                        title: { display: true, text: 'Fujifilm\'s Diversified Business' }
+                    }
+                }
+            });
+
+            // LLM Integration Functions
+            const apiKey = "AIzaSyB2OQkmPmEcJM1FX6r8kOm0WWmKq2cTOCM"; // API key will be provided at runtime by Canvas
+
+            async function callGeminiAPI(prompt, responseSchema = null) {
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                let chatHistory = [];
+                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                
+                const payload = { contents: chatHistory };
+                if (responseSchema) {
+                    payload.generationConfig = {
+                        responseMimeType: "application/json",
+                        responseSchema: responseSchema
+                    };
+                }
+
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    const result = await response.json();
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        const textContent = result.candidates[0].content.parts[0].text;
+                        // Attempt to parse JSON. If it fails, return as plain text.
+                        try {
+                            return responseSchema ? JSON.parse(textContent) : textContent;
+                        } catch (e) {
+                            console.warn("Failed to parse JSON from LLM, returning raw text. Error:", e);
+                            return { error: "LLM output was not valid JSON, displaying raw text: " + textContent, raw: textContent };
+                        }
+                    } else {
+                        throw new Error("Could not retrieve valid response from LLM.");
+                    }
+                } catch (error) {
+                    console.error("LLM API Call Error:", error);
+                    return { error: `Error: ${error.message}. Please check your input or network connection.`, raw: null };
+                }
+            }
+
+            // --- LLM Output Rendering Functions ---
+            function renderCompanyStrategyOutput(data, container) {
+                if (data.error) {
+                    container.innerHTML = `<p class='text-center text-red-700'>${data.error}</p>${data.raw ? `<pre class="mt-4 p-2 bg-red-50 text-red-800 text-xs overflow-auto">${data.raw}</pre>` : ''}`;
+                    return;
+                }
+                
+                let html = `<h4 class="font-bold text-xl text-slate-800 mb-3">${data.companyName || 'Company'} Strategy Analysis</h4>`;
+                
+                if (data.sections && data.sections.length > 0) {
+                    data.sections.forEach(section => {
+                        html += `<div class="mb-4">`;
+                        if (section.title) {
+                            html += `<h5 class="llm-section-title">${section.title}</h5>`;
+                        }
+                        if (Array.isArray(section.content)) {
+                            html += `<ul class="llm-section-content">`;
+                            section.content.forEach(item => {
+                                html += `<li>${item}</li>`;
+                            });
+                            html += `</ul>`;
+                        } else if (section.content) {
+                            html += `<p class="llm-section-content">${section.content}</p>`;
+                        }
+                        html += `</div>`;
+                    });
+                } else {
+                    html += `<p class="text-center italic">No structured analysis available. Raw LLM output might be shown if JSON parsing failed.</p>`;
+                }
+                container.innerHTML = html;
+            }
+
+
+            function renderRenewalOutlineOutput(data, container) {
+                if (data.error) {
+                    container.innerHTML = `<p class='text-center text-red-700'>${data.error}</p>${data.raw ? `<pre class="mt-4 p-2 bg-red-50 text-red-800 text-xs overflow-auto">${data.raw}</pre>` : ''}`;
+                    return;
+                }
+                let html = `<h4 class="font-bold text-xl text-slate-800 mb-3">Strategic Renewal for ${data.context || 'Industry/Company'}</h4>`;
+                if (data.renewalOutline && data.renewalOutline.length > 0) {
+                    data.renewalOutline.forEach(p => {
+                        html += `
+                            <div class="bg-stone-50 p-4 rounded-lg border border-stone-200 mb-4">
+                                <h5 class="font-bold text-lg text-slate-800 mb-2">${p.type}: ${p.title || 'N/A'}</h5>
+                                <p class="text-slate-600 text-sm mb-2">${p.description || 'No description provided.'}</p>
+                        `;
+                        if (p.examples && p.examples.length > 0) {
+                            html += `<p class="font-semibold text-xs text-slate-700 mb-1">Examples:</p><ul class="list-disc list-inside text-xs text-slate-600 ml-4">`;
+                            p.examples.forEach(ex => {
+                                html += `<li>${ex}</li>`;
+                            });
+                            html += `</ul>`;
+                        }
+                        html += `</div>`;
+                    });
+                } else {
+                    html += `<p class="text-slate-600">No specific renewal outline provided.</p>`;
+                }
+                container.innerHTML = html;
+            }
+
+            // Company Strategy Analysis LLM
+            const companyNameInput = document.getElementById('company-name-input');
+            const analyzeCompanyBtn = document.getElementById('analyze-company-btn');
+            const companyAnalysisOutput = document.getElementById('company-analysis-output');
+            const companyAnalysisLoading = document.getElementById('company-analysis-loading');
+
+            const companyStrategySchema = {
+                type: "OBJECT",
+                properties: {
+                    companyName: { type: "STRING" },
+                    sections: {
+                        type: "ARRAY",
+                        items: {
+                            type: "OBJECT",
+                            properties: {
+                                title: { type: "STRING" },
+                                content: {
+                                    type: "ARRAY", // Can be an array for bullet points
+                                    items: { type: "STRING" }
+                                }
+                            },
+                            required: ["title", "content"]
+                        }
+                    }
+                },
+                required: ["companyName", "sections"],
+                propertyOrdering: ["companyName", "sections"]
+            };
+
+            analyzeCompanyBtn.addEventListener('click', async () => {
+                const companyName = companyNameInput.value.trim();
+                if (!companyName) {
+                    companyAnalysisOutput.innerHTML = "<p class='text-center italic'>Please enter a company name to analyze.</p>";
+                    return;
+                }
+
+                companyAnalysisOutput.innerHTML = "<p class='text-center italic'>Analyzing...</p>";
+                companyAnalysisLoading.classList.remove('hidden');
+
+                const prompt = `Analyze the generic business strategy (Cost Leadership, Differentiation, Focused Low Cost, or Focused Differentiation) of ${companyName}. Provide the analysis in JSON format based on the following schema: ${JSON.stringify(companyStrategySchema)}. For the 'sections' array, include:
+                - A section with "title": "Strategy Type" and "content": ["The determined strategy (e.g., Broad Differentiation, Cost Leadership, Dual Strategy)."]
+                - A section with "title": "Explanation" and "content": ["A concise explanation (approx. 50 words) supporting the strategy type, highlighting key aspects."]
+                - A section with "title": "Key Characteristics" and "content": ["A list of 2-3 bullet points describing key characteristics that exemplify this strategy."]. Ensure text is properly formatted for readability within each content array item.`;
+                
+                const analysisData = await callGeminiAPI(prompt, companyStrategySchema);
+                renderCompanyStrategyOutput(analysisData, companyAnalysisOutput);
+                companyAnalysisLoading.classList.add('hidden');
+            });
+
+            // Strategic Renewal Outline LLM
+            const renewalInput = document.getElementById('renewal-input');
+            const generateRenewalBtn = document.getElementById('generate-renewal-btn');
+            const renewalOutput = document.getElementById('renewal-output');
+            const renewalLoading = document.getElementById('renewal-loading');
+
+            const renewalOutlineSchema = {
+                type: "OBJECT",
+                properties: {
+                    context: { type: "STRING" },
+                    renewalOutline: {
+                        type: "ARRAY",
+                        items: {
+                            type: "OBJECT",
+                            properties: {
+                                type: { type: "STRING" }, // e.g., "Processes", "Positions", "Paths"
+                                title: { type: "STRING" }, // e.g., "Streamline Operations"
+                                description: { type: "STRING" }, // Main description for this P
+                                examples: {
+                                    type: "ARRAY",
+                                    items: { type: "STRING" } // Specific examples
+                                }
+                            },
+                            required: ["type", "title", "description", "examples"],
+                            propertyOrdering: ["type", "title", "description", "examples"]
+                        }
+                    }
+                },
+                required: ["context", "renewalOutline"],
+                propertyOrdering: ["context", "renewalOutline"]
+            };
+
+            generateRenewalBtn.addEventListener('click', async () => {
+                const inputContext = renewalInput.value.trim();
+                if (!inputContext) {
+                    renewalOutput.innerHTML = "<p class='text-center italic'>Please enter an industry or company for the renewal outline.</p>";
+                    return;
+                }
+
+                renewalOutput.innerHTML = "<p class class='text-center italic'>Generating outline...</p>";
+                renewalLoading.classList.remove('hidden');
+
+                const prompt = `Based on the 3-P Dynamic Capabilities Framework (Processes, Positions, Paths), generate a brief, hypothetical strategic renewal outline for a company in the ${inputContext} sector facing significant environmental change. Respond strictly in JSON format according to this schema: ${JSON.stringify(renewalOutlineSchema)}. For each 'type' (Process, Position, Path), provide a 'title', a 'description' (approx. 30-40 words), and 1-2 'examples'. Ensure text is properly formatted for readability within each content array item.`;
+                const outlineData = await callGeminiAPI(prompt, renewalOutlineSchema);
+                renderRenewalOutlineOutput(outlineData, renewalOutput);
+                renewalLoading.classList.add('hidden');
+            });
+
+            // Search Functionality (local to this page)
+            const searchInput = document.getElementById('search-input');
+            const searchButton = document.getElementById('search-button');
+            const nextMatchButton = document.getElementById('next-match-button');
+            const clearSearchButton = document.getElementById('clear-search-button');
+            const mainContentArea = document.getElementById('main-content-area');
+
+            let highlightedElements = [];
+            let currentHighlightIndex = -1;
+
+            function removeHighlights() {
+                document.querySelectorAll('.highlight').forEach(span => {
+                    const parent = span.parentNode;
+                    span.classList.remove('active-highlight');
+                    if (parent.childNodes.length > 1) {
+                         const tempText = document.createTextNode(span.textContent);
+                         parent.replaceChild(tempText, span);
+                         parent.normalize(); 
+                    } else {
+                        parent.replaceChild(document.createTextNode(span.textContent), span);
+                    }
+                });
+                highlightedElements = [];
+                currentHighlightIndex = -1;
+                nextMatchButton.classList.add('hidden');
+            }
+
+            function highlightText(node, query) {
+                const lowerCaseText = node.nodeValue.toLowerCase();
+                const lowerCaseQuery = query.toLowerCase();
+                let lastIndex = 0;
+                const fragment = document.createDocumentFragment();
+
+                while (true) {
+                    const startIndex = lowerCaseText.indexOf(lowerCaseQuery, lastIndex);
+                    if (startIndex === -1) {
+                        fragment.appendChild(document.createTextNode(node.nodeValue.substring(lastIndex)));
+                        break;
+                    }
+
+                    fragment.appendChild(document.createTextNode(node.nodeValue.substring(lastIndex, startIndex)));
+                    const highlightSpan = document.createElement('span');
+                    highlightSpan.className = 'highlight';
+                    highlightSpan.textContent = node.nodeValue.substring(startIndex, startIndex + query.length);
+                    fragment.appendChild(highlightSpan);
+                    highlightedElements.push(highlightSpan);
+
+                    lastIndex = startIndex + query.length;
+                }
+                node.parentNode.replaceChild(fragment, node);
+            }
+
+            searchButton.addEventListener('click', () => {
+                removeHighlights();
+                const query = searchInput.value.trim();
+                if (!query) {
+                    return;
+                }
+
+                const walk = document.createTreeWalker(mainContentArea, NodeFilter.SHOW_TEXT, null, false);
+                let node;
+                while ((node = walk.nextNode())) {
+                    if (node.nodeValue.toLowerCase().includes(query.toLowerCase()) && 
+                        node.parentNode.tagName !== 'SCRIPT' && 
+                        node.parentNode.tagName !== 'STYLE' && 
+                        !node.parentNode.classList.contains('llm-loading') &&
+                        !node.parentNode.classList.contains('highlight') &&
+                        !node.parentNode.closest('.search-container')) {
+                        highlightText(node, query);
+                    }
+                }
+
+                if (highlightedElements.length > 0) {
+                    currentHighlightIndex = 0;
+                    highlightedElements[currentHighlightIndex].classList.add('active-highlight');
+                    highlightedElements[currentHighlightIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    nextMatchButton.classList.remove('hidden');
+                } else {
+                    const messageElement = document.createElement('div');
+                    messageElement.textContent = `No matches found for "${query}"`;
+                    messageElement.className = 'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-red-100 text-red-700 p-4 rounded-lg shadow-lg z-50';
+                    document.body.appendChild(messageElement);
+                    setTimeout(() => messageElement.remove(), 3000);
+                }
+            });
+
+            nextMatchButton.addEventListener('click', () => {
+                if (highlightedElements.length === 0) return;
+
+                if (currentHighlightIndex !== -1) {
+                    highlightedElements[currentHighlightIndex].classList.remove('active-highlight');
+                }
+
+                currentHighlightIndex = (currentHighlightIndex + 1) % highlightedElements.length;
+                
+                highlightedElements[currentHighlightIndex].classList.add('active-highlight');
+                highlightedElements[currentHighlightIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
+
+            clearSearchButton.addEventListener('click', () => {
+                searchInput.value = '';
+                removeHighlights();
+            });
+
+            // Hotkey Integration: Listen for Enter key on specific input fields
+            searchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    searchButton.click();
+                }
+            });
+
+            companyNameInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    analyzeCompanyBtn.click();
+                }
+            });
+
+            renewalInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    generateRenewalBtn.click();
+                }
+            });
+
+            // Search Toggle Logic
+            const searchToggleButton = document.getElementById('search-toggle-btn');
+            const searchBox = document.getElementById('search-box');
+
+            searchToggleButton.addEventListener('click', () => {
+                searchBox.classList.toggle('active');
+                if (!searchBox.classList.contains('active')) {
+                    removeHighlights();
+                    searchInput.value = ''; 
+                } else {
+                    searchInput.focus(); 
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
