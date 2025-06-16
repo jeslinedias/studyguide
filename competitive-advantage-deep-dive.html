@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Competitive Advantage Deep Dive</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .active-nav { color: #8b5cf6; border-bottom-color: #8b5cf6; } /* Purple for active */
+        .nav-link { border-bottom: 2px solid transparent; transition: all 0.3s ease; }
+        .nav-link:hover { color: #7c3aed; border-bottom-color: #7c3aed; }
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+        .highlight {
+            background-color: #ffe082; /* Light yellow */
+            padding: 2px 0;
+            border-radius: 3px;
+        }
+        .active-highlight {
+            border: 2px solid #ef4444; /* Red border for active highlight */
+            box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+        }
+        /* Styles for the new search box functionality */
+        .search-container {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .search-box {
+            display: flex;
+            flex-direction: column;
+            width: 250px;
+            opacity: 0;
+            transform: scale(0.9);
+            transform-origin: top right;
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+            pointer-events: none;
+            margin-top: 0.5rem;
+            background-color: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+
+        .search-box.active {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+        }
+        .llm-loading {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 8px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .llm-output-container {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            line-height: 1.6;
+            text-align: left;
+            padding: 1rem;
+        }
+        .llm-section-title {
+            font-weight: 600;
+            color: #334155;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            font-size: 1.125rem;
+            border-bottom: 1px solid #cbd5e1;
+            padding-bottom: 0.25rem;
+        }
+        .llm-section-content p {
+            margin-bottom: 0.75rem;
+        }
+        .llm-section-content ul {
+            list-style-type: disc;
+            margin-left: 1.5rem;
+            padding-left: 0;
+            margin-bottom: 0.75rem;
+        }
+        .llm-section-content li {
+            margin-bottom: 0.25rem;
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-slate-800">
+
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        
+        <header class="text-center mb-8 relative">
+            <a href="./portal-home.html" class="absolute top-0 left-0 bg-slate-200 text-slate-700 px-4 py-2 rounded-lg hover:bg-slate-300 transition flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+                </svg>
+                Back to Home
+            </a>
+            <h1 class="text-3xl md:text-4xl font-bold text-slate-900">Competitive Advantage: Sources & Sustainability</h1>
+            <p class="text-lg text-slate-600 mt-2">A deep dive into what makes firms outperform their rivals and how they maintain that edge.</p>
+        </header>
+
+        <!-- Search Container -->
+        <div class="search-container">
+            <button id="search-toggle-btn" class="bg-purple-700 text-white p-3 rounded-full shadow-lg hover:bg-purple-600 transition flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                </svg>
+            </button>
+            <div id="search-box" class="search-box">
+                <input type="text" id="search-input" placeholder="Search content..." class="w-full p-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 mb-2">
+                <div class="flex flex-col gap-2">
+                    <button id="search-button" class="bg-slate-700 text-white font-bold py-2 px-4 rounded-lg hover:bg-slate-600 transition">Search</button>
+                    <button id="next-match-button" class="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 transition">Next Match</button>
+                    <button id="clear-search-button" class="bg-red-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-600 transition">Clear Search</button>
+                </div>
+            </div>
+        </div>
+
+        <nav class="bg-white/80 backdrop-blur-sm sticky top-0 z-10 shadow-sm rounded-lg mb-8">
+            <ul class="flex items-center justify-center border-b border-slate-200">
+                <li><a href="#defining-advantage" class="nav-link active-nav p-4 inline-block text-sm md:text-base font-medium text-slate-600" data-target="defining-advantage">Defining Competitive Advantage</a></li>
+                <li><a href="#sources-of-advantage" class="nav-link p-4 inline-block text-sm md:text-base font-medium text-slate-600" data-target="sources-of-advantage">Sources of Advantage</a></li>
+                <li><a href="#sustaining-advantage" class="nav-link p-4 inline-block text-sm md:text-base font-medium text-slate-600" data-target="sustaining-advantage">Sustaining Advantage</a></li>
+            </ul>
+        </nav>
+
+        <main id="main-content-area">
+            <section id="defining-advantage" class="content-section active bg-white p-6 rounded-lg shadow-lg mb-8">
+                <h2 class="text-2xl font-bold text-slate-800 mb-4">1. Defining Competitive Advantage & Firm Performance</h2>
+                <p class="text-slate-700 mb-4">Competitive advantage exists when a firm is able to outperform its rivals. This outperformance is typically measured by long-run profit performance, with Economic Value Added (EVA) being a key conceptual metric.</p>
+                
+                <h3 class="text-xl font-semibold text-slate-800 mt-6 mb-3">Key Concepts:</h3>
+                <ul class="list-disc list-inside text-slate-700 space-y-2">
+                    <li><strong>Firm vs. Industry Effects:</strong> Research indicates that firm-specific attributes (company effects) are a much more significant factor in explaining profit performance (predicting nearly 80% of explained differences) than industry characteristics.</li>
+                    <li><strong>Economic Value Added (EVA):</strong> Conceptually, EVA is the difference between the value generated and the cost incurred by the company for the average customer. It highlights a firm's ability to undercut competitors while still making a profit. While valuable in theory, precise measurement can be challenging.</li>
+                    <li><strong>Measuring Performance:</strong> While accounting profits (ROA, ROE) are readily available, they are backward-looking. Stock market valuations reflect future prospects but may not capture tacit internal information. NPV projections offer a planning scenario but can be complex. Triangulating across different measures provides a more holistic view.</li>
+                    <li><strong>Sustained Competitive Advantage:</strong> The ultimate goal of strategy is to develop and maintain an advantage over time. This raises questions about the origins of inter-firm differences (heterogeneity) and how these advantages can be made durable.</li>
+                </ul>
+            </section>
+
+            <section id="sources-of-advantage" class="content-section bg-white p-6 rounded-lg shadow-lg mb-8">
+                <h2 class="text-2xl font-bold text-slate-800 mb-4">2. Sources of Competitive Advantage</h2>
+                <p class="text-slate-700 mb-4">A firm's competitive advantage stems from its unique internal attributes, broadly categorized as Activities, Resources, and Capabilities.</p>
+                
+                <h3 class="text-xl font-semibold text-slate-800 mt-6 mb-3">2.1 Activities of the Firm</h3>
+                <p class="text-slate-700 mb-2">Activities are the granular actions a firm undertakes (or chooses not to undertake), how they are executed, and how they are linked to create synergy.</p>
+                <div class="grid md:grid-cols-2 gap-6 mt-4">
+                    <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
+                        <h4 class="font-bold text-lg text-purple-700 mb-2">The Value Chain (Manufacturing)</h4>
+                        <p class="text-slate-600 text-sm mb-2">A sequential representation of value-adding steps in manufacturing. It organizes activities into:</p>
+                        <ul class="list-disc list-inside text-slate-600 text-sm ml-4">
+                            <li><strong>Primary Activities:</strong> Inbound logistics, operations (production), outbound logistics, marketing & sales, after-sales service.</li>
+                            <li><strong>Support Activities:</strong> R&D, information systems, accounting & finance, human resources, procurement, corporate infrastructure.</li>
+                        </ul>
+                        <p class="text-slate-600 text-xs mt-2 italic">Useful for analyzing material flow and synergies between primary activities.</p>
+                    </div>
+                    <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
+                        <h4 class="font-bold text-lg text-purple-700 mb-2">The Value Network (Service Industries)</h4>
+                        <p class="text-slate-600 text-sm mb-2">A non-sequential map of important sets of activities and their interrelationships, more suited for service industries (e.g., airlines, healthcare). Key features:</p>
+                        <ul class="list-disc list-inside text-slate-600 text-sm ml-4">
+                            <li>Activities are not linear but interconnected.</li>
+                            <li>Categories and connections are highly customized to the company/industry.</li>
+                            <li>Strategists must discern and illustrate these relationships.</li>
+                        </ul>
+                        <p class="text-slate-600 text-xs mt-2 italic">Provides a clearer, more explicit view of complex service operations.</p>
+                    </div>
+                </div>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-8 mb-3">2.2 Resources</h3>
+                <p class="text-slate-700 mb-2">Resources are productive, firm-specific assets owned by a company. They can be broadly categorized:</p>
+                <ul class="list-disc list-inside text-slate-700 space-y-2 mb-4">
+                    <li><strong>Tangible:</strong> Financial (cash, borrowing capacity), Physical (buildings, machinery, real estate).</li>
+                    <li><strong>Intangible:</strong> Technology (product designs, know-how), Relationships (reputation, customer/supplier networks), Human Capital (talent, skills, organization).</li>
+                </ul>
+                <p class="text-slate-700 mb-4">Increasingly, intangible resources are more critical for creating economic value and differentiating firms, as tangible assets have become more accessible.</p>
+
+                <!-- LLM: Resource Potential Evaluator -->
+                <div class="mt-8 bg-purple-50 p-6 rounded-lg shadow-md border border-purple-200">
+                    <h3 class="text-xl font-bold text-center mb-4 text-purple-800">Resource Potential Evaluator (VRI) ✨</h3>
+                    <p class="text-center text-slate-600 max-w-2xl mx-auto mb-6">Assess a resource's potential for competitive advantage using the VRI framework (Valuable, Rare, Inimitable).</p>
+                    <div class="flex flex-col md:flex-row items-center justify-center gap-4 mb-4">
+                        <input type="text" id="resource-input" placeholder="e.g., AI patents, strong brand" class="w-full md:w-1/2 p-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+                        <input type="text" id="resource-context-input" placeholder="e.g., for Google in AI, for Nike in apparel" class="w-full md:w-1/2 p-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+                    </div>
+                    <div class="text-center">
+                        <button id="evaluate-resource-btn" class="bg-purple-700 text-white font-bold py-3 px-6 rounded-lg hover:bg-purple-600 transition flex items-center justify-center mx-auto">
+                            Evaluate Resource
+                            <span id="resource-eval-loading" class="llm-loading hidden"></span>
+                        </button>
+                    </div>
+                    <div id="resource-eval-output" class="mt-6 p-4 bg-purple-100 rounded-lg text-slate-700 llm-output-container">
+                        <p class="text-center italic">Resource evaluation will appear here.</p>
+                    </div>
+                </div>
+
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-8 mb-3">2.3 Capabilities</h3>
+                <p class="text-slate-700 mb-2">A capability is the capacity to perform a particular activity in a reliable and satisfactory manner. It involves the deployment, combination, and linking of various resources.</p>
+                <ul class="list-disc list-inside text-slate-700 space-y-2">
+                    <li><strong>Capacity to Do:</strong> Firms have capabilities to perform specific activities (e.g., product development, viral marketing). Talent alone (resources) is not a capability.</li>
+                    <li><strong>Reliability:</strong> The ability to repeatedly perform an activity consistently.</li>
+                    <li><strong>Execution Level:</strong> A capability means satisfactory execution; superlative performance is an advantage, but not a minimum requirement.</li>
+                    <li><strong>Development & Learning:</strong> Capabilities develop through learning embedded in organizational routines and processes.</li>
+                    <li><strong>Cross-functional:</strong> Often span multiple functional areas (e.g., marketing, product development).</li>
+                </ul>
+                <p class="text-slate-700 mt-4">The choice of analytical lens (Activities, Resources, or Capabilities) depends on the desired level of detail and summarization for understanding a firm's internal strengths.</p>
+            </section>
+
+            <section id="sustaining-advantage" class="content-section bg-white p-6 rounded-lg shadow-lg mb-8">
+                <h2 class="text-2xl font-bold text-slate-800 mb-4">3. Sustaining Competitive Advantage</h2>
+                <p class="text-slate-700 mb-4">The long-term goal of strategy is to make competitive advantages durable. This involves overcoming four potential challenges:</p>
+
+                <div class="grid md:grid-cols-2 gap-6 mt-4">
+                    <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
+                        <h4 class="font-bold text-lg text-purple-700 mb-2">Threats to Rarity (Imitation & Replication)</h4>
+                        <ul class="list-disc list-inside text-slate-600 text-sm ml-4 space-y-1">
+                            <li><strong>Imitation:</strong> Other firms copy your exact processes/routines.</li>
+                            <li><strong>Replication:</strong> Other firms achieve similar results using different processes.</li>
+                        </ul>
+                        <p class="text-slate-600 text-sm mt-2">Firms need barriers (isolating mechanisms) to prevent rivals from acquiring or developing similar advantages.</p>
+                    </div>
+                    <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
+                        <h4 class="font-bold text-lg text-purple-700 mb-2">Threats to Value Creation (Non-Durability & Irrelevance)</h4>
+                        <ul class="list-disc list-inside text-slate-600 text-sm ml-4 space-y-1">
+                            <li><strong>Non-Durability:</strong> Internal strengths (capabilities, resources, routines) degrade over time (the "leaky bucket").</li>
+                            <li><strong>Irrelevance:</strong> Existing advantages become less useful in a changing environment, potentially becoming "core rigidities" (competency trap).</li>
+                        </ul>
+                        <p class="text-slate-600 text-sm mt-2">Requires continuous preservation and renewal of strengths.</p>
+                    </div>
+                </div>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-8 mb-3">3.1 Isolating Mechanisms (Barriers to Imitation)</h3>
+                <ul class="list-disc list-inside text-slate-700 space-y-2">
+                    <li><strong>Causal Ambiguity:</strong> When rivals cannot precisely identify the source of a firm's success (e.g., is it culture, leadership, or specific processes?).</li>
+                    <li><strong>Complexity:</strong> Even if elements are known, their precise combination is difficult to replicate without subtle errors.</li>
+                    <li><strong>Tacit Knowledge:</strong> Knowledge that is hard to explain or transfer, learned best by doing under expert guidance.</li>
+                    <li><strong>Resource Mobility Barriers:</strong> Factors preventing key resources (talented employees, crucial suppliers) from being lured away by competitors.</li>
+                    <li><strong>Property Rights:</strong> Legal protections (patents, copyrights) or exclusive access to physical resources (mining rights, real estate).</li>
+                    <li><strong>Activity Systems:</strong> The inherent complexity and interconnectedness of a firm's unique activity system makes it difficult for rivals to copy.</li>
+                </ul>
+
+                <!-- LLM: Isolating Mechanism Brainstormer -->
+                <div class="mt-8 bg-purple-50 p-6 rounded-lg shadow-md border border-purple-200">
+                    <h3 class="text-xl font-bold text-center mb-4 text-purple-800">Isolating Mechanism Brainstormer ✨</h3>
+                    <p class="text-center text-slate-600 max-w-2xl mx-auto mb-6">Brainstorm potential isolating mechanisms to protect a company's competitive advantage.</p>
+                    <div class="flex flex-col gap-4 mb-4">
+                        <input type="text" id="company-name-im" placeholder="Company Name (e.g., Apple)" class="w-full p-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+                        <textarea id="competitive-advantage-desc-im" rows="2" placeholder="Describe their competitive advantage (e.g., 'innovative product design and strong brand loyalty')" class="w-full p-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"></textarea>
+                    </div>
+                    <div class="text-center">
+                        <button id="brainstorm-isolating-mechanisms-btn" class="bg-purple-700 text-white font-bold py-3 px-6 rounded-lg hover:bg-purple-600 transition flex items-center justify-center mx-auto">
+                            Brainstorm Mechanisms
+                            <span id="isolating-mechanisms-loading" class="llm-loading hidden"></span>
+                        </button>
+                    </div>
+                    <div id="isolating-mechanisms-output" class="mt-6 p-4 bg-purple-100 rounded-lg text-slate-700 llm-output-container">
+                        <p class="text-center italic">Suggested isolating mechanisms will appear here.</p>
+                    </div>
+                </div>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-8 mb-3">3.2 The Resource-Based View (RBV) - VRI Framework</h3>
+                <p class="text-slate-700 mb-2">Developed by Jay Barney, the VRI framework links a firm's resources or capabilities to sustained competitive advantage:</p>
+                <ul class="list-disc list-inside text-slate-700 space-y-2">
+                    <li><strong>V → Valuable:</strong> Does it help the company increase Economic Value Added (EVA) by increasing customer value or reducing cost?</li>
+                    <li><strong>R → Rare:</strong> Is the company unique in its access to this source of value? Rivals don't possess it.</li>
+                    <li><strong>I → Inimitable:</strong> Is it difficult or costly for other firms to imitate or substitute? This is where isolating mechanisms play a crucial role.</li>
+                </ul>
+                <p class="text-slate-700 mt-2">While "Inimitability" addresses rarity, modern managers are increasingly focused on <strong>Durability</strong> (preventing degradation of strengths, like plugging a "leaky bucket" and continuously topping it up) and <strong>Relevance</strong> (ensuring existing advantages remain useful in a dynamic environment, avoiding the "competency trap" by developing dynamic capabilities).</p>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const contentSections = document.querySelectorAll('.content-section');
+            
+            // Main Navigation
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.dataset.target;
+
+                    navLinks.forEach(l => l.classList.remove('active-nav'));
+                    link.classList.add('active-nav');
+
+                    contentSections.forEach(section => {
+                        if (section.id === targetId) {
+                            section.classList.add('active');
+                        } else {
+                            section.classList.remove('active');
+                        }
+                    });
+                     // Scroll to the top of the selected section for better UX
+                    document.getElementById(targetId).scrollIntoView({ behavior: 'smooth', block: 'start' });
+                });
+            });
+
+            // Set initial active nav link and section
+            const initialSectionId = window.location.hash ? window.location.hash.substring(1) : 'defining-advantage';
+            const initialNavLink = document.querySelector(`.nav-link[data-target="${initialSectionId}"]`);
+            const initialContentSection = document.getElementById(initialSectionId);
+
+            if (initialNavLink) {
+                initialNavLink.classList.add('active-nav');
+            }
+            if (initialContentSection) {
+                initialContentSection.classList.add('active');
+            }
+
+
+            // Search Functionality (local to this page)
+            const searchInput = document.getElementById('search-input');
+            const searchButton = document.getElementById('search-button');
+            const nextMatchButton = document.getElementById('next-match-button');
+            const clearSearchButton = document.getElementById('clear-search-button');
+            const mainContentArea = document.getElementById('main-content-area');
+
+            let highlightedElements = [];
+            let currentHighlightIndex = -1;
+
+            function removeHighlights() {
+                document.querySelectorAll('.highlight').forEach(span => {
+                    const parent = span.parentNode;
+                    span.classList.remove('active-highlight');
+                    // Replace the span with its text content to remove the highlight markup
+                    parent.replaceChild(document.createTextNode(span.textContent), span);
+                    parent.normalize(); // Clean up any empty text nodes or merge adjacent ones
+                });
+                highlightedElements = [];
+                currentHighlightIndex = -1;
+                nextMatchButton.classList.add('hidden'); // Hide next button if no highlights
+            }
+
+            function highlightText(node, query) {
+                const lowerCaseText = node.nodeValue.toLowerCase();
+                const lowerCaseQuery = query.toLowerCase();
+                let lastIndex = 0;
+                const fragment = document.createDocumentFragment();
+
+                while (true) {
+                    const startIndex = lowerCaseText.indexOf(lowerCaseQuery, lastIndex);
+                    if (startIndex === -1) {
+                        fragment.appendChild(document.createTextNode(node.nodeValue.substring(lastIndex)));
+                        break;
+                    }
+
+                    fragment.appendChild(document.createTextNode(node.nodeValue.substring(lastIndex, startIndex)));
+                    const highlightSpan = document.createElement('span');
+                    highlightSpan.className = 'highlight';
+                    highlightSpan.textContent = node.nodeValue.substring(startIndex, startIndex + query.length);
+                    fragment.appendChild(highlightSpan);
+                    highlightedElements.push(highlightSpan);
+
+                    lastIndex = startIndex + query.length;
+                }
+                node.parentNode.replaceChild(fragment, node);
+            }
+
+            searchButton.addEventListener('click', () => {
+                removeHighlights(); // Clear previous highlights
+                const query = searchInput.value.trim();
+                if (!query) {
+                    return; // Do nothing if query is empty
+                }
+
+                // Use TreeWalker for efficient text node traversal
+                const walk = document.createTreeWalker(mainContentArea, NodeFilter.SHOW_TEXT, null, false);
+                let node;
+                while ((node = walk.nextNode())) {
+                    // Only process text nodes that contain the query and are not part of scripts/styles or already highlights
+                    if (node.nodeValue.toLowerCase().includes(query.toLowerCase()) && 
+                        node.parentNode.tagName !== 'SCRIPT' && 
+                        node.parentNode.tagName !== 'STYLE' && 
+                        !node.parentNode.classList.contains('llm-loading') &&
+                        !node.parentNode.classList.contains('highlight') &&
+                        !node.parentNode.closest('.search-container')) { // Exclude search box itself
+                        highlightText(node, query);
+                    }
+                }
+
+                if (highlightedElements.length > 0) {
+                    currentHighlightIndex = 0;
+                    highlightedElements[currentHighlightIndex].classList.add('active-highlight');
+                    highlightedElements[currentHighlightIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    nextMatchButton.classList.remove('hidden'); // Show next button
+                } else {
+                    // Show a temporary message if no matches found
+                    const messageElement = document.createElement('div');
+                    messageElement.textContent = `No matches found for "${query}"`;
+                    messageElement.className = 'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-red-100 text-red-700 p-4 rounded-lg shadow-lg z-50';
+                    document.body.appendChild(messageElement);
+                    setTimeout(() => messageElement.remove(), 3000); // Remove message after 3 seconds
+                }
+            });
+
+            nextMatchButton.addEventListener('click', () => {
+                if (highlightedElements.length === 0) return; // Do nothing if no highlights
+
+                // Remove highlight from current element
+                if (currentHighlightIndex !== -1) {
+                    highlightedElements[currentHighlightIndex].classList.remove('active-highlight');
+                }
+
+                // Move to the next highlight, looping back to the beginning if at the end
+                currentHighlightIndex = (currentHighlightIndex + 1) % highlightedElements.length;
+                
+                // Add highlight to the new current element and scroll into view
+                highlightedElements[currentHighlightIndex].classList.add('active-highlight');
+                highlightedElements[currentHighlightIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
+
+            clearSearchButton.addEventListener('click', () => {
+                searchInput.value = ''; // Clear search input
+                removeHighlights(); // Remove all highlights
+            });
+
+            // Hotkey Integration: Listen for Enter key on search input field
+            searchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault(); // Prevent default form submission
+                    searchButton.click(); // Trigger search button click
+                }
+            });
+
+            // Search Toggle Logic
+            const searchToggleButton = document.getElementById('search-toggle-btn');
+            const searchBox = document.getElementById('search-box');
+
+            searchToggleButton.addEventListener('click', () => {
+                searchBox.classList.toggle('active');
+                if (!searchBox.classList.contains('active')) {
+                    // If closing the search box, clear search and highlights
+                    removeHighlights();
+                    searchInput.value = ''; 
+                } else {
+                    // If opening, focus on the input
+                    searchInput.focus(); 
+                }
+            });
+
+            // LLM Integration Functions
+            const apiKey = "AIzaSyB2OQkmPmEcJM1FX6r8kOm0WWmKq2cTOCM"; // API key will be provided at runtime by Canvas
+
+            async function callGeminiAPI(prompt, responseSchema = null) {
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                let chatHistory = [];
+                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                
+                const payload = { contents: chatHistory };
+                if (responseSchema) {
+                    payload.generationConfig = {
+                        responseMimeType: "application/json",
+                        responseSchema: responseSchema
+                    };
+                }
+
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    const result = await response.json();
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        const textContent = result.candidates[0].content.parts[0].text;
+                        try {
+                            return responseSchema ? JSON.parse(textContent) : textContent;
+                        } catch (e) {
+                            console.warn("Failed to parse JSON from LLM, returning raw text. Error:", e);
+                            return { error: "LLM output was not valid JSON, displaying raw text: " + textContent, raw: textContent };
+                        }
+                    } else {
+                        throw new Error("Could not retrieve valid response from LLM.");
+                    }
+                } catch (error) {
+                    console.error("LLM API Call Error:", error);
+                    return { error: `Error: ${error.message}. Please check your input or network connection.`, raw: null };
+                }
+            }
+
+            // --- LLM Output Rendering Functions ---
+            function renderResourceEvaluationOutput(data, container) {
+                if (data.error) {
+                    container.innerHTML = `<p class='text-center text-red-700'>${data.error}</p>${data.raw ? `<pre class="mt-4 p-2 bg-red-50 text-red-800 text-xs overflow-auto">${data.raw}</pre>` : ''}`;
+                    return;
+                }
+                let html = `<h4 class="font-bold text-xl text-slate-800 mb-3">VRI Evaluation for: ${data.resource || 'N/A'}</h4>`;
+                html += `<p class="text-slate-700 mb-4"><strong>Context:</strong> ${data.context || 'N/A'}</p>`;
+                
+                if (data.vriAnalysis) {
+                    html += `<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">`;
+                    ['Valuable', 'Rare', 'Inimitable'].forEach(criterion => {
+                        const status = data.vriAnalysis[criterion.toLowerCase()] ? 'Yes' : 'No';
+                        const colorClass = data.vriAnalysis[criterion.toLowerCase()] ? 'text-green-700' : 'text-red-700';
+                        html += `
+                            <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm text-center">
+                                <h5 class="font-bold text-lg text-slate-800 mb-1">${criterion}</h5>
+                                <p class="text-sm ${colorClass} font-semibold mb-2">${status}</p>
+                                <p class="text-slate-600 text-xs">${data.vriAnalysis[`${criterion.toLowerCase()}Explanation`] || 'No explanation.'}</p>
+                            </div>
+                        `;
+                    });
+                    html += `</div>`;
+                    html += `<p class="text-slate-700 font-semibold mt-4"><strong>Overall Assessment:</strong> ${data.overallAssessment || 'No overall assessment.'}</p>`;
+                } else {
+                    html += `<p class="text-center italic">No VRI analysis generated.</p>`;
+                }
+                container.innerHTML = html;
+            }
+
+            function renderIsolatingMechanismsOutput(data, container) {
+                if (data.error) {
+                    container.innerHTML = `<p class='text-center text-red-700'>${data.error}</p>${data.raw ? `<pre class="mt-4 p-2 bg-red-50 text-red-800 text-xs overflow-auto">${data.raw}</pre>` : ''}`;
+                    return;
+                }
+                let html = `<h4 class="font-bold text-xl text-slate-800 mb-3">Isolating Mechanisms for ${data.company || 'N/A'}</h4>`;
+                html += `<p class="text-slate-700 mb-4"><strong>Competitive Advantage:</strong> ${data.competitiveAdvantage || 'N/A'}</p>`;
+                
+                if (data.mechanisms && data.mechanisms.length > 0) {
+                    html += `<ul class="list-disc list-inside text-slate-700 space-y-3">`;
+                    data.mechanisms.forEach(mech => {
+                        html += `<li><strong>${mech.type || 'N/A'}:</strong> ${mech.description || 'No description.'}</li>`;
+                    });
+                    html += `</ul>`;
+                } else {
+                    html += `<p class="text-center italic">No isolating mechanisms suggested.</p>`;
+                }
+                container.innerHTML = html;
+            }
+
+            // LLM: Resource Potential Evaluator
+            const resourceInput = document.getElementById('resource-input');
+            const resourceContextInput = document.getElementById('resource-context-input');
+            const evaluateResourceBtn = document.getElementById('evaluate-resource-btn');
+            const resourceEvalOutput = document.getElementById('resource-eval-output');
+            const resourceEvalLoading = document.getElementById('resource-eval-loading');
+
+            const vriSchema = {
+                type: "OBJECT",
+                properties: {
+                    resource: { type: "STRING" },
+                    context: { type: "STRING" },
+                    vriAnalysis: {
+                        type: "OBJECT",
+                        properties: {
+                            valuable: { type: "BOOLEAN" },
+                            valuableExplanation: { type: "STRING" },
+                            rare: { type: "BOOLEAN" },
+                            rareExplanation: { type: "STRING" },
+                            inimitable: { type: "BOOLEAN" },
+                            inimitableExplanation: { type: "STRING" }
+                        },
+                        required: ["valuable", "valuableExplanation", "rare", "rareExplanation", "inimitable", "inimitableExplanation"]
+                    },
+                    overallAssessment: { type: "STRING" }
+                },
+                required: ["resource", "context", "vriAnalysis", "overallAssessment"]
+            };
+
+            evaluateResourceBtn.addEventListener('click', async () => {
+                const resource = resourceInput.value.trim();
+                const context = resourceContextInput.value.trim();
+
+                if (!resource || !context) {
+                    resourceEvalOutput.innerHTML = "<p class='text-center italic text-red-700'>Please enter both a resource and a company/context.</p>";
+                    return;
+                }
+
+                resourceEvalOutput.innerHTML = "<p class='text-center italic'>Evaluating resource potential...</p>";
+                resourceEvalLoading.classList.remove('hidden');
+
+                const prompt = `Evaluate the resource "${resource}" for "${context}" using the VRI (Valuable, Rare, Inimitable) framework. Provide a boolean (true/false) for each criterion, a brief explanation for why, and an overall assessment of its potential for sustained competitive advantage. Respond strictly in JSON format according to this schema: ${JSON.stringify(vriSchema)}.`;
+                
+                const evaluationData = await callGeminiAPI(prompt, vriSchema);
+                renderResourceEvaluationOutput(evaluationData, resourceEvalOutput);
+                resourceEvalLoading.classList.add('hidden');
+            });
+
+            // LLM: Isolating Mechanism Brainstormer
+            const companyNameIM = document.getElementById('company-name-im');
+            const competitiveAdvantageDescIM = document.getElementById('competitive-advantage-desc-im');
+            const brainstormIsolatingMechanismsBtn = document.getElementById('brainstorm-isolating-mechanisms-btn');
+            const isolatingMechanismsOutput = document.getElementById('isolating-mechanisms-output');
+            const isolatingMechanismsLoading = document.getElementById('isolating-mechanisms-loading');
+
+            const isolatingMechanismSchema = {
+                type: "OBJECT",
+                properties: {
+                    company: { type: "STRING" },
+                    competitiveAdvantage: { type: "STRING" },
+                    mechanisms: {
+                        type: "ARRAY",
+                        items: {
+                            type: "OBJECT",
+                            properties: {
+                                type: { type: "STRING" }, // e.g., "Causal Ambiguity", "Tacit Knowledge"
+                                description: { type: "STRING" }
+                            },
+                            required: ["type", "description"]
+                        }
+                    }
+                },
+                required: ["company", "competitiveAdvantage", "mechanisms"]
+            };
+
+            brainstormIsolatingMechanismsBtn.addEventListener('click', async () => {
+                const company = companyNameIM.value.trim();
+                const competitiveAdvantage = competitiveAdvantageDescIM.value.trim();
+
+                if (!company || !competitiveAdvantage) {
+                    isolatingMechanismsOutput.innerHTML = "<p class='text-center italic text-red-700'>Please enter both company name and competitive advantage description.</p>";
+                    return;
+                }
+
+                isolatingMechanismsOutput.innerHTML = "<p class='text-center italic'>Brainstorming isolating mechanisms...</p>";
+                isolatingMechanismsLoading.classList.remove('hidden');
+
+                const prompt = `For the company "${company}" with the competitive advantage: "${competitiveAdvantage}", brainstorm 3-5 potential isolating mechanisms it could use to sustain this advantage. For each mechanism, provide its type (e.g., Causal Ambiguity, Complexity, Tacit Knowledge, Resource Mobility Barriers, Property Rights, Activity Systems) and a brief description of how it applies. Respond strictly in JSON format according to this schema: ${JSON.stringify(isolatingMechanismSchema)}.`;
+                
+                const mechanismsData = await callGeminiAPI(prompt, isolatingMechanismSchema);
+                renderIsolatingMechanismsOutput(mechanismsData, isolatingMechanismsOutput);
+                isolatingMechanismsLoading.classList.add('hidden');
+            });
+        });
+    </script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
