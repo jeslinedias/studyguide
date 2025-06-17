@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 1 Notes: Creativity Toolkit I - Changing Perspectives</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            line-height: 1.6;
+            scroll-behavior: smooth; /* Smooth scrolling for anchor links */
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #1a202c;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        h2 {
+            color: #2d3748;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #4a5568;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        ul {
+            list-style-type: disc;
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+        ol {
+            list-style-type: decimal;
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        strong {
+            color: #2b6cb0;
+            font-weight: 700;
+        }
+        .highlight {
+            background-color: #fff3c4; /* Light yellow */
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+        .example {
+            font-style: italic;
+            color: #5f6b7d;
+            border-left: 4px solid #a0aec0;
+            padding-left: 10px;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+        .back-link-top {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 15px;
+            background-color: #4299e1; /* Blue-500 */
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px; /* Space below the link */
+        }
+        .back-link-top:hover {
+            background-color: #3182ce; /* Blue-600 */
+            transform: translateY(-2px);
+        }
+        .back-link-top svg {
+            margin-right: 8px;
+        }
+
+        /* Tabbed sections styling */
+        .tabs {
+            display: flex;
+            flex-wrap: wrap; /* Allow tabs to wrap on smaller screens */
+            border-bottom: 2px solid #cbd5e0;
+            margin-bottom: 20px;
+        }
+        .tab-button {
+            padding: 12px 20px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-bottom: none;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            background-color: #edf2f7; /* Gray-100 */
+            color: #4a5568; /* Gray-700 */
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-right: 5px; /* Space between tabs */
+            margin-bottom: -2px; /* Overlap with border-bottom */
+        }
+        .tab-button:hover {
+            background-color: #e2e8f0; /* Gray-200 */
+        }
+        .tab-button.active {
+            background-color: #ffffff;
+            border-color: #cbd5e0;
+            border-bottom-color: #ffffff; /* Hide bottom border for active tab */
+            color: #2d3748; /* Darker gray-800 */
+        }
+        .tab-content {
+            display: none;
+            padding: 20px 0;
+            border-top: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Floating Scroll to Top Button */
+        #scrollToTopBtn {
+            display: none; /* Hidden by default */
+            position: fixed; /* Fixed position */
+            bottom: 30px; /* 30px from the bottom */
+            right: 30px; /* 30px from the right */
+            z-index: 99; /* Ensure it's above other content */
+            border: none; /* Remove borders */
+            outline: none; /* Remove outline */
+            background-color: #4299e1; /* Blue background */
+            color: white; /* White text */
+            cursor: pointer; /* Add a mouse pointer on hover */
+            padding: 15px; /* Some padding */
+            border-radius: 50%; /* Rounded shape */
+            font-size: 1.5rem; /* Large icon */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        #scrollToTopBtn:hover {
+            background-color: #3182ce; /* Darker blue on hover */
+            transform: translateY(-3px); /* Slight lift on hover */
+        }
+
+        /* AI features specific styles */
+        .ai-feature-box {
+            background-color: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        .ai-button {
+            background-color: #48bb78; /* Green-500 */
+            color: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+            border: none;
+            display: inline-flex; /* Use flex to align icon/spinner */
+            align-items: center;
+            justify-content: center;
+        }
+        .ai-button:hover {
+            background-color: #38a169; /* Green-600 */
+        }
+        .loading-spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid #fff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 8px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive adjustments for tabs */
+        @media (max-width: 768px) {
+            .tabs {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .tab-button {
+                margin-right: 0;
+                margin-bottom: 5px;
+                border-radius: 8px; /* Full rounded corners for stacked tabs */
+            }
+            .tab-button.active {
+                border-bottom-color: #cbd5e0; /* Show border for active tab when stacked */
+            }
+            #scrollToTopBtn {
+                bottom: 20px;
+                right: 20px;
+                padding: 12px;
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container rounded-xl">
+        <a href="index.html" class="back-link-top rounded-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H16a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+            </svg>
+            Back to Home
+        </a>
+
+        <h1 class="text-3xl lg:text-4xl">Creativity Toolkit I: Changing Perspectives - Module 1</h1>
+
+        <!-- Tab Buttons -->
+        <div class="tabs" id="moduleTabs">
+            <button class="tab-button active" data-tab="tab1">About the Course</button>
+            <button class="tab-button" data-tab="tab2">Challenging Perspectives</button>
+            <button class="tab-button" data-tab="tab3">Changing Perspectives</button>
+            <button class="tab-button" data-tab="tab4">Cues to Creativity</button>
+        </div>
+
+        <!-- Tab Content -->
+        <div id="tab1" class="tab-content active">
+            <h2>1. About the Course: Welcome to Creativity Toolkit I: Changing Perspectives!</h2>
+            <p>This course focuses on understanding and enhancing creativity, emphasizing that it's a learnable process, not just an inherent trait.</p>
+            <ul>
+                <li>Creativity is applicable in many situations and types of work.</li>
+                <li>
+                    <span class="highlight">Creativity is a process that can be learned and improved upon, not just a "magic moment."</span>
+                </li>
+                <li>The course aims to provide a clear, systematic understanding of creativity.</li>
+            </ul>
+            <div class="ai-feature-box rounded-lg mt-6">
+                <h3 class="text-lg font-bold mb-3">✨ Summarize Tab Content</h3>
+                <button class="ai-button" onclick="summarizeContent('tab1')">
+                    Summarize Tab 1
+                    <span id="summaryLoadingSpinner_tab1" class="loading-spinner hidden"></span>
+                </button>
+                <div id="summaryOutput_tab1" class="mt-4 p-4 bg-purple-50 text-purple-800 border border-purple-200 rounded-lg hidden">
+                    <p class="font-semibold">Summary:</p>
+                    <p id="summaryText_tab1" class="mt-2"></p>
+                </div>
+                <div id="summaryError_tab1" class="mt-4 p-4 bg-red-100 text-red-700 border border-red-300 rounded-lg hidden"></div>
+            </div>
+        </div>
+
+        <div id="tab2" class="tab-content">
+            <h2>2. Lesson 1-1: Challenging Perspectives</h2>
+            <h3>2.1 Creativity as a Core Leadership Skill</h3>
+            <p>Creativity is crucial for leaders to adapt, solve problems, and make decisions in a changing world.</p>
+            <ul>
+                <li><strong>Kodak Example:</strong>
+                    <div class="example">Kodak dominated the film industry but failed to adapt creatively to new digital technologies, leading to its decline. This highlights the need for creative strategic shifts.</div>
+                </li>
+                <li><strong>Minor League Baseball Example:</strong>
+                    <div class="example">Minor league teams creatively used a broader range of statistical indicators to recruit players more effectively, competing with wealthier teams by making data-driven decisions.</div>
+                </li>
+                <li><strong>Infosys CEO Example:</strong>
+                    <div class="example">The CEO of Infosys, after achieving the highest level of Capability Maturity Model certification, shared this knowledge with other Indian companies. This unselfish act elevated the entire Indian IT industry, making everyone, including Infosys, more profitable. This shows how creative, collaborative approaches can lead to greater collective success.</div>
+                </li>
+                <li><strong>Ethical Lapses:</strong> Creativity is needed to identify and address ethical issues that might be overlooked due to conventional thinking.</li>
+                <li><strong>Cultural Understanding:</strong> Leaders need creative thinking to understand and bridge cultural barriers.
+                    <div class="example"><strong>"Je Demande" Misunderstanding:</strong> A French team member saying "Je demande" (I ask) was interpreted by Americans as "I demand," leading to conflict. Creative thinking is required to overcome such misunderstandings by adopting different cultural perspectives.</div>
+                </li>
+                <li>
+                    <span class="highlight">Creativity is broadly applicable across various jobs, organizational levels, and global contexts.</span>
+                </li>
+            </ul>
+
+            <h3>2.2 Creativity is a Skill You Can Learn (Myth Busting)</h3>
+            <p>Addressing common misconceptions about creativity:</p>
+
+            <h4>Myth 1: Creativity is a Magic Moment (The "Light Bulb" Moment)</h4>
+            <ul>
+                <li><strong>Misconception:</strong> Creative ideas appear suddenly, out of nowhere, like a lightning strike.</li>
+                <li><strong>Reality:</strong> Creative insights often occur after significant preparation, training, and effort. They are not entirely out of our control.
+                    <div class="example">Finding lost keys might feel like a sudden insight, but it's not creative. True creative insights are built upon accumulated knowledge and persistent effort.</div>
+                </li>
+                <li><span class="highlight">"Chance favors the prepared mind."</span> We are not powerless bystanders to our own creativity.</li>
+            </ul>
+
+            <h4>Myth 2: Creativity is Random</h4>
+            <ul>
+                <li><strong>Misconception:</strong> Creativity is purely a result of random events or luck.
+                    <div class="example">Inventions like Post-it notes, Penicillin, and chocolate chip cookies had elements of randomness in their discovery.</div>
+                </li>
+                <li><strong>Reality:</strong> While random events can play a role, relying solely on randomness is inefficient. More importantly, recognizing the significance of a random event requires insight and a prepared mind.
+                    <ul>
+                        <li><span class="highlight">It requires insight to see how a random event fits into a bigger picture.</span></li>
+                        <li>We need a systematic process for consistent creativity, not just chance.</li>
+                    </ul>
+                </li>
+                <li><strong>Riddle Example ("What grows up while growing down?"):</strong>
+                    <div class="example">Initially, one might think of plants (roots growing down as the plant grows up) or carrots. However, a creative solution involves re-interpreting "down" as "feathers," leading to the answer "a goose" (grows up while growing down feathers). This shows how our initial perspective can limit us and how changing it can open new possibilities.</div>
+                </li>
+            </ul>
+
+            <h4>Myth 3: Creativity Is In Your Personality</h4>
+            <ul>
+                <li><strong>Misconception:</strong> Only eccentric "lone geniuses" with specific personality traits (e.g., crazy hair, emotionally unstable) can be creative.
+                    <div class="example">Stereotypes often depict creative individuals like Salvador Dali as quirky and friendless.</div>
+                </li>
+                <li><strong>Reality:</strong> Creativity is a process and a skill that can be learned by anyone, regardless of their personality.</li>
+                <li><span class="highlight">It does not depend on a particular personality type.</span></li>
+            </ul>
+
+            <h4>Myth 4: Creativity Is Just Being Smart</h4>
+            <ul>
+                <li><strong>Misconception:</strong> Creativity is solely a function of raw intelligence or IQ.</li>
+                <li><strong>Reality:</strong> While intelligence and domain knowledge are helpful, creativity also involves the ability to *change* how one thinks about a situation.
+                    <div class="example"><strong>Murray Gell-Mann (Physicist) and Isaac Asimov (Writer):</strong> Both were incredibly smart but lacked practical knowledge in certain domains (e.g., car repair). This highlights that raw intelligence isn't enough; specific knowledge and the ability to apply it flexibly are also crucial for creativity.</div>
+                </li>
+                <li>Even smart people can get "locked into their perspectives." Creativity requires working to find alternative ways of thinking.</li>
+            </ul>
+
+            <h4>Myth 5: Creativity Is About Amassing Information</h4>
+            <ul>
+                <li><strong>Misconception:</strong> The more information you have, the more creative you will be.</li>
+                <li><strong>Reality:</strong> Creativity is less about *how much* information you have and more about *how you make sense of it* and form alternative interpretations. It's about changing your perspective on existing information.</li>
+                <li>
+                    <span class="highlight">Creativity is about effectively re-interpreting and utilizing the information already possessed.</span>
+                </li>
+            </ul>
+            <div class="ai-feature-box rounded-lg mt-6">
+                <h3 class="text-lg font-bold mb-3">✨ Summarize Tab Content</h3>
+                <button class="ai-button" onclick="summarizeContent('tab2')">
+                    Summarize Tab 2
+                    <span id="summaryLoadingSpinner_tab2" class="loading-spinner hidden"></span>
+                </button>
+                <div id="summaryOutput_tab2" class="mt-4 p-4 bg-purple-50 text-purple-800 border border-purple-200 rounded-lg hidden">
+                    <p class="font-semibold">Summary:</p>
+                    <p id="summaryText_tab2" class="mt-2"></p>
+                </div>
+                <div id="summaryError_tab2" class="mt-4 p-4 bg-red-100 text-red-700 border border-red-300 rounded-lg hidden"></div>
+            </div>
+        </div>
+
+        <div id="tab3" class="tab-content">
+            <h2>3. Lesson 1-2: Changing Perspectives</h2>
+            <h3>3.1 The Creative Process</h3>
+            <p>Creativity is fundamentally about changing perspectives.</p>
+            <ul>
+                <li><strong>Perspective Definition:</strong> A collection of concepts used to make sense of a story or situation.</li>
+                <li><strong>Ordinary Thinking:</strong> Using existing knowledge and habitual ways of seeing the world.</li>
+                <li><strong>Creative Thinking:</strong> Breaking commitments to habitual perspectives and changing one's point of view. It's about understanding things in a new way, not just acquiring new facts.
+                    <div class="example"><strong>Finding a $10 Bill:</strong> Novel and useful, but not creative because it doesn't involve a change in perspective.</div>
+                </li>
+                <li><strong>Norton Juster's "The Phantom Tollbooth" Example (Bucket of Water):</strong>
+                    <div class="example">A bucket of water can be seen as an "ocean" by an ant, a "cool drink" by an elephant, or "home" by a fish. The *thing itself* (the water) remains the same, but the *perspective* on it changes based on the observer. This illustrates how changing concepts (ant's self-concept, fish's self-concept) alters the interpretation.</div>
+                </li>
+                <li><strong>Jackie Torrance's "Story Lady" Example (Human Body):</strong> This story highlights how disparate parts (fingers, toes, ears) are assembled into a larger, coherent reality (the human being), akin to how our minds cast concepts into roles to form a story or perspective.</li>
+            </ul>
+
+            <h3>3.2 PAGES Framework</h3>
+            <p>The PAGES acronym provides a systematic way to break down and intentionally change perspectives.</p>
+            <ul>
+                <li><strong>P - Parts:</strong> Specific objects, people, places involved in the story.</li>
+                <li><strong>A - Actions:</strong> Operations, behaviors, transformations in the story.</li>
+                <li><strong>G - Goals:</strong> Objectives, motivations, purposes pursued.</li>
+                <li><strong>E - Event:</strong> The type of situation or larger story.</li>
+                <li><strong>S - Self-Concept:</strong> Who we (the storytellers) are in the story.</li>
+                <li>To be creative, the task is to "rewrite what's on our pages" by tweaking or adjusting these five components.</li>
+            </ul>
+
+            <h3>3.3 PAGES Exercise: The Nine-Dot Puzzle</h3>
+            <p>This classic puzzle demonstrates the need to "think outside the box" by changing one's perspective on the problem's "parts."</p>
+            <ul>
+                <li><strong>The Puzzle:</strong> Connect 9 dots (3x3 grid) with no more than four straight, connected lines without lifting your pen or retracing lines.</li>
+                <li><strong>Common Constraint (Implicit):</strong> People often assume lines must stay within the "box" formed by the dots or connect dot-to-dot.</li>
+                <li><strong>Solutions by Changing "Parts" Perspective:</strong>
+                    <ol>
+                        <li><strong>Dots as Larger Circles:</strong> If dots are seen as large circles, lines can pass through their edges, allowing a solution with three lines.</li>
+                        <li><strong>Lines as Thicker:</strong> If lines are thick enough, a single line can cover all nine dots.</li>
+                        <li><strong>Paper as Modifiable:</strong>
+                            <ul>
+                                <li><strong>Rolling the Paper:</strong> Roll the paper into a cylinder and draw a single line spiraling through all dots.</li>
+                                <li><strong>Ripping the Paper:</strong> Rip the dots out and arrange them in a single line, then draw one straight line through them.</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </li>
+                <li><span class="highlight">Creativity often requires stopping reliance on habits and usual ways of behaving.</span></li>
+                <li>The same element can be interpreted differently (e.g., "making a bed" can be an event or an action within a larger event).</li>
+            </ul>
+
+            <h3>3.4 Using, Adding To, Changing, and Building Perspectives</h3>
+            <ul>
+                <li><strong>Ordinary Thinking vs. Creative Thinking:</strong>
+                    <ul>
+                        <li><strong>Ordinary Thinking:</strong> Uses existing perspectives and adds new information (e.g., learning a new fact about a client). This reinforces the current story.</li>
+                        <li><strong>Creative Thinking:</strong> Changes or builds a new perspective.</li>
+                    </ul>
+                </li>
+                <li><strong>Three Levels of Creative Action:</strong>
+                    <ol>
+                        <li><strong>Adding to Perspective:</strong> Acquiring new information within an existing framework (e.g., learning a new fact about a client).</li>
+                        <li><strong>Changing Perspective:</strong> Shifting existing concepts within PAGES (e.g., a "client" becomes a "partner"). This changes the interpretation of past events and opens new future possibilities. It's like a plot twist in a story.</li>
+                        <li><strong>Building a New Perspective:</strong> Constructing entirely new concepts or frameworks when existing ones are inadequate (e.g., developing non-monetary compensation ideas when only monetary ones existed). This often requires active learning and exploration of unfamiliar areas.</li>
+                    </ol>
+                </li>
+                <li><span class="highlight">The core of the creative process is pushing our perspectives, not just our stories.</span></li>
+            </ul>
+
+            <h3>3.5 Separating Stories from Perspectives</h3>
+            <ul>
+                <li><strong>Story:</strong> A series of actions or events that occur.</li>
+                <li><strong>Perspective:</strong> The way in which one thinks about those actions.</li>
+                <li><strong>Importance of Separation:</strong> This distinction is crucial because it allows us to analyze and intentionally change *how* we interpret reality, rather than just passively experiencing it.
+                    <div class="example"><strong>Fishing Business Example:</strong> If fish catch is low, one might attribute it to bad luck (existing perspective, advancing the story). Alternatively, one could change perspective to investigate team performance or environmental factors, leading to different actions and potentially better solutions.</div>
+                </li>
+                <li>Our perspectives are "models" or "maps" of the territory, not the territory itself. They are necessarily incomplete.</li>
+                <li>We tend to commit to our perspectives out of habit and efficiency, forgetting they are just one way of seeing things. Creativity involves recognizing and exploring alternative "maps."</li>
+                <li><strong>Sherlock Holmes & Dr. Watson Camping Story:</strong>
+                    <div class="example">Watson, stuck in astronomical, astrological, logical, horological, and theological perspectives, completely misses the obvious: their tent was stolen. Holmes' creative insight comes from changing his perspective to the practical, immediate reality of their situation. This highlights how being "locked into particular perspectives" can prevent noticing crucial information directly in front of us.</div>
+                </li>
+                <li><strong>Habits of Mind:</strong> Essential for daily functioning and efficiency (e.g., not re-learning what breakfast is every day). However, they can also hinder creativity by limiting our views.</li>
+                <li>We must balance exploiting existing knowledge/perspectives with exploring new ones. We don't need to be creative all the time, only when needed.</li>
+            </ul>
+            <div class="ai-feature-box rounded-lg mt-6">
+                <h3 class="text-lg font-bold mb-3">✨ Summarize Tab Content</h3>
+                <button class="ai-button" onclick="summarizeContent('tab3')">
+                    Summarize Tab 3
+                    <span id="summaryLoadingSpinner_tab3" class="loading-spinner hidden"></span>
+                </button>
+                <div id="summaryOutput_tab3" class="mt-4 p-4 bg-purple-50 text-purple-800 border border-purple-200 rounded-lg hidden">
+                    <p class="font-semibold">Summary:</p>
+                    <p id="summaryText_tab3" class="mt-2"></p>
+                </div>
+                <div id="summaryError_tab3" class="mt-4 p-4 bg-red-100 text-red-700 border border-red-300 rounded-lg hidden"></div>
+            </div>
+        </div>
+
+        <div id="tab4" class="tab-content">
+            <h2>4. Lesson 1-3: Cues to Creativity</h2>
+            <h3>4.1 The Impasse Cue</h3>
+            <p>Impasses are situations where we are stuck and cannot advance our current story, prompting us to seek new perspectives.</p>
+            <ul>
+                <li><strong>Definition:</strong> Hitting a "brick wall" where there seems to be no way forward using current thinking.</li>
+                <li><strong>Burt's Bees Example:</strong>
+                    <div class="example">Burt Shavitz and Roxanne Quimby started making beeswax candles. They were stuck with an excess of beeswax. This impasse led Roxanne to creatively think of a new use for the beeswax – lip balm. The initial frustration led to a major product innovation.</div>
+                </li>
+                <li><strong>Contingencies for Impasse to be Fruitful:</strong>
+                    <ul>
+                        <li><strong>Caring about the Goal:</strong> If you don't care, an impasse leads to giving up.</li>
+                        <li><strong>Self-Efficacy:</strong> Believing in your capability to overcome the challenge.</li>
+                        <li><strong>Enjoyment of the Task:</strong> Viewing the impasse as a challenge rather than just frustration.</li>
+                        <li><strong>Nature of the Goal:</strong> Goals like "10x better" (Google's philosophy) force rethinking, whereas "10% better" often leads to incremental changes within existing perspectives.</li>
+                        <li><strong>Acknowledging Constraints:</strong> Constraints (e.g., time, resources) create impasses, which can be helpful triggers for creativity. Creativity is not about a lack of constraint, but often emerges from working within them.</li>
+                        <li><strong>Conflict:</strong> Disagreements with others can create an impasse, forcing a re-evaluation of perspectives. Seeking diverse viewpoints helps create these beneficial impasses.</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h3>4.2 The Dissatisfaction Cue</h3>
+            <p>Dissatisfaction with the current story or outcome can prompt a change in perspective.</p>
+            <ul>
+                <li><strong>Definition:</strong> Feeling that something isn't "right" or "good enough," even if there's no clear problem.</li>
+                <li><strong>Coca-Cola "Share of Stomach" Example:</strong>
+                    <div class="example">A Coca-Cola executive, Putnam, was initially proud of soda consumption surpassing milk (focused on "share of market" vs. Pepsi). Later, he felt immense dissatisfaction, realizing the health implications he had overlooked. This dissatisfaction came from a change in perspective, acknowledging a broader "share of stomach" concept and ethical responsibility.</div>
+                </li>
+                <li><strong>Contingencies for Dissatisfaction to be Fruitful:</strong>
+                    <ul>
+                        <li><strong>Ownership/Responsibility:</strong> Feeling personally accountable for the outcome. If you don't own it, you might rationalize the dissatisfaction away.</li>
+                        <li><strong>Noticing the Difference:</strong> Being able to perceive the gap between the actual and desired state.</li>
+                        <li><strong>Moral Compass:</strong> A strong ethical framework can drive dissatisfaction when actions don't align with values.</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h3>4.3 The Surprise Cue</h3>
+            <p>Unexpected events or information can challenge existing perspectives and prompt creativity.</p>
+            <ul>
+                <li><strong>Definition:</strong> Encountering something that violates expectations.</li>
+                <li><strong>Teflon Example:</strong>
+                    <div class="example">Roy Plunkett accidentally discovered Teflon when trying to make a new refrigerant. A surprise (a solidified, waxy substance instead of gas) led to a revolutionary invention.</div>
+                </li>
+                <li><strong>Contingencies for Surprise to be Fruitful:</strong>
+                    <ul>
+                        <li><strong>Noticing:</strong> Paying attention to unexpected observations and not dismissing them.</li>
+                        <li><strong>Openness to New Experiences:</strong> Being willing to deviate from routines and put oneself in changing or different situations.</li>
+                        <li><strong>Playfulness:</strong> Approaching the unexpected with a sense of curiosity and exploration rather than frustration.</li>
+                    </ul>
+                </li>
+                <li>Surprise can work in conjunction with impasses or dissatisfaction.</li>
+            </ul>
+
+            <h3>4.4 The Crosstalk Cue</h3>
+            <p>Crosstalk involves making connections across different ideas or stories, often through casual encounters or interdisciplinary interactions.</p>
+            <ul>
+                <li><strong>Definition:</strong> The spontaneous linking of ideas from different domains or conversations.</li>
+                <li><strong>Benoit Mandelbrot Example (Fractal Geometry):</strong>
+                    <div class="example">Mandelbrot, a mathematician, noticed a similar pattern between Pareto's income distribution and noise in communication lines at IBM. This "crosstalk" between seemingly unrelated fields led to his development of fractal geometry.</div>
+                </li>
+                <li><strong>Larry Page and Sergey Brin Example (Google Search):</strong>
+                    <div class="example">They connected the academic concept of citing papers (indicating importance) to webpages linking to each other. This crosstalk led to the PageRank algorithm, revolutionizing web search.</div>
+                </li>
+                <li><strong>Antibiotic Spider Silk Example (University of Nottingham):</strong>
+                    <div class="example">A spider expert and a chemist had a chance conversation. The biologist's interest in spider silk properties sparked an idea in the chemist about embedding antibiotics into artificial spider silk for wound healing. This interdisciplinary crosstalk led to an unexpected medical application.</div>
+                </li>
+                <li><strong>Contingencies for Crosstalk to be Fruitful:</strong>
+                    <ul>
+                        <li><strong>Noticing Connections:</strong> Being attentive and open to new sources of information.</li>
+                        <li><strong>Openness to New Sources:</strong> Actively seeking out diverse people and information, and not staying in "isolated little boxes."</li>
+                        <li><strong>Attending & Listening:</strong> Genuinely paying attention to and respecting information, even if unfamiliar or from different perspectives.</li>
+                        <li><strong>Willingness to Consider:</strong> Not dismissing new information or people as irrelevant.</li>
+                    </ul>
+                </li>
+                <li>Crosstalk can occur between an individual's own stories or socially between different people's stories.</li>
+                <li>It's an opportunity to think more flexibly, but requires confidence to act upon.</li>
+                <li>The better one gets at the creative process, the more confidence they gain to navigate ambiguity and uncertainty.</li>
+                <li><span class="highlight">Key Cues to seriously consider: Impasse, Dissatisfaction, Surprise, Crosstalk.</span></li>
+            </ul>
+            <div class="ai-feature-box rounded-lg mt-6">
+                <h3 class="text-lg font-bold mb-3">✨ Summarize Tab Content</h3>
+                <button class="ai-button" onclick="summarizeContent('tab4')">
+                    Summarize Tab 4
+                    <span id="summaryLoadingSpinner_tab4" class="loading-spinner hidden"></span>
+                </button>
+                <div id="summaryOutput_tab4" class="mt-4 p-4 bg-purple-50 text-purple-800 border border-purple-200 rounded-lg hidden">
+                    <p class="font-semibold">Summary:</p>
+                    <p id="summaryText_tab4" class="mt-2"></p>
+                </div>
+                <div id="summaryError_tab4" class="mt-4 p-4 bg-red-100 text-red-700 border border-red-300 rounded-lg hidden"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Scroll to Top Button -->
+    <button onclick="topFunction()" id="scrollToTopBtn" title="Go to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // Tab functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabsContainer = document.getElementById('moduleTabs');
+            const tabButtons = tabsContainer.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Deactivate all buttons and hide all content
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+
+                    // Activate clicked button
+                    button.classList.add('active');
+
+                    // Show corresponding content
+                    const targetTabId = button.dataset.tab;
+                    document.getElementById(targetTabId).classList.add('active');
+                });
+            });
+
+            // Set initial active tab (if none is explicitly active, default to first)
+            if (!tabsContainer.querySelector('.tab-button.active')) {
+                tabButtons[0].classList.add('active');
+                tabContents[0].classList.add('active');
+            }
+        });
+
+        // Scroll to top button functionality
+        let mybutton = document.getElementById("scrollToTopBtn");
+
+        // When the user scrolls down 20px from the top of the document, show the button
+        window.onscroll = function() {scrollFunction()};
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                mybutton.style.display = "block";
+            } else {
+                mybutton.style.display = "none";
+            }
+        }
+
+        // When the user clicks on the button, scroll to the top of the document
+        function topFunction() {
+            document.body.scrollTop = 0; // For Safari
+            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        }
+
+        // LLM Summarization Function
+        async function summarizeContent(tabId) {
+            const tabContentElement = document.getElementById(tabId);
+            const summaryOutputElement = document.getElementById(`summaryOutput_${tabId}`);
+            const summaryTextElement = document.getElementById(`summaryText_${tabId}`);
+            const loadingSpinner = document.getElementById(`summaryLoadingSpinner_${tabId}`);
+            const errorDiv = document.getElementById(`summaryError_${tabId}`);
+
+            summaryOutputElement.classList.add('hidden');
+            errorDiv.classList.add('hidden');
+            loadingSpinner.classList.remove('hidden');
+
+            // Extract only the text content, ignoring HTML tags and examples
+            let contentToSummarize = tabContentElement.textContent.replace(/Example:\s*[\s\S]*?(?=(Example:|Myth \d:|Contingencies for|Solutions by Changing|The Puzzle:|The (\w+) Cue))/g, ''); // Remove examples for cleaner summary
+            contentToSummarize = contentToSummarize.replace(/\s\s+/g, ' ').trim(); // Clean up multiple spaces
+
+            // Prepare the prompt for the LLM
+            const prompt = `Please provide a concise summary of the following text, focusing on the main points and key takeaways. Keep it under 200 words:\n\n"${contentToSummarize}"`;
+
+            let chatHistory = [];
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+            const payload = { contents: chatHistory };
+            const apiKey = ""; // Canvas will automatically provide the API key
+
+            try {
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.status} ${response.statusText}`);
+                }
+
+                const result = await response.json();
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const generatedSummary = result.candidates[0].content.parts[0].text;
+                    summaryTextElement.textContent = generatedSummary;
+                    summaryOutputElement.classList.remove('hidden');
+                } else {
+                    summaryTextElement.textContent = "Could not generate a summary. Please try again.";
+                    summaryOutputElement.classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error(`Error summarizing tab ${tabId}:`, error);
+                errorDiv.textContent = `Failed to generate summary: ${error.message}. Please try again later.`;
+                errorDiv.classList.remove('hidden');
+            } finally {
+                loadingSpinner.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">

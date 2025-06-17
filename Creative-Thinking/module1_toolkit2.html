@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 1 Notes: Creativity Toolkit II - Creative Collaboration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #1a202c;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        h2 {
+            color: #2d3748;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #4a5568;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        ul {
+            list-style-type: disc;
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+        ol {
+            list-style-type: decimal;
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        strong {
+            color: #2b6cb0;
+            font-weight: 700;
+        }
+        .highlight {
+            background-color: #fff3c4;
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+        .example {
+            font-style: italic;
+            color: #5f6b7d;
+            border-left: 4px solid #a0aec0;
+            padding-left: 10px;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+        .back-link-top {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 15px;
+            background-color: #4299e1;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .back-link-top:hover {
+            background-color: #3182ce;
+            transform: translateY(-2px);
+        }
+        .back-link-top svg {
+            margin-right: 8px;
+        }
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            border-bottom: 2px solid #cbd5e0;
+            margin-bottom: 20px;
+        }
+        .tab-button {
+            padding: 12px 20px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-bottom: none;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            background-color: #edf2f7;
+            color: #4a5568;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-right: 5px;
+            margin-bottom: -2px;
+        }
+        .tab-button:hover {
+            background-color: #e2e8f0;
+        }
+        .tab-button.active {
+            background-color: #ffffff;
+            border-color: #cbd5e0;
+            border-bottom-color: #ffffff;
+            color: #2d3748;
+        }
+        .tab-content {
+            display: none;
+            padding: 20px 0;
+            border-top: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        #scrollToTopBtn {
+            display: none;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 99;
+            border: none;
+            outline: none;
+            background-color: #4299e1;
+            color: white;
+            cursor: pointer;
+            padding: 15px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        #scrollToTopBtn:hover {
+            background-color: #3182ce;
+            transform: translateY(-3px);
+        }
+        .ai-feature-box {
+            background-color: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        .ai-button {
+            background-color: #48bb78;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .ai-button:hover {
+            background-color: #38a169;
+        }
+        .loading-spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid #fff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 8px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @media (max-width: 768px) {
+            .tabs {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .tab-button {
+                margin-right: 0;
+                margin-bottom: 5px;
+                border-radius: 8px;
+            }
+            .tab-button.active {
+                border-bottom-color: #cbd5e0;
+            }
+            #scrollToTopBtn {
+                bottom: 20px;
+                right: 20px;
+                padding: 12px;
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container rounded-xl">
+        <a href="index.html" class="back-link-top rounded-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H16a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+            </svg>
+            Back to Home
+        </a>
+
+        <h1 class="text-3xl lg:text-4xl">Creativity Toolkit II: Creative Collaboration - Module 1</h1>
+
+        <!-- Tab Buttons -->
+        <div class="tabs" id="moduleTabs">
+            <button class="tab-button active" data-tab="tab1">Social Influence on Ideas</button>
+            <button class="tab-button" data-tab="tab2">Pitching Ideas Effectively</button>
+        </div>
+
+        <!-- Tab Content -->
+        <div id="tab1" class="tab-content active">
+            <h2>1. Lesson 1-1: Social Influence on Creative Ideas</h2>
+            <h3>1.1 The Social Context of Creativity</h3>
+            <ul>
+                <li>Creativity is often influenced by social interactions and group dynamics.</li>
+                <li>Ideas rarely emerge in a vacuum; they are shaped by collaboration and feedback.</li>
+            </ul>
+
+            <h3>1.2 How Social Influence Can Help Creativity</h3>
+            <ul>
+                <li><strong>Diverse Perspectives:</strong> Collaboration brings together different viewpoints, leading to richer ideas and solutions.</li>
+                <li><strong>Constructive Criticism:</strong> Feedback from others can help refine and improve ideas, identifying flaws or new opportunities.</li>
+                <li><strong>Motivation and Support:</strong> A supportive social environment can encourage risk-taking and persistence.</li>
+                <li><strong>Crosstalk:</strong> Informal interactions can lead to unexpected connections between ideas (as seen in Creativity Toolkit I).</li>
+            </ul>
+
+            <h3>1.3 Potential Pitfalls of Social Influence</h3>
+            <ul>
+                <li><strong>Groupthink:</strong> Desire for harmony or conformity in a group can lead to irrational or dysfunctional decision-making. Individuals suppress dissenting viewpoints.</li>
+                <li><strong>Production Blocking:</strong> In brainstorming, only one person can speak at a time, limiting the flow of ideas.</li>
+                <li><strong>Evaluation Apprehension:</strong> Fear of being judged can inhibit individuals from sharing novel or "risky" ideas.</li>
+                <li><strong>Conformity Pressures:</strong> Tendency to align with the majority opinion, even if it contradicts one's own beliefs.</li>
+                <li><strong>Lack of Psychological Safety:</strong> If team members don't feel safe to express themselves, creativity will be stifled.</li>
+            </ul>
+
+            <h3>1.4 Strategies for Maximizing Positive Social Influence</h3>
+            <ul>
+                <li><strong>Structured Brainstorming:</strong> Techniques like "brainwriting" or "nominal group technique" can mitigate production blocking.</li>
+                <li><strong>Foster Psychological Safety:</strong> Leaders must explicitly encourage open dialogue and assure that mistakes are learning opportunities.</li>
+                <li><strong>Encourage Dissent:</strong> Actively seek out and value opposing viewpoints to challenge assumptions.</li>
+                <li><strong>Diversity of Thought:</strong> Bring together individuals with varied backgrounds, expertise, and thinking styles.</li>
+                <li><strong>Rotate Roles:</strong> Change leadership or presentation roles to avoid dominant voices.</li>
+            </ul>
+            <div class="ai-feature-box rounded-lg mt-6">
+                <h3 class="text-lg font-bold mb-3">✨ Summarize Tab Content</h3>
+                <button class="ai-button" onclick="summarizeContent('tab1')">
+                    Summarize Tab 1
+                    <span id="summaryLoadingSpinner_tab1" class="loading-spinner hidden"></span>
+                </button>
+                <div id="summaryOutput_tab1" class="mt-4 p-4 bg-purple-50 text-purple-800 border border-purple-200 rounded-lg hidden">
+                    <p class="font-semibold">Summary:</p>
+                    <p id="summaryText_tab1" class="mt-2"></p>
+                </div>
+                <div id="summaryError_tab1" class="mt-4 p-4 bg-red-100 text-red-700 border border-red-300 rounded-lg hidden"></div>
+            </div>
+        </div>
+
+        <div id="tab2" class="tab-content">
+            <h2>2. Lesson 1-2: Pitching Ideas Effectively</h2>
+            <h3>2.1 The Importance of Pitching</h3>
+            <ul>
+                <li>A great idea is only valuable if it can be communicated and accepted by others.</li>
+                <li>Effective pitching is crucial for gaining support, resources, and implementation.</li>
+                <li>It's about selling your vision, not just listing features.</li>
+            </ul>
+
+            <h3>2.2 Understanding Your Audience</h3>
+            <ul>
+                <li><strong>Who are they?</strong> What are their roles, expertise, and priorities?</li>
+                <li><strong>What are their limits?</strong> What existing beliefs or constraints might make them resistant to your idea?
+                    <div class="example">Pitching a complex technical solution to a non-technical audience requires simplifying jargon and focusing on benefits.</div>
+                </li>
+                <li><strong>What are their interests?</strong> How does your idea align with their goals, values, or concerns?
+                    <div class="example">When pitching a new project to management, highlight its financial benefits and strategic alignment, not just its innovative aspects.</div>
+                </li>
+                <li>Tailor your message to resonate with their specific needs and perspectives.</li>
+            </ul>
+
+            <h3>2.3 Crafting Your Pitch</h3>
+            <ul>
+                <li><strong>Start with the Problem:</strong> Clearly articulate the problem your idea solves. This creates relevance.</li>
+                <li><strong>Highlight Novelty AND Usefulness:</strong> Emphasize both aspects of creativity. Explain *why* it's new and *how* it's valuable.</li>
+                <li><strong>Use Storytelling:</strong> Engage emotions and make the idea memorable. Paint a picture of the future.
+                    <div class="example">Instead of just stating product features, tell a story about how a user's life is improved by it.</div>
+                </li>
+                <li><strong>Keep it Concise:</strong> Get to the point quickly, especially for busy audiences. The "elevator pitch."</li>
+                <li><strong>Anticipate Objections:</strong> Address potential concerns proactively.</li>
+                <li><strong>Call to Action:</strong> Clearly state what you want the audience to do next (e.g., provide feedback, approve funding).</li>
+            </ul>
+
+            <h3>2.4 Non-Verbal Communication and Delivery</h3>
+            <ul>
+                <li><strong>Enthusiasm and Passion:</strong> Convey your belief in the idea.</li>
+                <li><strong>Confidence:</strong> Stand tall, make eye contact, speak clearly.</li>
+                <li><strong>Body Language:</strong> Use open and inviting gestures.</li>
+                <li><strong>Adaptability:</strong> Be ready to adjust your pitch based on audience reactions and questions.</li>
+            </ul>
+
+            <h3>2.5 Persistence and Iteration in Pitching</h3>
+            <ul>
+                <li>Just like ideas, pitches often need refinement.</li>
+                <li>If a pitch is rejected, learn from the experience and iterate on your approach.</li>
+                <li>Don't give up after the first "no."</li>
+            </ul>
+            <div class="ai-feature-box rounded-lg mt-6">
+                <h3 class="text-lg font-bold mb-3">✨ Summarize Tab Content</h3>
+                <button class="ai-button" onclick="summarizeContent('tab2')">
+                    Summarize Tab 2
+                    <span id="summaryLoadingSpinner_tab2" class="loading-spinner hidden"></span>
+                </button>
+                <div id="summaryOutput_tab2" class="mt-4 p-4 bg-purple-50 text-purple-800 border border-purple-200 rounded-lg hidden">
+                    <p class="font-semibold">Summary:</p>
+                    <p id="summaryText_tab2" class="mt-2"></p>
+                </div>
+                <div id="summaryError_tab2" class="mt-4 p-4 bg-red-100 text-red-700 border border-red-300 rounded-lg hidden"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Scroll to Top Button -->
+    <button onclick="topFunction()" id="scrollToTopBtn" title="Go to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // Tab functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabsContainer = document.getElementById('moduleTabs');
+            const tabButtons = tabsContainer.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+
+                    button.classList.add('active');
+                    const targetTabId = button.dataset.tab;
+                    document.getElementById(targetTabId).classList.add('active');
+                });
+            });
+
+            if (!tabsContainer.querySelector('.tab-button.active')) {
+                tabButtons[0].classList.add('active');
+                tabContents[0].classList.add('active');
+            }
+        });
+
+        // Scroll to top button functionality
+        let mybutton = document.getElementById("scrollToTopBtn");
+        window.onscroll = function() {scrollFunction()};
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                mybutton.style.display = "block";
+            } else {
+                mybutton.style.display = "none";
+            }
+        }
+
+        function topFunction() {
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        }
+
+        // LLM Summarization Function
+        async function summarizeContent(tabId) {
+            const tabContentElement = document.getElementById(tabId);
+            const summaryOutputElement = document.getElementById(`summaryOutput_${tabId}`);
+            const summaryTextElement = document.getElementById(`summaryText_${tabId}`);
+            const loadingSpinner = document.getElementById(`summaryLoadingSpinner_${tabId}`);
+            const errorDiv = document.getElementById(`summaryError_${tabId}`);
+
+            summaryOutputElement.classList.add('hidden');
+            errorDiv.classList.add('hidden');
+            loadingSpinner.classList.remove('hidden');
+            summaryTextElement.textContent = ''; // Clear previous output
+
+            // Extract only the text content, ignoring HTML tags and examples for summary
+            let contentToSummarize = tabContentElement.cloneNode(true); // Clone to avoid modifying original DOM
+            contentToSummarize.querySelectorAll('.example, .ai-feature-box').forEach(el => el.remove());
+            contentToSummarize = contentToSummarize.textContent.replace(/\s\s+/g, ' ').trim();
+
+            const prompt = `Please provide a concise summary of the following text, focusing on the main points and key takeaways. Keep it under 200 words:\n\n"${contentToSummarize}"`;
+
+            let chatHistory = [];
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+            const payload = { contents: chatHistory };
+            const apiKey = ""; // Canvas will automatically provide the API key
+
+            try {
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.status} ${response.statusText}`);
+                }
+
+                const result = await response.json();
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const generatedSummary = result.candidates[0].content.parts[0].text;
+                    summaryTextElement.textContent = generatedSummary;
+                    summaryOutputElement.classList.remove('hidden');
+                } else {
+                    summaryTextElement.textContent = "Could not generate a summary. Please try again.";
+                    summaryOutputElement.classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error(`Error summarizing tab ${tabId}:`, error);
+                errorDiv.textContent = `Failed to generate summary: ${error.message}. Please try again later.`;
+                errorDiv.classList.remove('hidden');
+            } finally {
+                loadingSpinner.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
