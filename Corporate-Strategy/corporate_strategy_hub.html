@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corporate Strategy Study Hub</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary-blue': '#1a56db',
+                        'secondary-blue': '#3b82f6',
+                        'light-blue': '#eff6ff',
+                        'dark-gray': '#374151',
+                        'light-gray': '#f3f4f6',
+                        'accent-blue': '#2563eb',
+                        'success-green': '#10b981',
+                        'warning-yellow': '#f59e0b',
+                        'danger-red': '#ef4444',
+                        'highlight-yellow': '#ffeb3b', // For search term highlighting in results snippet
+                        'in-page-highlight': '#a7f3d0', // Light green for in-page highlighting
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Base styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background-color: theme('colors.light-gray');
+            color: theme('colors.dark-gray');
+            padding-top: 2rem; /* Initial padding, adjusted by JS for fixed search bar height */
+            padding-right: 1rem; /* Give space for fixed search bar */
+        }
+
+        /* Global Search Container (fixed to top right) */
+        #global-search-container {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: theme('colors.white');
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 0.5rem;
+            border-radius: 0.5rem; /* rounded-lg */
+            border: 1px solid theme('colors.gray.200');
+            max-width: 300px; /* Limit width */
+        }
+
+        #global-search-container input {
+            flex-grow: 1;
+            padding: 0.5rem; /* Smaller padding */
+            font-size: 0.875rem; /* text-sm */
+            border: 1px solid theme('colors.gray.300');
+            border-radius: 0.375rem; /* rounded-md */
+            outline: none;
+            transition: all 0.2s ease-in-out;
+        }
+        #global-search-container input:focus {
+            box-shadow: 0 0 0 2px theme('colors.primary-blue');
+            border-color: transparent;
+        }
+
+        #global-search-container button {
+            padding: 0.5rem 0.875rem; /* Smaller padding */
+            font-size: 0.875rem; /* text-sm */
+            background-color: theme('colors.primary-blue');
+            color: theme('colors.white');
+            border-radius: 0.375rem; /* rounded-md */
+            transition: all 0.2s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #global-search-container button:hover {
+            background-color: theme('colors.secondary-blue');
+        }
+        #global-search-container button:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px theme('colors.primary-blue');
+            box-shadow: 0 0 0 4px theme('colors.primary-blue') / 0.5;
+        }
+        #global-search-container button svg {
+            margin-left: 0.25rem;
+            height: 1rem; /* Smaller icon */
+            width: 1rem;
+        }
+
+        /* Styles for the module's internal tabs */
+        .module-tab-button.active-module-tab {
+            border-bottom: 3px solid theme('colors.primary-blue');
+            color: theme('colors.primary-blue');
+            background-color: theme('colors.white');
+        }
+        .module-tab-button {
+            transition: all 0.2s ease-in-out;
+            border-bottom: 3px solid transparent; /* Ensure consistent border height */
+        }
+
+        /* Styles for content frames and boxes */
+        .content-box {
+            @apply bg-white p-6 rounded-xl shadow-lg border border-gray-200 mb-6;
+        }
+
+        .subsection-header {
+            @apply text-xl font-semibold text-accent-blue mb-4 pb-2 border-b border-blue-100;
+        }
+
+        .example-box {
+            @apply bg-blue-50 border-l-4 border-accent-blue rounded-r-lg shadow-sm p-4 mt-3 mb-4 text-sm italic text-gray-700 leading-relaxed;
+        }
+        .example-box.bg-red-50 { /* Specific for failed examples */
+            border-color: theme('colors.danger-red');
+        }
+
+        .chart-frame, .image-frame {
+            @apply bg-gray-50 border border-gray-300 rounded-lg p-4 my-6 shadow-md flex flex-col items-center justify-center text-center;
+        }
+
+        .chart-description-box {
+            @apply bg-yellow-50 border-l-4 border-warning-yellow rounded-r-lg shadow-sm p-4 mt-3 mb-4 text-sm text-gray-800 leading-relaxed;
+        }
+
+        /* Custom styles for main sections */
+        .main-content-section {
+            @apply max-w-5xl mx-auto bg-white rounded-2xl shadow-xl p-6 md:p-10 border border-gray-200;
+        }
+
+        /* Specific styles for response content (kept for general text display) */
+        .text-content-display p {
+            margin-bottom: 0.75rem; /* Space between paragraphs */
+        }
+        .text-content-display ul {
+            list-style-type: disc;
+            margin-left: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .text-content-display ol {
+            list-style-type: decimal;
+            margin-left: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .text-content-display li {
+            margin-bottom: 0.25rem;
+        }
+        .text-content-display b {
+            font-weight: bold;
+        }
+        .text-content-display i {
+            font-style: italic;
+        }
+
+        /* Search highlighting in results snippets */
+        .search-highlight {
+            background-color: theme('colors.highlight-yellow');
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        /* In-page highlighting for clicked search results */
+        .current-search-highlight {
+            background-color: theme('colors.in-page-highlight'); /* A distinct color for in-page */
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-weight: bold;
+            display: inline; /* Keep inline for text flow */
+        }
+
+        /* Responsive adjustments for global search bar */
+        @media (max-width: 640px) { /* Adjust for smaller screens */
+            #global-search-container {
+                left: 0.5rem;
+                right: 0.5rem;
+                width: auto; /* Allow it to shrink */
+                max-width: none; /* Remove max-width on small screens */
+                padding: 0.5rem;
+                top: 0.5rem; /* Adjust top spacing */
+            }
+            body {
+                padding-top: 5rem; /* More space for search bar on small screens */
+            }
+        }
+    </style>
+</head>
+<body class="bg-light-gray p-4 sm:p-6 md:p-8">
+
+    <!-- Global Search Bar (Fixed to Top Right) -->
+    <div id="global-search-container">
+        <input type="text" id="search-input" placeholder="Search...">
+        <button id="search-button">
+            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- Home Page Section -->
+    <div id="home-page" class="main-content-section">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-primary-blue text-center mb-8 pb-4 border-b-4 border-accent-blue/30 tracking-tight">
+            Corporate Strategy Study Hub
+        </h1>
+
+        <div class="text-center mb-10">
+            <p class="text-lg text-dark-gray mb-4">Welcome to your central hub for learning about Corporate Strategy. Select a module below to begin your study!</p>
+        </div>
+
+        <h2 class="text-2xl font-bold text-secondary-blue mb-6 pb-2 border-b border-blue-200">Available Modules</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            <!-- Module 1 Card: Corporate-Level Strategies -->
+            <div class="bg-blue-100 rounded-xl shadow-md overflow-hidden transform hover:scale-105 transition-transform duration-300 ease-in-out cursor-pointer" onclick="showSection('module-1-content', 'intro')">
+                <div class="p-6">
+                    <h3 class="text-xl font-semibold text-primary-blue mb-2">Module 1: Corporate-Level Strategies</h3>
+                    <p class="text-gray-700 text-sm">Dive deep into the fundamental types of corporate strategies, including growth, stability, and retrenchment.</p>
+                    <button class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-blue hover:bg-secondary-blue focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-blue">
+                        Start Module
+                        <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M10.293 15.707a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                            <path fill-rule="evenodd" d="M4.293 15.707a1 1 0 010-1.414L8.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Placeholder Module 2 Card -->
+            <div class="bg-gray-100 rounded-xl shadow-md overflow-hidden opacity-70 cursor-not-allowed">
+                <div class="p-6">
+                    <h3 class="text-xl font-semibold text-gray-600 mb-2">Module 2: Strategic Analysis</h3>
+                    <p class="text-gray-500 text-sm">Coming soon: Explore frameworks like Porter's Five Forces and SWOT analysis to understand industry dynamics.</p>
+                    <button class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-gray-400 bg-gray-200 cursor-not-allowed">
+                        Coming Soon
+                    </button>
+                </div>
+            </div>
+
+            <!-- Placeholder Module 3 Card -->
+            <div class="bg-gray-100 rounded-xl shadow-md overflow-hidden opacity-70 cursor-not-allowed">
+                <div class="p-6">
+                    <h3 class="text-xl font-semibold text-gray-600 mb-2">Module 3: Business-Level Strategies</h3>
+                    <p class="text-gray-500 text-sm">Coming soon: Learn about cost leadership, differentiation, and focus strategies for competitive advantage.</p>
+                    <button class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-gray-400 bg-gray-200 cursor-not-allowed">
+                        Coming Soon
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Module 1: Corporate-Level Strategies Content -->
+    <div id="module-1-content" class="main-content-section hidden">
+        <button class="mb-6 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-primary-blue bg-light-blue hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-blue" onclick="showSection('home-page')">
+            <svg class="mr-2 -ml-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M9.707 15.707a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 111.414 1.414L6.414 10l3.293 3.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+            </svg>
+            Back to Modules
+        </button>
+
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-primary-blue text-center mb-8 pb-4 border-b-4 border-accent-blue/30 tracking-tight">
+            Corporate-Level Strategies: Enhanced Study Guide
+        </h1>
+
+        <!-- Module's Internal Tab Buttons -->
+        <div class="flex flex-wrap justify-center mb-6 bg-gray-50 rounded-lg shadow-inner py-1">
+            <button class="module-tab-button flex-grow text-center px-3 py-2 sm:px-4 sm:py-3 text-xs sm:text-sm md:text-base font-semibold text-dark-gray rounded-lg hover:bg-light-blue hover:text-secondary-blue focus:outline-none transition-colors duration-200 active-module-tab" data-tab="intro">
+                Introduction
+            </button>
+            <button class="module-tab-button flex-grow text-center px-3 py-2 sm:px-4 sm:py-3 text-xs sm:text-sm md:text-base font-semibold text-dark-gray rounded-lg hover:bg-light-blue hover:text-secondary-blue focus:outline-none transition-colors duration-200" data-tab="concentration-horizontal">
+                Concentration & Horizontal Integration
+            </button>
+            <button class="module-tab-button flex-grow text-center px-3 py-2 sm:px-4 sm:py-3 text-xs sm:text-sm md:text-base font-semibold text-dark-gray rounded-lg hover:bg-light-blue hover:text-secondary-blue focus:outline-none transition-colors duration-200" data-tab="vertical-integration">
+                Vertical Integration
+            </button>
+            <button class="module-tab-button flex-grow text-center px-3 py-2 sm:px-4 sm:py-3 text-xs sm:text-sm md:text-base font-semibold text-dark-gray rounded-lg hover:bg-light-blue hover:text-secondary-blue focus:outline-none transition-colors duration-200" data-tab="organizational-modes">
+                Organizational Modes: Williamson & TCE
+            </button>
+            <button class="module-tab-button flex-grow text-center px-3 py-2 sm:px-4 sm:py-3 text-xs sm:text-sm md:text-base font-semibold text-dark-gray rounded-lg hover:bg-light-blue hover:text-secondary-blue focus:outline-none transition-colors duration-200" data-tab="diversification">
+                Diversification Strategies
+            </button>
+            <button class="module-tab-button flex-grow text-center px-3 py-2 sm:px-4 sm:py-3 text-xs sm:text-sm md:text-base font-semibold text-dark-gray rounded-lg hover:bg-light-blue hover:text-secondary-blue focus:outline-none transition-colors duration-200" data-tab="getting-smaller">
+                Strategies for Getting Smaller
+            </button>
+            <button class="module-tab-button flex-grow text-center px-3 py-2 sm:px-4 sm:py-3 text-xs sm:text-sm md:text-base font-semibold text-dark-gray rounded-lg hover:bg-light-blue hover:text-secondary-blue focus:outline-none transition-colors duration-200" data-tab="portfolio-planning">
+                Portfolio Planning
+            </button>
+            <button class="module-tab-button flex-grow text-center px-3 py-2 sm:px-4 sm:py-3 text-xs sm:text-sm md:text-base font-semibold text-dark-gray rounded-lg hover:bg-light-blue hover:text-secondary-blue focus:outline-none transition-colors duration-200" data-tab="conclusion">
+                Conclusion
+            </button>
+        </div>
+
+        <!-- Tab Content: Introduction -->
+        <div id="intro" class="module-tab-content pt-4 text-content-display">
+            <div class="content-box">
+                <h2 class="text-2xl font-bold text-secondary-blue mb-4 pb-2 border-b border-blue-200">Introduction to Corporate-Level Strategy</h2>
+                <p class="text-dark-gray leading-relaxed mb-4">Corporate strategy is the pursuit of competitive advantage through the configuration and coordination of a company's multi-business activities. It involves decisions and actions about the scope of the firm, coordinating synergies across businesses, and corporate transactions.</p>
+
+                <div class="subsection-header">What is Corporate Scope?</div>
+                <ul class="list-disc ml-6 space-y-2 text-dark-gray leading-relaxed">
+                    <li>Simply put, it's the "footprint" of the company – which activities or businesses a company is engaged in, and how they should be managed.</li>
+                    <li>It concerns the boundaries of the firm along three key dimensions:
+                        <ul class="list-circle ml-6 mt-2 space-y-1">
+                            <li><b>Vertical Integration:</b> Stages of the industry value chain (e.g., manufacturing vs. retail).</li>
+                            <li><b>Horizontal Integration (Diversification):</b> Range of products and services/businesses offered.</li>
+                            <li><b>Geographic Scope:</b> Where in the world the company competes (regional, national, global markets).</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <div class="subsection-header mt-6">Contrast with Business-Level Strategy</div>
+                <ul class="list-disc ml-6 space-y-2 text-dark-gray leading-relaxed">
+                    <li><b>Corporate-Level Strategy:</b> Addresses the question "What industry or industries should our firm compete in?"
+                        <div class="example-box">Example: The Walt Disney Company's expansion from films into television, theme parks, and merchandise licensing. General Electric deciding to be in aviation, healthcare, and power.</div>
+                    </li>
+                    <li><b>Business-Level Strategy:</b> Focuses on how to compete successfully within a specific industry or market.
+                        <div class="example-box">Example: GE Aviation deciding to differentiate through advanced technology and service for jet engines.</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Tab Content: Concentration & Horizontal Integration -->
+        <div id="concentration-horizontal" class="module-tab-content hidden pt-4 text-content-display">
+            <div class="content-box">
+                <h2 class="text-2xl font-bold text-secondary-blue mb-4 pb-2 border-b border-blue-200">Concentration & Horizontal Integration</h2>
+                <p class="text-dark-gray leading-relaxed mb-4">Concentration strategies involve trying to compete successfully only within a single industry, focusing efforts to grow within that domain.</p>
+
+                <div class="subsection-header">8.1.1. Concentration Strategies Overview</div>
+                <ul class="list-disc ml-6 space-y-2 text-dark-gray leading-relaxed">
+                    <li>Firms like McDonald's, Starbucks, and Subway have heavily relied on concentration to become dominant players in their single industries.</li>
+                    <li>There are three primary concentration strategies:
+                        <ol class="list-decimal ml-6 mt-2 space-y-1">
+                            <li>Market Penetration</li>
+                            <li>Market Development</li>
+                            <li>Product Development</li>
+                        </ol>
+                    </li>
+                </ul>
+
+                <div class="subsection-header mt-6">8.1.2. Market Penetration</div>
+                <ul class="list-disc ml-6 space-y-2 text-dark-gray leading-relaxed">
+                    <li>Involves trying to gain additional share of a firm's existing markets using existing products. Often relies on extensive advertising.</li>
+                    <li><div class="example-box">Example: The "cola wars" between Coca-Cola and PepsiCo where they fight for market share. Nike featuring famous athletes in ads to gain share from Adidas. McDonald's using Latino themes and a Spanish-language website (`meencanta.com`) to attract more Latino customers.</div></li>
+                </ul>
+
+                <div class="subsection-header mt-6">8.1.3. Market Development</div>
+                <ul class="list-disc ml-6 space-y-2 text-dark-gray leading-relaxed">
+                    <li>Involves taking existing products and trying to sell them within new markets.</li>
+                    <li>Can involve entering new retail channels or new geographic areas.</li>
+                    <li><div class="example-box">Example: Starbucks selling its coffee beans and bottled drinks in grocery stores. Flowers Foods acquiring Tasty Baking Company (Tastykake) to extensively distribute Tastykake products within the southeastern United States.</div></li>
+                </ul>
+
+                <div class="subsection-header mt-6">8.1.4. Product Development</div>
+                <ul class="list-disc ml-6 space-y-2 text-dark-gray leading-relaxed">
+                    <li>Involves creating new products to serve existing markets.</li>
+                    <li><div class="example-box">Example: Disney expanding its film offerings beyond cartoons to include movies with real actors (1940s). McDonald's gradually adding healthier items to its menu. Starbucks introducing VIA instant coffee. Coca-Cola and Pepsi regularly introducing new varieties like Coke Zero or Pepsi Cherry Vanilla. Jones Soda Co. creating unusual holiday-themed flavors (Green Pea, Sweet Potato, Turkey and Gravy sodas) to generate buzz for their traditional flavors.</div></li>
+                </ul>
+
+                <div class="subsection-header mt-6">8.1.5. Horizontal Integration: Mergers and Acquisitions</div>
+                <ul class="list-disc ml-6 space-y-2 text-dark-gray leading-relaxed">
+                    <li><b>Definition:</b> Pursuing a concentration strategy by acquiring or merging with a rival.
+                        <ul class="list-circle ml-6 mt-2 space-y-1">
+                            <li><b>Merger:</b> Generally used when two similarly sized firms are integrated into a single entity (e.g., Exxon and Mobil in 1999).</li>
+                            <li><b>Acquisition:</b> A larger firm purchases and absorbs a smaller firm (e.g., Disney's acquisition of Miramax and Pixar).</li>
+                        </ul>
+                    </li>
+                    <li><b>Reasons for Attractiveness:</b>
+                        <ul class="list-circle ml-6 mt-2 space-y-1">
+                            <li><b>Lowering Costs:</b> Achieving greater economies of scale (e.g., BP and Amoco, Exxon and Mobil, Chevron and Texaco in oil industry).</li>
+                            <li><b>Reducing Rivalry:</b> Can reduce the intensity of competition in an industry, potentially making it more profitable (links to Porter's Five Forces).</li>
+                            <li><b>Accessing Strategic Resources:</b> Acquiring valuable brand names (e.g., Flowers Foods acquiring Tastykake).</li>
+                            <li><b>Gaining Market Share:</b> Acquiring firms with significant presence in desired markets (e.g., Southwest Airlines' purchase of AirTran to enter Atlanta).</li>
+                            <li><b>Accessing New Distribution Channels:</b> (e.g., UFC purchasing Strikeforce to gain exposure on network television).</li>
+                        </ul>
+                    </li>
+                    <li><b>Why Horizontal Integration Often Fails:</b>
+                        <ul class="list-circle ml-6 mt-2 space-y-1">
+                            <li>More than 60% of mergers and acquisitions erode shareholder wealth.</li>
+                            <li><b>Culture Clash:</b> The cultures of the two companies cannot be effectively meshed (e.g., Disney and Pixar's potential conflict over creative vs. commercial focus for movies like Cars 2).</li>
+                            <li><b>Overpaying for Target Company:</b> Buyer pays more than the target company is worth and never earns back the premium.
+                                <div class="example-box">Examples: Philip Morris bought 7Up for four times its worth and sold it years later. Mattel purchased The Learning Company for $3.6 billion and sold it for $430 million a year later. Daimler-Benz bought Chrysler for $37 billion and recouped only $1.5 billion when sold.</div>
+                            </li>
+                            <li>Between 30% and 45% of mergers and acquisitions are eventually undone, often at huge losses.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Tab Content: Vertical Integration Strategies -->
+        <div id="vertical-integration" class="module-tab-content hidden pt-4 text-content-display">
+            <div class="content-box">
+                <h2 class="text-2xl font-bold text-secondary-blue mb-4 pb-2 border-b border-blue-200">Vertical Integration Strategies</h2>
+                <p class="text-dark-gray leading-relaxed mb-4">When pursuing a vertical integration strategy, a firm gets involved in new portions of the value chain. This approach is attractive when a firm’s suppliers or buyers have too much power and are becoming increasingly profitable at the firm’s expense. It can reduce or eliminate the leverage that the supplier or buyer has.</p>
+
+                <div class="subsection-header">8.2.1. Historical and Modern Examples</div>
+                <ul class="list-disc ml-6 space-y-2 text-dark-gray leading-relaxed">
+                    <li><b>Carnegie Steel Company (late 1800s):</b> A pioneer in vertical integration, controlling iron mines, coal mines, railroads, and steel mills. This ensured stability, quality, and achieved unprecedented efficiency.</li>
+                    <li><b>Oil Companies Today:</b> Firms like ExxonMobil and ConocoPhillips are highly vertically integrated, involved in exploration, drilling, shipping, refining, distribution, and operating gas stations.</li>
+                    <li><div class="example-box">Risk of NOT being vertically integrated: The 2010 Deepwater Horizon oil spill, where BP sued its suppliers (Transocean, Halliburton, Cameron International) for their roles, highlighting dependency on external parties.</div></li>
+                </ul>
+
+                <div class="subsection-header mt-6">8.2.2. Backward Vertical Integration</div>
+                <ul class="list-disc ml-6 space-y-2 text-dark-gray leading-relaxed">
+                    <li>Involves a firm moving back along the value chain, entering a supplier’s business.</li>
+                    <li>Used when executives are concerned that a supplier has too much power, or to ensure quality and availability of inputs.</li>
+                    <li><div class="example-box">Example: In early automobile days, Ford Motor Company created subsidiaries for rubber, glass, and metal to control input quality and prices. In entertainment, ESPN created its own production company (ESPN Films) to ensure a steady flow of programs.</div></li>
+                </ul>
+
+                <div class="subsection-header mt-6">8.2.3. Forward Vertical Integration</div>
+                <ul class="list-disc ml-6 space-y-2 text-dark-gray leading-relaxed">
+                    <li>Involves a firm moving further down the value chain, entering a buyer’s business.</li>
+                    <li>Allows firms to capture profits previously enjoyed by intermediaries and neutralize the effect of powerful buyers.</li>
+                    <li><div class="example-box">Example: Disney operating over three hundred retail stores to sell merchandise, capturing more profit than through third-party retailers like Target. Ford purchasing Hertz Corporation in 1994 (later sold in 2005). eBay's purchase of PayPal to signal transaction safety. Apple's creation of Apple Stores, providing expert product advice and setting it apart from competitors relying solely on retailers.</div></li>
+                </ul>
+
+                <div class="subsection-header mt-6">8.2.4. Risks of Vertical Integration</div>
+                <ul class="list-disc ml-6 space-y-2 text-dark-gray leading-relaxed">
+                    <li><b>Entering Different Businesses:</b> The skills developed in one part of the value chain may have limited value in the new integrated business.
+                        <div class="example-box">Example: A lumberyard building houses would find its lumber business skills of limited use in home construction.</div>
+                    </li>
+                    <li><b>Complacency:</b> Internal units may believe they don't need to perform well because their output is guaranteed to be used by the integrating firm. Some firms try to counter this by forcing internal units to compete with outside suppliers, but this can undermine the reason for integration.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- New Tab Content: Organizational Modes: Williamson & TCE -->
+        <div id="organizational-modes" class="module-tab-content hidden pt-4 text-content-display">
+            <div class="content-box">
+                <h2 class="text-2xl font-bold text-secondary-blue mb-4 pb-2 border-b border-blue-200">Organizational Modes: Williamson & Transaction Cost Economics (TCE)</h2>
+                <p class="text-dark-gray leading-relaxed mb-4">Transaction Cost Economics (TCE), sometimes called the theory of the firm, is a field of research that directly addresses questions about when to vertically integrate or diversify. It provides a framework for understanding the costs associated with economic exchanges and internal organization.</p>
+
+                <div class="subsection-header">Oliver Williamson and TCE</div>
+                <ul class="list-disc ml-6 space-y-2 text-dark-gray leading-relaxed">
+                    <li>One of the most prominent names associated with the theory is <b>Oliver Williamson</b>, who won the Nobel Prize in Economics in 2009 for this work.</li>
+                    <li>TCE deals with two main types of costs:
+                        <ul class="list-circle ml-6 mt-2 space-y-1">
+                            <li><b>Transaction Costs:</b> Associated with economic exchanges (markets/outsourcing). Includes negotiating, monitoring, and enforcing contracts.</li>
+                            <li><b>Administrative Costs:</b> Associated with organizing activities within a hierarchy (inside the firm). Can involve bureaucracy, weak incentives, and sclerotic (slow) response to changing environments.</li>
+                        </ul>
+                    </li>
+                    <li>Williamson's core insight is summarized in the idea of <b>Comparative Organizational Analysis</b>: All organizational forms are flawed, and the task is to compare the relative advantages and disadvantages of different modes ("make or buy").</li>
+                    <li>His main mantra: "Markets provide better <b>adaptation</b>, while hierarchies (firms) provide better <b>coordination</b>."</li>
+                </ul>
+
+                <div class="subsection-header mt-6">Three Key Transaction Costs (Market Exchanges)</div>
+                <p class="text-dark-gray leading-relaxed mb-2">When engaging in market transactions (outsourcing), firms must consider these strategic costs:</p>
+                <ul class="list-disc ml-6 space-y-2 text-dark-gray leading-relaxed">
+                    <li><b>Adverse Selection (Ex Ante):</b> Arises due to information asymmetries *before* a transaction. One party knows something the other doesn't, leading to potential exploitation.
+                        <div class="example-box"><b>"Lemons Problem" (George Akerlof, Nobel Prize 2001):</b> In the used car market, sellers know more about a car's quality than buyers, making buyers suspicious and unwilling to pay full value, thus making it more likely only "lemons" are sold. In outsourcing, a supplier might not dedicate its best resources or people to your project if it knows you can't observe their true quality.</div>
+                    </li>
+                    <li><b>Moral Hazard (Ex Post):</b> Arises due to information asymmetries *after* a transaction. The transaction partner has private information about its performance that is not measurable or contracted for, leading to abuse.
+                        <div class="example-box"><b>Government Bailouts:</b> If banks expect to be bailed out, they might take on excessive risks. In vertical integration, a downstream dealer might reduce service quality if their contract only measures sales, not customer satisfaction.</div>
+                    </li>
+                    <li><b>Hold-Up Problem (Williamson):</b> Occurs when one party gains an upper hand after the initial transaction due to specific investments or inherent uncertainty, leading to opportunistic behavior ("self-interest seeking with guile").
+                        <ul class="list-circle ml-6 mt-2 space-y-1">
+                            <li><b>Asset Specificity:</b> Investments in assets (machinery, IT systems, specialized knowledge) that are customized to the other party's needs, making them less valuable elsewhere. This puts the investing party at a disadvantage.</li>
+                            <li><b>Technology Leakage:</b> Exposing core knowledge or technology to a supplier/buyer who may then no longer need you or may use that knowledge to compete against you.</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <div class="subsection-header mt-6">Three Key Administrative Costs (Hierarchical Organization)</div>
+                <p class="text-dark-gray leading-relaxed mb-2">Organizing activities within a single company also incurs costs:</p>
+                <ul class="list-disc ml-6 space-y-2 text-dark-gray leading-relaxed">
+                    <li><b>Weak Incentives:</b> Internal units may be less focused on peak performance than external suppliers because there's an expectation of continuity and less fear of losing the business. This "slack" is often exchanged for the ability to manage by "fiat" (direct orders).</li>
+                    <li><b>Principal-Agent Problem:</b> Occurs when one party (the "agent," e.g., a manager or a division) acts on behalf of another (the "principal," e.g., the owner or CEO), but their interests are not perfectly aligned, and the principal cannot fully observe the agent's actions or effort. This can lead to underperformance on unobservable dimensions.</li>
+                    <li><b>Lack of Dynamism:</b> Vertically integrated hierarchies can exhibit less responsiveness to market or technology trends due to bureaucracy, rigid rules, and the inability to "selectively intervene" and apply market-like pressures to internal divisions.</li>
+                </ul>
+
+                <div class="subsection-header mt-6">Main Takeaway: When to Vertically Integrate?</div>
+                <p class="text-dark-gray leading-relaxed mb-2">There is no universal prescription for "make or buy." The key is to align the attributes of the transaction with the most appropriate governance mode:</p>
+                <ul class="list-disc ml-6 space-y-2 text-dark-gray leading-relaxed">
+                    <li><b>Vertically Integrate (Make) if:</b>
+                        <ul class="list-circle ml-6 mt-2 space-y-1">
+                            <li>Significant investments in specific assets are needed.</li>
+                            <li>High risk of technology leakage or hold-up problems.</li>
+                            <li>Performance of the partner is difficult to measure or contract for.</li>
+                            <li>Need for strong coordination and control.</li>
+                        </ul>
+                    </li>
+                    <li><b>Outsource (Buy) if:</b>
+                        <ul class="list-circle ml-6 mt-2 space-y-1">
+                            <li>Strong market incentives for performance are critical.</li>
+                            <li>High need for adaptation to changing market or technology trends.</li>
+                            <li>Resources/capabilities are easily available in the market.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Tab Content: Diversification Strategies -->
+        <div id="diversification" class="module-tab-content hidden pt-4 text-content-display">
+            <div class="content-box">
+                <h2 class="text-2xl font-bold text-secondary-blue mb-4 pb-2 border-b border-blue-200">Diversification Strategies</h2>
+                <p class="text-dark-gray leading-relaxed mb-4">Firms using diversification strategies enter entirely new industries, moving into new value chains, unlike vertical integration which stays within one value chain but at different stages. This can be achieved through mergers, acquisitions, or organic expansion.</p>
+
+                <div class="subsection-header">8.3.1. Three Tests for Diversification (Porter)</div>
+                <p class="text-dark-gray leading-relaxed mb-2">A proposed diversification move should pass these three tests, or it should be rejected:</p>
+                <ol class="list-decimal ml-6 space-y-2 text-dark-gray leading-relaxed">
+                    <li><b>How attractive is the industry?</b> Unless the industry has strong profit potential, entering it may be very risky.</li>
+                    <li><b>How much will it cost to enter the industry?</b> Executives need to be sure that their firm can recoup the expenses absorbed to diversify.
+                        <div class="example-box">Example: Philip Morris bought 7Up in the late 1970s for four times its worth, a cost that proved impossible to recoup, leading to its sale in 1986.</div>
+                    </li>
+                    <li><b>Will the new unit and the firm be better off?</b> Unless one side or the other gains a competitive advantage, diversification should be avoided.</li>
+                </ol>
+
+                <div class="subsection-header mt-6">8.3.2. Related Diversification</div>
+                <ul class="list-disc ml-6 space-y-2 text-dark-gray leading-relaxed">
+                    <li>Occurs when a firm moves into a new industry that has important similarities with the firm’s existing industry or industries.</li>
+                    <li>Often aims to develop and exploit a <b>core competency</b> – a skill set that is difficult for competitors to imitate, can be leveraged in different businesses, and contributes to customer benefits.</li>
+                    <li><div class="example-box">Example: Disney's purchase of ABC (films and television are both entertainment). Newell Rubbermaid's skill at identifying underperforming brands and integrating them into its home, office, and tools business groups. Honda Motor Company leveraging its unique ability to build small and reliable engines from motorcycles into automobiles, lawn mowers, and boat motors.</div></li>
+                    <li><div class="example-box bg-red-50 border-danger-red">Failed Related Diversification Example: Philip Morris's acquisition of 7Up. On the surface, marketing skills seemed transferable, but the benefits never materialized, illustrating that perceived similarities may not always translate into real synergies.</div></li>
+                </ul>
+
+                <div class="subsection-header mt-6">8.3.3. Unrelated Diversification</div>
+                <ul class="list-disc ml-6 space-y-2 text-dark-gray leading-relaxed">
+                    <li>Occurs when a firm enters an industry that lacks any important similarities with the firm’s existing industry or industries.</li>
+                    <li>Historically pursued by <b>conglomerates</b> (collections of unrelated businesses).</li>
+                    <li><div class="example-box">Example: Coca-Cola purchasing Columbia Pictures in 1982 (though this turned out to be a financially successful, but rare, unrelated diversification). More typical failures include Harley-Davidson's attempt to sell branded bottled water and Starbucks' attempt to sell branded furniture, where iconic brands did not effectively transfer to unrelated businesses.</div></li>
+                    <li><div class="example-box">Zippo's diversification efforts: Facing a bleak future in the lighter business, Zippo examined leveraging its "rugged, durable, made in America, iconic" brand image into products like watches, clothing, wallets, pens, liquor flasks, or grills, similar to how Eddie Bauer's image fueled Ford SUVs or Swiss Army knives extended to luggage and watches.</div></li>
+                    <li><div class="example-box bg-red-50 border-danger-red">"In Good Company" Movie Illustration: Globodyne's acquisition of Waterman Publishing (Sports America magazine) alongside cell phone and cereal businesses. Despite efforts to create "synergy" through cross-promotion, the unrelated nature of the businesses inhibited it, leading to the sale of the division and executive firings. This reinforces the "stick to the knitting" principle.</div></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Tab Content: Strategies for Getting Smaller -->
+        <div id="getting-smaller" class="module-tab-content hidden pt-4 text-content-display">
+            <div class="content-box">
+                <h2 class="text-2xl font-bold text-secondary-blue mb-4 pb-2 border-b border-blue-200">Strategies for Getting Smaller (Retrenchment & Restructuring)</h2>
+                <p class="text-dark-gray leading-relaxed mb-4">Sometimes, corporate-level strategy dictates exiting or shrinking businesses to improve future success, especially when facing poor performance.</p>
+
+                <div class="subsection-header">8.4.1. Retrenchment</div>
+                <ul class="list-disc ml-6 space-y-2 text-dark-gray leading-relaxed">
+                    <li>Firms shrink one or more of their business units, akin to an army making a small retreat to avoid total defeat.</li>
+                    <li>Often accomplished through layoffs or reducing operational scope.</li>
+                    <li><div class="example-box">Example: South African grocery chain Pick n Pay announced plans to lay off over 3,000 workers in response to intensified competition from Walmart's acquisition of Massmart. The goal is to cut costs and ensure viability.</div></li>
+                </ul>
+
+                <div class="subsection-header mt-6">8.4.2. Restructuring</div>
+                <p class="text-dark-gray leading-relaxed mb-2">Executives sometimes decide that bolder moves than retrenchment are needed.</p>
+                <ul class="list-disc ml-6 space-y-2 text-dark-gray leading-relaxed">
+                    <li><b>Divestment:</b> Selling off part of a firm’s operations.
+                        <ul class="list-circle ml-6 mt-2 space-y-1">
+                            <li>Can reverse forward or backward vertical integration (e.g., Ford selling Hertz after acquiring it).</li>
+                            <li>Serves to undo diversification strategies, especially unrelated ones, to unlock "diversification discount" value for shareholders.
+                                <div class="example-box">Example: Fortune Brands, which owned spirits (Jim Beam), household goods (Masterlock), and golf equipment (Titleist), announced a plan to separate these businesses to maximize long-term shareholder value. They sold the golf business and spun off the home products business.</div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><b>Spin-off:</b> Creating a new independent company whose stock is owned by the original firm's investors.
+                        <ul class="list-circle ml-6 mt-2 space-y-1">
+                            <li>Used when diversified firms are too complex for investors to understand.</li>
+                            <li>Reduces management layers, lowers costs, and speeds up decision-making.</li>
+                            <li><div class="example-box">Example: General Motors (GM) turning its parts supplier Delphi Automotive Systems Corporation into an independent firm by spinning it off; GM stockholders received shares in Delphi.</div></li>
+                        </ul>
+                    </li>
+                    <li><b>Liquidation:</b> Simply shutting down portions of a firm’s operations, often at a tremendous financial loss. This is a last resort.
+                        <div class="example-box">Example: GM scrapping brands like Geo, Saturn, Oldsmobile, and Pontiac. Ford shutting down its Mercury brand. These moves are painful but aim to make the company "leaner and meaner" to avoid total ruin.</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Tab Content: Portfolio Planning -->
+        <div id="portfolio-planning" class="module-tab-content hidden pt-4 text-content-display">
+            <div class="content-box">
+                <h2 class="text-2xl font-bold text-secondary-blue mb-4 pb-2 border-b border-blue-200">Portfolio Planning and Corporate-Level Strategy</h2>
+                <p class="text-dark-gray leading-relaxed mb-4">Executives managing firms involved in many different businesses use portfolio planning to assess their firms’ prospects for success, make suggestions for each industry, and allocate resources across industries.</p>
+
+                <div class="subsection-header">8.5.1. The Boston Consulting Group (BCG) Matrix</div>
+                <p class="text-dark-gray leading-relaxed mb-2">The BCG matrix is the best-known approach to portfolio planning. It categorizes a firm’s businesses based on two dimensions: its share of the market and the growth rate of its industry.</p>
+                <div class="chart-frame">
+                    <p class="font-bold text-lg mb-2">The BCG Growth-Share Matrix</p>
+                    <div class="flex justify-center w-full max-w-xl">
+                        <table class="table-auto w-full border border-gray-400 rounded-lg overflow-hidden">
+                            <thead>
+                                <tr class="bg-blue-100 text-blue-800">
+                                    <th class="border px-3 py-2 sm:px-4 sm:py-3 text-left"></th>
+                                    <th class="border px-3 py-2 sm:px-4 sm:py-3">High Relative Market Share</th>
+                                    <th class="border px-3 py-2 sm:px-4 sm:py-3">Low Relative Market Share</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border px-3 py-2 sm:px-4 sm:py-3 font-semibold bg-green-100 text-green-800">High Industry Growth</td>
+                                    <td class="border px-3 py-2 sm:px-4 sm:py-3 bg-green-50">
+                                        <b class="text-lg">STAR</b>
+                                        <p class="text-xs sm:text-sm italic text-gray-700">Cashflow: Neutral</p>
+                                        <p class="text-xs sm:text-sm italic text-gray-700">Strategy: Hold or invest for growth</p>
+                                    </td>
+                                    <td class="border px-3 py-2 sm:px-4 sm:py-3 bg-blue-50">
+                                        <b class="text-lg">QUESTION MARK</b>
+                                        <p class="text-xs sm:text-sm italic text-gray-700">Cashflow: Negative</p>
+                                        <p class="text-xs sm:text-sm italic text-gray-700">Strategy: Increase market share or harvest/divest</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="border px-3 py-2 sm:px-4 sm:py-3 font-semibold bg-yellow-100 text-yellow-800">Low Industry Growth</td>
+                                    <td class="border px-3 py-2 sm:px-4 sm:py-3 bg-yellow-50">
+                                        <b class="text-lg">CASH COW</b>
+                                        <p class="text-xs sm:text-sm italic text-gray-700">Cashflow: High and Stable</p>
+                                        <p class="text-xs sm:text-sm italic text-gray-700">Strategy: Hold (and milk for cash)</p>
+                                    </td>
+                                    <td class="border px-3 py-2 sm:px-4 sm:py-3 bg-red-50">
+                                        <b class="text-lg">DOG</b>
+                                        <p class="text-xs sm:text-sm italic text-gray-700">Cashflow: Neutral or Negative</p>
+                                        <p class="text-xs sm:text-sm italic text-gray-700">Strategy: Harvest/divest</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="mt-4 text-sm text-gray-600">The BCG Matrix helps firms manage a balanced portfolio, where cash from "Cash Cows" funds "Stars" and promising "Question Marks." "Dogs" are typically divested.</p>
+                </div>
+                <ul class="list-disc ml-6 space-y-2 text-dark-gray leading-relaxed">
+                    <li>GE also developed the <b>Attractiveness-Strength Matrix</b> with a consulting firm, using more dimensions and resulting in a 3x3 matrix with specific recommendations for each box.</li>
+                </ul>
+
+                <div class="subsection-header mt-6">8.5.2. Limitations of Portfolio Planning</div>
+                <ul class="list-disc ml-6 space-y-2 text-dark-gray leading-relaxed">
+                    <li><b>Oversimplification:</b> Focuses on only two dimensions, while many others are important for strategic decisions.</li>
+                    <li><b>Motivational Problems:</b> Employees in units classified as "dogs" may lose hope, and those in "cash cows" may be dismayed that their profits are diverted.</li>
+                    <li><b>No New Opportunities:</b> The tool only deals with existing businesses and cannot reveal new industries a firm should consider entering.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Tab Content: Conclusion -->
+        <div id="conclusion" class="module-tab-content hidden pt-4 text-content-display">
+            <div class="content-box">
+                <h2 class="text-2xl font-bold text-secondary-blue mb-4 pb-2 border-b border-blue-200">Conclusion</h2>
+                <p class="text-dark-gray leading-relaxed mb-4">Corporate-level strategy fundamentally addresses in what industry or industries firms will compete. This involves critical decisions about:</p>
+                <ul class="list-disc ml-6 space-y-2 text-dark-gray leading-relaxed">
+                    <li><b>Growth:</b> Through concentration strategies (market penetration, development, product development) or integration (vertical and horizontal).</li>
+                    <li><b>Shrinking:</b> Through retrenchment or more profound restructuring (divestment, spin-offs, liquidation).</li>
+                    <li><b>Portfolio Management:</b> Using tools like the BCG matrix to analyze and allocate resources across a variety of industries.</li>
+                </ul>
+                <p class="text-dark-gray leading-relaxed">Ultimately, effective corporate-level strategy is about continuously evaluating opportunities and threats, aligning organizational capabilities with market needs, and adapting the firm's scope to maximize long-term value and competitive advantage.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Results Section -->
+    <div id="search-results-content" class="main-content-section hidden">
+        <button class="mb-6 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-primary-blue bg-light-blue hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-blue" onclick="showSection('home-page')">
+            <svg class="mr-2 -ml-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M9.707 15.707a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 111.414 1.414L6.414 10l3.293 3.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+            </svg>
+            Back to Modules
+        </button>
+
+        <h1 id="search-results-title" class="text-3xl sm:text-4xl font-extrabold text-primary-blue text-center mb-8 pb-4 border-b-4 border-accent-blue/30 tracking-tight">
+            Search Results
+        </h1>
+
+        <div id="results-display" class="space-y-6 text-content-display">
+            <!-- Search results will be loaded here -->
+            <p class="text-center text-dark-gray">Enter a search term and click 'Search' to find content.</p>
+        </div>
+    </div>
+
+
+    <!-- JavaScript for section navigation and module's internal tabs -->
+    <script>
+        let searchableContent = []; // Global array to store content for searching
+        let currentHighlightQuery = ''; // Stores the query to highlight on the active content page
+
+        // --- Main Section Navigation ---
+        function showSection(sectionId, initialModuleTabId = '', queryFromSearch = '') {
+            // Clear any existing in-page highlights before showing a new section
+            clearPreviousHighlights();
+
+            document.querySelectorAll('.main-content-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            document.getElementById(sectionId).classList.remove('hidden');
+
+            // Set the current highlight query if navigating from a search result
+            if (sectionId === 'module-1-content' && queryFromSearch) {
+                currentHighlightQuery = queryFromSearch;
+            } else {
+                currentHighlightQuery = ''; // Clear query if not navigating to a module from search
+            }
+
+            // If navigating to a module with internal tabs, activate its first tab
+            if (sectionId === 'module-1-content' && initialModuleTabId) {
+                showModuleTab(initialModuleTabId); // This call will then trigger applyHighlightsToCurrentModule
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top on navigation
+        }
+
+        // --- Module 1's Internal Tab Navigation ---
+        function showModuleTab(tabId) {
+            const currentModuleContent = document.getElementById('module-1-content');
+            if (!currentModuleContent) return;
+
+            // First, clear highlights when changing tabs within a module
+            clearPreviousHighlights();
+
+            const tabContents = currentModuleContent.querySelectorAll('.module-tab-content');
+            const tabButtons = currentModuleContent.querySelectorAll('.module-tab-button');
+
+            tabContents.forEach(content => {
+                content.classList.add('hidden');
+            });
+            tabButtons.forEach(button => {
+                button.classList.remove('active-module-tab', 'border-b-3', 'border-primary-blue', 'text-primary-blue');
+                button.classList.add('text-dark-gray', 'hover:bg-light-blue', 'hover:text-secondary-blue');
+            });
+
+            const activeContent = currentModuleContent.querySelector(`#${tabId}`);
+            if (activeContent) {
+                activeContent.classList.remove('hidden');
+            }
+
+            const activeButton = currentModuleContent.querySelector(`.module-tab-button[data-tab="${tabId}"]`);
+            if (activeButton) {
+                activeButton.classList.add('active-module-tab', 'border-b-3', 'border-primary-blue', 'text-primary-blue');
+                activeButton.classList.remove('text-dark-gray', 'hover:bg-light-blue', 'hover:text-secondary-blue');
+            }
+
+            // Apply highlights after the new tab content is made visible
+            applyHighlightsToCurrentModule();
+        }
+
+        // --- Basic Markdown to HTML Converter (kept for general text display if needed) ---
+        function convertMarkdownToHtml(markdownText) {
+            let html = markdownText;
+
+            // Convert bold (**text**)
+            html = html.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+            // Convert italics (*text*)
+            html = html.replace(/\*(.*?)\*/g, '<i>$1</i>');
+
+            // Convert unordered lists (- item)
+            html = html.replace(/^- (.*)$/gm, '<li>$1</li>');
+            if (html.includes('<li>') && !html.startsWith('<ul>') && !html.startsWith('<ol>')) {
+                html = `<ul>${html}</ul>`;
+            }
+
+            // Convert ordered lists (1. item)
+            html = html.replace(/^\d+\. (.*)$/gm, '<li>$1</li>');
+            if (html.includes('<li>') && !html.startsWith('<ul>') && !html.startsWith('<ol>')) {
+                html = `<ol>${html}</ol>`;
+            }
+
+            // Convert multiple newlines to paragraphs
+            html = html.split('\n\n').map(paragraph => {
+                if (!paragraph.trim().startsWith('<li') && !paragraph.trim().startsWith('<ul') && !paragraph.trim().startsWith('<ol')) {
+                    return `<p>${paragraph.trim()}</p>`;
+                }
+                return paragraph.trim();
+            }).join('');
+
+            return html;
+        }
+
+        // --- Highlighting Functions ---
+        function clearPreviousHighlights() {
+            document.querySelectorAll('.current-search-highlight').forEach(span => {
+                // Replace the span with its text content
+                const parent = span.parentNode;
+                if (parent) {
+                    parent.replaceChild(document.createTextNode(span.textContent), span);
+                }
+            });
+            // Re-normalize the parent node in case of text node fragmentation
+            // This is a simple approach, for complex HTML, a library might be better
+            document.querySelectorAll('.text-content-display').forEach(displayDiv => {
+                displayDiv.normalize();
+            });
+        }
+
+        function applyHighlightsToCurrentModule() {
+            if (!currentHighlightQuery) return; // Only apply if a query is set
+
+            // Target the currently active module tab content
+            const activeModuleTabContent = document.querySelector('#module-1-content .module-tab-content:not(.hidden)');
+            if (!activeModuleTabContent) return;
+
+            const query = currentHighlightQuery;
+            const regex = new RegExp(`(${query})`, 'gi'); // Case-insensitive, global, capture group
+
+            // Select elements to highlight within the active tab
+            activeModuleTabContent.querySelectorAll('p, li, h2, h3, h4, h5, h6').forEach(element => {
+                // We need to operate on text nodes to avoid breaking HTML tags
+                // A more robust solution might involve a DOM traversal and text node replacement
+                // For static text in this app, re-setting innerHTML is generally acceptable.
+                if (element.innerHTML.toLowerCase().includes(query.toLowerCase())) {
+                    element.innerHTML = element.innerHTML.replace(regex, `<span class="current-search-highlight">$1</span>`);
+                }
+            });
+        }
+
+
+        // --- Content Indexing for Search ---
+        function indexContent() {
+            searchableContent = []; // Clear previous content
+
+            // Index Module 1 content
+            const module1Tabs = document.querySelectorAll('#module-1-content .module-tab-content');
+            module1Tabs.forEach(tab => {
+                const tabId = tab.id;
+                const tabTitleElement = tab.querySelector('h2');
+                const tabTitle = tabTitleElement ? tabTitleElement.textContent : 'Untitled Section';
+
+                // Get all relevant text elements within the tab
+                const textElements = tab.querySelectorAll('p, li, h2, h3, h4, h5, h6');
+                let fullText = '';
+                textElements.forEach(el => {
+                    fullText += el.textContent + ' ';
+                });
+
+                searchableContent.push({
+                    moduleId: 'module-1-content',
+                    tabId: tabId,
+                    sectionTitle: tabTitle,
+                    fullText: fullText.trim()
+                });
+            });
+
+            // You can add logic here to index other modules as they are added
+            // Example for a hypothetical Module 2:
+            /*
+            const module2Content = document.getElementById('module-2-content');
+            if (module2Content) {
+                // ... extract text from module2Content similar to module1Tabs
+                searchableContent.push({
+                    moduleId: 'module-2-content',
+                    sectionTitle: 'Module 2 Overview',
+                    fullText: module2Content.textContent.trim()
+                });
+            }
+            */
+
+            console.log('Content indexed:', searchableContent);
+        }
+
+        // --- Search Functionality ---
+        function performSearch() {
+            const query = document.getElementById('search-input').value.trim();
+            const resultsDisplay = document.getElementById('results-display');
+            const resultsTitle = document.getElementById('search-results-title');
+
+            resultsTitle.textContent = `Search Results for "${query}"`;
+            resultsDisplay.innerHTML = ''; // Clear previous results
+
+            if (!query) {
+                resultsDisplay.innerHTML = '<p class="text-center text-dark-gray">Please enter a search term.</p>';
+                showSection('search-results-content');
+                return;
+            }
+
+            const lowerCaseQuery = query.toLowerCase();
+            let foundResults = false;
+
+            searchableContent.forEach(item => {
+                const lowerCaseText = item.fullText.toLowerCase();
+                if (lowerCaseText.includes(lowerCaseQuery)) {
+                    foundResults = true;
+
+                    // Find first occurrence to create a relevant snippet
+                    const startIndex = Math.max(0, lowerCaseText.indexOf(lowerCaseQuery) - 100); // 100 chars before
+                    const endIndex = Math.min(item.fullText.length, lowerCaseText.indexOf(lowerCaseQuery) + query.length + 100); // 100 chars after
+                    let snippet = item.fullText.substring(startIndex, endIndex);
+
+                    // Add ellipsis if snippet doesn't start/end with full text boundary
+                    if (startIndex > 0) snippet = '...' + snippet;
+                    if (endIndex < item.fullText.length) snippet = snippet + '...';
+
+                    // Highlight the query in the snippet (case-insensitive)
+                    const regex = new RegExp(query, 'gi');
+                    const highlightedSnippet = snippet.replace(regex, match => `<span class="search-highlight">${match}</span>`);
+
+                    // Pass the query to showSection for in-page highlighting
+                    const resultCard = `
+                        <div class="content-box cursor-pointer hover:bg-gray-50 transition-colors duration-150"
+                             onclick="showSection('${item.moduleId}', '${item.tabId}', '${query.replace(/'/g, "\\'")}')">
+                            <h3 class="text-lg font-semibold text-primary-blue mb-2">${item.sectionTitle}</h3>
+                            <p class="text-gray-700 text-sm">${highlightedSnippet}</p>
+                            <span class="text-xs text-gray-500 mt-2 block">Found in: Module 1 / ${item.sectionTitle}</span>
+                        </div>
+                    `;
+                    resultsDisplay.innerHTML += resultCard;
+                }
+            });
+
+            if (!foundResults) {
+                resultsDisplay.innerHTML = `<p class="text-center text-dark-gray">No results found for "${query}".</p>`;
+            }
+
+            showSection('search-results-content'); // Navigate to search results page
+        }
+
+        // --- Event Listeners and Initial Load ---
+        document.addEventListener('DOMContentLoaded', () => {
+            indexContent(); // Index content when the page loads
+
+            const searchInput = document.getElementById('search-input');
+            const searchButton = document.getElementById('search-button');
+
+            // Attach event listeners to the globally accessible search elements
+            if (searchButton) {
+                searchButton.addEventListener('click', performSearch);
+            }
+
+            if (searchInput) {
+                searchInput.addEventListener('keypress', function(event) {
+                    if (event.key === 'Enter') {
+                        performSearch();
+                    }
+                });
+            }
+
+            // Adjust body padding-top based on the actual height of the fixed search container
+            const globalSearchContainer = document.getElementById('global-search-container');
+            if (globalSearchContainer) {
+                const height = globalSearchContainer.offsetHeight;
+                document.body.style.paddingTop = `${height + 16}px`; // Add some extra space (16px = 1rem)
+            }
+
+
+            // Show the home page by default when the page loads
+            showSection('home-page');
+        });
+
+        // Add click event listeners for module's internal tab buttons
+        document.querySelectorAll('.module-tab-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.dataset.tab;
+                showModuleTab(tabId);
+            });
+        });
+    </script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">

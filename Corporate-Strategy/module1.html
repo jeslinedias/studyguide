@@ -4,87 +4,67 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Corporate-Level Strategies</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
     <style>
+        /* Custom styles for Inter font and general layout if needed, though Tailwind covers most */
         body {
-            font-family: sans-serif;
-            line-height: 1.6;
-            margin: 20px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            border-radius: 8px;
-        }
-        h1 {
-            color: #0056b3;
-            text-align: center;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #0056b3;
-        }
-        h2 {
-            color: #0056b3;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 5px;
-            margin-top: 25px;
-        }
-        h3 {
-            color: #007bff;
-            margin-top: 20px;
-        }
-        ul {
-            list-style-type: disc;
-            margin-left: 25px;
-            padding-left: 0;
-        }
-        li {
-            margin-bottom: 8px;
-        }
-        .example {
-            font-style: italic;
-            color: #555;
-            background-color: #e6f7ff;
-            border-left: 3px solid #007bff;
-            padding: 8px 15px;
-            margin: 10px 0;
-            border-radius: 4px;
-        }
-        .section {
-            margin-bottom: 30px;
-            padding-top: 10px;
-        }
-        img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin: 20px auto;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
-        }
-        .image-caption {
-            text-align: center;
-            font-size: 0.9em;
-            color: #666;
-            margin-top: 5px;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
     </style>
 </head>
-<body>
+<body class="bg-gray-100 p-4 sm:p-6 md:p-8">
 
-    <div class="container">
-        <h1>Corporate-Level Strategies</h1>
+    <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-6 md:p-8">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-blue-800 text-center mb-8 pb-4 border-b-4 border-blue-200">
+            Corporate-Level Strategies
+        </h1>
 
-        <div class="section">
-            <h2>Section 1: Introduction to Corporate-Level Strategy</h2>
-            <ul>
+        <!-- Tab Buttons -->
+        <div class="flex flex-wrap justify-center mb-6 border-b border-gray-200">
+            <button class="tab-button px-4 py-2 text-sm sm:text-base font-semibold text-gray-700 rounded-t-lg hover:bg-blue-100 hover:text-blue-700 focus:outline-none transition-colors duration-200 active-tab" data-tab="intro">
+                Introduction
+            </button>
+            <button class="tab-button px-4 py-2 text-sm sm:text-base font-semibold text-gray-700 rounded-t-lg hover:bg-blue-100 hover:text-blue-700 focus:outline-none transition-colors duration-200" data-tab="growth">
+                Growth Strategies
+            </button>
+            <button class="tab-button px-4 py-2 text-sm sm:text-base font-semibold text-gray-700 rounded-t-lg hover:bg-blue-100 hover:text-blue-700 focus:outline-none transition-colors duration-200" data-tab="stability">
+                Stability Strategies
+            </button>
+            <button class="tab-button px-4 py-2 text-sm sm:text-base font-semibold text-gray-700 rounded-t-lg hover:bg-blue-100 hover:text-blue-700 focus:outline-none transition-colors duration-200" data-tab="retrenchment">
+                Retrenchment Strategies
+            </button>
+            <button class="tab-button px-4 py-2 text-sm sm:text-base font-semibold text-gray-700 rounded-t-lg hover:bg-blue-100 hover:text-blue-700 focus:outline-none transition-colors duration-200" data-tab="combination">
+                Combination Strategy
+            </button>
+            <button class="tab-button px-4 py-2 text-sm sm:text-base font-semibold text-gray-700 rounded-t-lg hover:bg-blue-100 hover:text-blue-700 focus:outline-none transition-colors duration-200" data-tab="factors">
+                Influencing Factors
+            </button>
+            <button class="tab-button px-4 py-2 text-sm sm:text-base font-semibold text-gray-700 rounded-t-lg hover:bg-blue-100 hover:text-blue-700 focus:outline-none transition-colors duration-200" data-tab="synergy">
+                Synergy & Fit
+            </button>
+        </div>
+
+        <!-- Tab Content -->
+        <div id="intro" class="tab-content">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">Introduction to Corporate-Level Strategy</h2>
+            <ul class="list-disc ml-6 space-y-2 text-gray-700">
                 <li><b>Definition:</b> The highest level of strategy that deals with the overall direction of the company and its portfolio of businesses. It's about deciding where the company will compete and how it will manage its different business units to create synergy and maximize shareholder value.</li>
                 <li><b>Key Questions Addressed:</b>
-                    <ul>
+                    <ul class="list-circle ml-6 mt-2 space-y-1">
                         <li>Which industries should we compete in?</li>
                         <li>How should we enter or exit industries?</li>
                         <li>How can we create synergy among our different business units?</li>
@@ -92,187 +72,217 @@
                     </ul>
                 </li>
                 <li><b>Contrast with Business-Level Strategy:</b>
-                    <ul>
-                        <li><b>Corporate-Level:</b> "What businesses are we in?" <span class="example">e.g., General Electric deciding to be in aviation, healthcare, and power.</span></li>
-                        <li><b>Business-Level:</b> "How do we compete in this specific business?" <span class="example">e.g., GE Aviation deciding to differentiate through advanced technology and service.</span></li>
+                    <ul class="list-circle ml-6 mt-2 space-y-1">
+                        <li><b>Corporate-Level:</b> "What businesses are we in?" <span class="block text-sm italic text-gray-600 mt-1 p-2 bg-blue-50 rounded">Example: General Electric deciding to be in aviation, healthcare, and power.</span></li>
+                        <li><b>Business-Level:</b> "How do we compete in this specific business?" <span class="block text-sm italic text-gray-600 mt-1 p-2 bg-blue-50 rounded">Example: GE Aviation deciding to differentiate through advanced technology and service.</span></li>
                     </ul>
                 </li>
             </ul>
-            <img src="corporate-business-strategy.jpg" alt="Diagram showing corporate strategy at the top and business strategy below it">
-            <p class="image-caption">Figure 1: Distinguishing Corporate and Business Strategy</p>
         </div>
 
-        <div class="section">
-            <h2>Section 2: Main Types of Corporate-Level Strategies</h2>
-            <p>Corporate-level strategies generally fall into four broad categories: Growth, Stability, Retrenchment, and Combination.</p>
+        <div id="growth" class="tab-content hidden">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">Growth Strategies (Expansion)</h2>
+            <p class="mb-4 text-gray-700">These strategies aim to increase the company's size, market share, revenue, and profitability.</p>
 
-            <h3>2.1. Growth Strategies (Expansion)</h3>
-            <p>These strategies aim to increase the company's size, market share, revenue, and profitability.</p>
-            <ul>
-                <li><b>Market Penetration:</b> Increasing sales of existing products in existing markets.
-                    <div class="example">Example: A soda company launching aggressive marketing campaigns and promotions to encourage current customers to buy more or switch from competitors.</div>
+            <h3 class="text-xl font-semibold text-blue-600 mb-3">2.1.1. Market Penetration</h3>
+            <ul class="list-disc ml-6 space-y-2 text-gray-700">
+                <li>Increasing sales of existing products in existing markets.
+                    <span class="block text-sm italic text-gray-600 mt-1 p-2 bg-blue-50 rounded">Example: A soda company launching aggressive marketing campaigns and promotions to encourage current customers to buy more or switch from competitors.</span>
                 </li>
-                <li><b>Market Development:</b> Introducing existing products to new markets.
-                    <div class="example">Example: Starbucks expanding its coffee shops into new countries or regions.</div>
+            </ul>
+
+            <h3 class="text-xl font-semibold text-blue-600 mb-3">2.1.2. Market Development</h3>
+            <ul class="list-disc ml-6 space-y-2 text-gray-700">
+                <li>Introducing existing products to new markets.
+                    <span class="block text-sm italic text-gray-600 mt-1 p-2 bg-blue-50 rounded">Example: Starbucks expanding its coffee shops into new countries or regions.</span>
                 </li>
-                <li><b>Product Development:</b> Creating new products or services for existing markets.
-                    <div class="example">Example: Apple regularly releasing new iPhone models with enhanced features for its existing customer base.</div>
+            </ul>
+
+            <h3 class="text-xl font-semibold text-blue-600 mb-3">2.1.3. Product Development</h3>
+            <ul class="list-disc ml-6 space-y-2 text-gray-700">
+                <li>Creating new products or services for existing markets.
+                    <span class="block text-sm italic text-gray-600 mt-1 p-2 bg-blue-50 rounded">Example: Apple regularly releasing new iPhone models with enhanced features for its existing customer base.</span>
                 </li>
-                <li><b>Diversification:</b> Entering new markets with new products. This is often the riskiest growth strategy.
-                    <ul>
+            </ul>
+
+            <h3 class="text-xl font-semibold text-blue-600 mb-3">2.1.4. Diversification</h3>
+            <ul class="list-disc ml-6 space-y-2 text-gray-700">
+                <li>Entering new markets with new products. This is often the riskiest growth strategy.
+                    <ul class="list-circle ml-6 mt-2 space-y-1">
                         <li><b>Related Diversification (Concentric):</b> Expanding into new businesses that have similarities with the existing core business in terms of technology, marketing, or operations.
-                            <div class="example">Example: A company producing athletic shoes (Nike) diversifying into athletic apparel and sports equipment. The expertise in sports and consumer branding is related.</div>
-                            <img src="related-diversification.jpg" alt="Diagram showing a central core business expanding to related businesses">
-                            <p class="image-caption">Figure 2: Related Diversification</p>
+                            <span class="block text-sm italic text-gray-600 mt-1 p-2 bg-blue-50 rounded">Example: A company producing athletic shoes (Nike) diversifying into athletic apparel and sports equipment. The expertise in sports and consumer branding is related.</span>
                         </li>
                         <li><b>Unrelated Diversification (Conglomerate):</b> Expanding into businesses that are completely unrelated to the current core business.
-                            <div class="example">Example: A manufacturing company acquiring a chain of hotels. The rationale is often about spreading risk or seeking financial returns, rather than operational synergy.</div>
-                            <img src="unrelated-diversification.jpg" alt="Diagram showing a core business expanding to completely different businesses">
-                            <p class="image-caption">Figure 3: Unrelated Diversification</p>
+                            <span class="block text-sm italic text-gray-600 mt-1 p-2 bg-blue-50 rounded">Example: A manufacturing company acquiring a chain of hotels. The rationale is often about spreading risk or seeking financial returns, rather than operational synergy.</span>
                         </li>
                     </ul>
                 </li>
-                <li><b>Integration Strategies:</b> Gaining control over different stages of the supply chain or acquiring competitors.
-                    <ul>
+            </ul>
+
+            <h3 class="text-xl font-semibold text-blue-600 mb-3">2.1.5. Integration Strategies</h3>
+            <ul class="list-disc ml-6 space-y-2 text-gray-700">
+                <li>Gaining control over different stages of the supply chain or acquiring competitors.
+                    <ul class="list-circle ml-6 mt-2 space-y-1">
                         <li><b>Vertical Integration:</b> Taking control of activities that were previously handled by suppliers or distributors.
-                            <ul>
+                            <ul class="list-square ml-6 mt-2 space-y-1">
                                 <li><b>Backward Integration:</b> Acquiring a supplier.
-                                    <div class="example">Example: A car manufacturer buying a company that produces car seats to ensure a steady supply and control costs.</div>
-                                    <img src="backward-integration.jpg" alt="Diagram showing a company acquiring its supplier">
-                                    <p class="image-caption">Figure 4: Backward Integration</p>
+                                    <span class="block text-sm italic text-gray-600 mt-1 p-2 bg-blue-50 rounded">Example: A car manufacturer buying a company that produces car seats to ensure a steady supply and control costs.</span>
                                 </li>
                                 <li><b>Forward Integration:</b> Acquiring a distributor or retail outlet.
-                                    <div class="example">Example: A clothing manufacturer opening its own retail stores to sell directly to consumers.</div>
-                                    <img src="forward-integration.jpg" alt="Diagram showing a company acquiring its distributor">
-                                    <p class="image-caption">Figure 5: Forward Integration</p>
+                                    <span class="block text-sm italic text-gray-600 mt-1 p-2 bg-blue-50 rounded">Example: A clothing manufacturer opening its own retail stores to sell directly to consumers.</span>
                                 </li>
                             </ul>
                         </li>
                         <li><b>Horizontal Integration:</b> Acquiring or merging with competitors at the same level of the supply chain.
-                            <div class="example">Example: Facebook acquiring Instagram or WhatsApp to expand its user base and reduce competition.</div>
-                            <img src="horizontal-integration.jpg" alt="Diagram showing two competing companies merging">
-                            <p class="image-caption">Figure 6: Horizontal Integration</p>
+                            <span class="block text-sm italic text-gray-600 mt-1 p-2 bg-blue-50 rounded">Example: Facebook acquiring Instagram or WhatsApp to expand its user base and reduce competition.</span>
                         </li>
                     </ul>
                 </li>
             </ul>
         </div>
 
-        <div class="section">
-            <h3>2.2. Stability Strategies</h3>
-            <p>These strategies focus on maintaining the company's current size and operations, often in mature or stable markets. The goal is consistent, steady performance rather than aggressive expansion.</p>
-            <ul>
+        <div id="stability" class="tab-content hidden">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">Stability Strategies</h2>
+            <p class="mb-4 text-gray-700">These strategies focus on maintaining the company's current size and operations, often in mature or stable markets. The goal is consistent, steady performance rather than aggressive expansion.</p>
+            <ul class="list-disc ml-6 space-y-2 text-gray-700">
                 <li><b>No-Change Strategy:</b> Continuing with current business operations and objectives without significant alterations.
-                    <div class="example">Example: A local bakery that has a loyal customer base and is content with its current size and profitability, focusing on maintaining quality and efficiency.</div>
+                    <span class="block text-sm italic text-gray-600 mt-1 p-2 bg-blue-50 rounded">Example: A local bakery that has a loyal customer base and is content with its current size and profitability, focusing on maintaining quality and efficiency.</span>
                 </li>
                 <li><b>Profit Strategy:</b> Focusing on improving profitability through cost reduction and efficiency, rather than increasing sales volume.
-                    <div class="example">Example: A well-established manufacturing company in a saturated market might focus on optimizing its production processes and supply chain to lower costs and boost profit margins.</div>
+                    <span class="block text-sm italic text-gray-600 mt-1 p-2 bg-blue-50 rounded">Example: A well-established manufacturing company in a saturated market might focus on optimizing its production processes and supply chain to lower costs and boost profit margins.</span>
                 </li>
             </ul>
-            <img src="stability-strategy.jpg" alt="Image symbolizing steady, balanced growth">
-            <p class="image-caption">Figure 7: Stability Strategy</p>
         </div>
 
-        <div class="section">
-            <h3>2.3. Retrenchment Strategies</h3>
-            <p>These strategies are used when a company faces declining performance, financial difficulties, or needs to streamline operations. The focus is on reducing size or scope to improve efficiency and profitability.</p>
-            <ul>
+        <div id="retrenchment" class="tab-content hidden">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">Retrenchment Strategies</h2>
+            <p class="mb-4 text-gray-700">These strategies are used when a company faces declining performance, financial difficulties, or needs to streamline operations. The focus is on reducing size or scope to improve efficiency and profitability.</p>
+            <ul class="list-disc ml-6 space-y-2 text-gray-700">
                 <li><b>Turnaround Strategy:</b> Aiming to reverse a decline in performance and return to profitability. Often involves aggressive cost-cutting, restructuring, and refocusing on core competencies.
-                    <div class="example">Example: A struggling retail chain closing unprofitable stores, reducing inventory, and reorganizing management to improve efficiency.</div>
-                    <img src="turnaround-strategy.jpg" alt="Image symbolizing a U-turn or recovery path">
-                    <p class="image-caption">Figure 8: Turnaround Strategy</p>
+                    <span class="block text-sm italic text-gray-600 mt-1 p-2 bg-blue-50 rounded">Example: A struggling retail chain closing unprofitable stores, reducing inventory, and reorganizing management to improve efficiency.</span>
                 </li>
                 <li><b>Divestment Strategy:</b> Selling off a portion of the business (a subsidiary, product line, or asset) that is underperforming or no longer fits the company's core strategy.
-                    <div class="example">Example: General Electric selling off its appliance business to focus on its core industrial businesses like aviation and healthcare.</div>
-                    <img src="divestment-strategy.jpg" alt="Image symbolizing selling off a part of a company">
-                    <p class="image-caption">Figure 9: Divestment Strategy</p>
+                    <span class="block text-sm italic text-gray-600 mt-1 p-2 bg-blue-50 rounded">Example: General Electric selling off its appliance business to focus on its core industrial businesses like aviation and healthcare.</span>
                 </li>
                 <li><b>Liquidation Strategy:</b> The most drastic retrenchment, involving selling all assets and ceasing operations. This is a last resort when a business is no longer viable.
-                    <div class="example">Example: A small, niche business that can no longer compete in its market decides to close down and sell off its remaining assets.</div>
-                    <img src="liquidation-strategy.jpg" alt="Image symbolizing a closing business sign">
-                    <p class="image-caption">Figure 10: Liquidation Strategy</p>
+                    <span class="block text-sm italic text-gray-600 mt-1 p-2 bg-blue-50 rounded">Example: A small, niche business that can no longer compete in its market decides to close down and sell off its remaining assets.</span>
                 </li>
             </ul>
         </div>
 
-        <div class="section">
-            <h3>2.4. Combination Strategy</h3>
-            <p>This involves using elements from multiple strategies simultaneously to achieve diverse objectives.</p>
-            <ul>
-                <li><div class="example">Example: A large conglomerate might pursue growth in one division (e.g., through market development for a new tech product), maintain stability in another (e.g., a mature consumer goods division), and divest an underperforming unit (e.g., a struggling legacy manufacturing plant).</div></li>
+        <div id="combination" class="tab-content hidden">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">Combination Strategy</h2>
+            <p class="mb-4 text-gray-700">This involves using elements from multiple strategies simultaneously to achieve diverse objectives.</p>
+            <ul class="list-disc ml-6 space-y-2 text-gray-700">
+                <li><span class="block text-sm italic text-gray-600 mt-1 p-2 bg-blue-50 rounded">Example: A large conglomerate might pursue growth in one division (e.g., through market development for a new tech product), maintain stability in another (e.g., a mature consumer goods division), and divest an underperforming unit (e.g., a struggling legacy manufacturing plant).</span></li>
             </ul>
-            <img src="combination-strategy.jpg" alt="Image symbolizing a mix of different strategic arrows">
-            <p class="image-caption">Figure 11: Combination Strategy</p>
         </div>
 
-        <div class="section">
-            <h2>Section 3: Factors Influencing Corporate Strategy Selection</h2>
-            <p>Selecting the right corporate-level strategy requires a thorough analysis of both internal and external factors.</p>
+        <div id="factors" class="tab-content hidden">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">Factors Influencing Corporate Strategy Selection</h2>
+            <p class="mb-4 text-gray-700">Selecting the right corporate-level strategy requires a thorough analysis of both internal and external factors.</p>
 
-            <h3>3.1. Internal Factors</h3>
-            <ul>
+            <h3 class="text-xl font-semibold text-blue-600 mb-3">3.1. Internal Factors</h3>
+            <ul class="list-disc ml-6 space-y-2 text-gray-700">
                 <li><b>Resources and Capabilities:</b> What are the company's strengths and weaknesses? Does it have the financial, human, technological, and organizational resources to pursue a particular strategy?
-                    <div class="example">Example: A company with strong R&D capabilities might be more inclined towards product development or related diversification.</div>
+                    <span class="block text-sm italic text-gray-600 mt-1 p-2 bg-blue-50 rounded">Example: A company with strong R&D capabilities might be more inclined towards product development or related diversification.</span>
                 </li>
                 <li><b>Organizational Culture:</b> Does the company culture support innovation, risk-taking, or stability?
-                    <div class="example">Example: A highly bureaucratic culture might struggle with rapid growth or diversification into agile new markets.</div>
+                    <span class="block text-sm italic text-gray-600 mt-1 p-2 bg-blue-50 rounded">Example: A highly bureaucratic culture might struggle with rapid growth or diversification into agile new markets.</span>
                 </li>
                 <li><b>Past Performance:</b> Historical performance can influence future strategic choices. Companies performing well might opt for stability or organic growth, while struggling companies might need retrenchment.</li>
             </ul>
-            <img src="internal-factors.jpg" alt="Diagram showing internal factors like resources, capabilities, culture">
-            <p class="image-caption">Figure 12: Key Internal Factors for Strategy</p>
 
-            <h3>3.2. External Factors</h3>
-            <ul>
+            <h3 class="text-xl font-semibold text-blue-600 mb-3">3.2. External Factors</h3>
+            <ul class="list-disc ml-6 space-y-2 text-gray-700">
                 <li><b>Industry Attractiveness (Porter's Five Forces):</b> Analyzing the competitive intensity and profitability potential of industries.
-                    <ul>
+                    <ul class="list-circle ml-6 mt-2 space-y-1">
                         <li>Threat of New Entrants</li>
                         <li>Bargaining Power of Buyers</li>
                         <li>Bargaining Power of Suppliers</li>
                         <li>Threat of Substitute Products or Services</li>
                         <li>Rivalry Among Existing Competitors</li>
-                        <div class="example">Example: An industry with high threats and strong bargaining powers might lead a company to diversify into more attractive industries or focus on a niche to escape intense rivalry.</div>
+                        <span class="block text-sm italic text-gray-600 mt-1 p-2 bg-blue-50 rounded">Example: An industry with high threats and strong bargaining powers might lead a company to diversify into more attractive industries or focus on a niche to escape intense rivalry.</span>
                     </ul>
-                    <img src="porters-five-forces.jpg" alt="Diagram of Porter's Five Forces model">
-                    <p class="image-caption">Figure 13: Porter's Five Forces Model</p>
                 </li>
                 <li><b>Market Conditions:</b> Overall economic conditions, market growth rates, and consumer trends.
-                    <div class="example">Example: During an economic downturn, retrenchment or stability strategies might be more appropriate than aggressive growth.</div>
+                    <span class="block text-sm italic text-gray-600 mt-1 p-2 bg-blue-50 rounded">Example: During an economic downturn, retrenchment or stability strategies might be more appropriate than aggressive growth.</span>
                 </li>
                 <li><b>Regulatory and Legal Environment:</b> Government policies, laws, and regulations.
-                    <div class="example">Example: Strict environmental regulations might deter a company from entering certain manufacturing industries.</div>
+                    <span class="block text-sm italic text-gray-600 mt-1 p-2 bg-blue-50 rounded">Example: Strict environmental regulations might deter a company from entering certain manufacturing industries.</span>
                 </li>
                 <li><b>Technological Advancements:</b> Disruptive technologies can create new opportunities or threaten existing businesses.
-                    <div class="example">Example: The rise of e-commerce prompted many traditional brick-and-mortar retailers to adopt online sales channels or diversify into digital services.</div>
+                    <span class="block text-sm italic text-gray-600 mt-1 p-2 bg-blue-50 rounded">Example: The rise of e-commerce prompted many traditional brick-and-mortar retailers to adopt online sales channels or diversify into digital services.</span>
                 </li>
             </ul>
-            <img src="external-factors.jpg" alt="Diagram showing external factors like economy, technology, regulations">
-            <p class="image-caption">Figure 14: Key External Factors for Strategy</p>
         </div>
 
-        <div class="section">
-            <h2>Section 4: Strategic Fit and Synergy</h2>
-            <p>A key goal of corporate-level strategy, especially for diversified companies, is to create <b>synergy</b>, where the combined value of the different business units is greater than the sum of their individual parts. This is often achieved through "strategic fit."</p>
-            <ul>
+        <div id="synergy" class="tab-content hidden">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">Strategic Fit and Synergy</h2>
+            <p class="mb-4 text-gray-700">A key goal of corporate-level strategy, especially for diversified companies, is to create <b>synergy</b>, where the combined value of the different business units is greater than the sum of their individual parts. This is often achieved through "strategic fit."</p>
+            <ul class="list-disc ml-6 space-y-2 text-gray-700">
                 <li><b>Strategic Fit:</b> The compatibility and complementary nature of different business units within a corporate portfolio.
-                    <ul>
+                    <ul class="list-circle ml-6 mt-2 space-y-1">
                         <li><b>Operational Synergy:</b> Sharing resources, activities, or capabilities.
-                            <div class="example">Example: Disney owning Pixar and Marvel allows for shared marketing, distribution, and cross-promotion of characters and stories across movies, theme parks, and merchandise.</div>
+                            <span class="block text-sm italic text-gray-600 mt-1 p-2 bg-blue-50 rounded">Example: Disney owning Pixar and Marvel allows for shared marketing, distribution, and cross-promotion of characters and stories across movies, theme parks, and merchandise.</span>
                         </li>
                         <li><b>Managerial Synergy:</b> Sharing management expertise, knowledge, and best practices across different business units.
-                            <div class="example">Example: A strong corporate leadership team with expertise in turnarounds applying its knowledge to a newly acquired struggling subsidiary.</div>
+                            <span class="block text-sm italic text-gray-600 mt-1 p-2 bg-blue-50 rounded">Example: A strong corporate leadership team with expertise in turnarounds applying its knowledge to a newly acquired struggling subsidiary.</span>
                         </li>
                         <li><b>Financial Synergy:</b> Improved access to capital, lower cost of capital, and better risk management through diversification.
-                            <div class="example">Example: A company with a "cash cow" business unit generating stable profits can use that cash to fund a high-growth "star" business unit.</div>
+                            <span class="block text-sm italic text-gray-600 mt-1 p-2 bg-blue-50 rounded">Example: A company with a "cash cow" business unit generating stable profits can use that cash to fund a high-growth "star" business unit.</span>
                         </li>
                     </ul>
                 </li>
             </ul>
-            <img src="synergy.jpg" alt="Image symbolizing synergy where 1+1=3">
-            <p class="image-caption">Figure 15: The Concept of Synergy</p>
         </div>
-
     </div>
+
+    <script>
+        // Get all tab buttons
+        const tabButtons = document.querySelectorAll('.tab-button');
+        // Get all tab content divs
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        // Function to show a specific tab
+        function showTab(tabId) {
+            tabContents.forEach(content => {
+                content.classList.add('hidden'); // Hide all tab content
+            });
+            tabButtons.forEach(button => {
+                button.classList.remove('active-tab', 'border-b-2', 'border-blue-500', 'text-blue-700'); // Remove active style from all buttons
+                button.classList.add('border-b-0', 'text-gray-700'); // Ensure non-active state
+            });
+
+            // Show the selected tab content
+            const activeContent = document.getElementById(tabId);
+            if (activeContent) {
+                activeContent.classList.remove('hidden');
+            }
+
+            // Add active style to the clicked button
+            const activeButton = document.querySelector(`.tab-button[data-tab="${tabId}"]`);
+            if (activeButton) {
+                activeButton.classList.add('active-tab', 'border-b-2', 'border-blue-500', 'text-blue-700');
+                activeButton.classList.remove('border-b-0', 'text-gray-700');
+            }
+        }
+
+        // Add click event listener to each tab button
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.dataset.tab; // Get the data-tab attribute value
+                showTab(tabId);
+            });
+        });
+
+        // Show the first tab by default when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            showTab('intro'); // Default to showing the Introduction tab
+        });
+    </script>
 
 </body>
 </html>
+<!-- End of Corporate-Level Strategies Module -->
+<!-- This is the end of the Corporate-Level Strategies module. -->

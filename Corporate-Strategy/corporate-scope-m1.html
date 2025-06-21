@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corporate Strategy Module 1 Notes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+        .highlight {
+            background-color: #facc15; /* Tailwind yellow-400 */
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .search-highlight {
+            background-color: #8b5cf6; /* Tailwind violet-500 */
+            color: white;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+        .note-heading {
+            color: #1e40af; /* Tailwind blue-800 */
+            font-weight: bold;
+            font-size: 1.25rem; /* Equivalent to text-xl */
+        }
+        .sub-heading {
+            color: #1d4ed8; /* Tailwind blue-700 */
+            font-weight: 600;
+            font-size: 1.125rem; /* Equivalent to text-lg */
+        }
+        .main-keyword {
+            color: #c026d3; /* Tailwind purple-700 */
+            font-weight: bold;
+        }
+        .sidebar {
+            width: 250px;
+            flex-shrink: 0;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                overflow-y: visible;
+                margin-bottom: 1rem;
+            }
+            .content-area {
+                padding: 1rem;
+            }
+        }
+        /* Custom scrollbar for desktop sidebar */
+        @media (min-width: 769px) {
+            .sidebar {
+                max-height: calc(100vh - 4rem); /* Adjust based on header height */
+                overflow-y: auto;
+            }
+            .sidebar::-webkit-scrollbar {
+                width: 8px;
+            }
+            .sidebar::-webkit-scrollbar-track {
+                background: #e2e8f0; /* Tailwind gray-200 */
+                border-radius: 10px;
+            }
+            .sidebar::-webkit-scrollbar-thumb {
+                background: #94a3b8; /* Tailwind slate-400 */
+                border-radius: 10px;
+            }
+            .sidebar::-webkit-scrollbar-thumb:hover {
+                background: #64748b; /* Tailwind slate-500 */
+            }
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+    <header class="bg-blue-900 text-white p-4 shadow-lg flex justify-between items-center fixed w-full z-10">
+        <h1 class="text-2xl font-bold rounded-md">Corporate Strategy</h1>
+        <div class="relative">
+            <input type="text" id="searchInput" placeholder="Search notes..." class="p-2 rounded-md bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400 pl-10">
+            <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+        </div>
+    </header>
+
+    <div class="flex flex-1 pt-16"> <!-- Padding top equal to header height -->
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar bg-gray-50 p-6 shadow-md rounded-br-lg md:block hidden">
+            <h2 class="text-xl font-semibold mb-4 text-gray-800">Module 1: Corporate Scope</h2>
+            <ul class="space-y-2">
+                <li><a href="#introduction" class="block p-2 rounded-md hover:bg-blue-100 text-blue-700 font-medium transition-colors">Lesson 1-1: Introduction</a></li>
+                <li><a href="#vertical-scope-part1" class="block p-2 rounded-md hover:bg-blue-100 text-blue-700 font-medium transition-colors">Lesson 1-2: Vertical Scope Part 1</a></li>
+                <li><a href="#vertical-scope-part2" class="block p-2 rounded-md hover:bg-blue-100 text-blue-700 font-medium transition-colors">Lesson 1-3: Vertical Scope Part 2 (TCE)</a></li>
+                <li><a href="#horizontal-scope-part1" class="block p-2 rounded-md hover:bg-blue-100 text-blue-700 font-medium transition-colors">Lesson 1-4: Horizontal Scope Part 1</a></li>
+                <li><a href="#horizontal-scope-part2" class="block p-2 rounded-md hover:bg-blue-100 text-blue-700 font-medium transition-colors">Lesson 1-5: Horizontal Scope Part 2 (BCG Matrix)</a></li>
+                <li><a href="#horizontal-scope-part3" class="block p-2 rounded-md hover:bg-blue-100 text-blue-700 font-medium transition-colors">Lesson 1-6: Horizontal Scope Part 3</a></li>
+                <li><a href="#managing-integrated-firms" class="block p-2 rounded-md hover:bg-blue-100 text-blue-700 font-medium transition-colors">Lesson 1-7: Managing Integrated Firms</a></li>
+                <li class="mt-4 pt-4 border-t border-gray-200">
+                    <h3 class="font-semibold text-gray-600 mb-2">Future Modules</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="block p-2 rounded-md text-gray-500 hover:bg-gray-100 cursor-not-allowed">Module 2: [Placeholder Topic]</a></li>
+                        <li><a href="#" class="block p-2 rounded-md text-gray-500 hover:bg-gray-100 cursor-not-allowed">Module 3: [Placeholder Topic]</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 p-8 md:p-10 lg:p-12 bg-white rounded-tl-lg shadow-lg overflow-y-auto">
+            <!-- Home Page -->
+            <section id="home" class="mb-12 pb-8 border-b border-gray-200">
+                <h1 class="text-4xl font-extrabold mb-6 text-blue-900">Welcome to Corporate Strategy Notes</h1>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    This website serves as an interactive note-taking platform for the "Corporate Strategy" module. Here, you'll find detailed explanations, examples, and key takeaways to help you master the concepts of corporate scope, vertical integration, diversification, and managing integrated firms.
+                </p>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    Use the navigation menu on the left to jump to specific lessons, or the search bar in the top right to find keywords and topics of interest. Important terms and concepts are highlighted for easy identification.
+                </p>
+                <h2 class="text-2xl font-semibold mt-8 mb-4 text-blue-800">What is Corporate Strategy?</h2>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    <span class="main-keyword">Corporate strategy</span> is defined as "the pursuit of competitive advantage through the configuration and coordination of a company's multi-business activities." It involves crucial decisions and actions concerning:
+                </p>
+                <ul class="list-disc list-inside ml-6 text-gray-700 space-y-2 mb-4">
+                    <li>The <span class="main-keyword">scope of the firm</span></li>
+                    <li><span class="main-keyword">Coordinating synergies</span> across businesses</li>
+                    <li><span class="main-keyword">Corporate transactions</span></li>
+                </ul>
+                <p class="text-gray-700 leading-relaxed">
+                    Module 1 focuses primarily on the <span class="main-keyword">vertical</span> and <span class="main-keyword">horizontal scope</span> of companies, exploring choices related to vertical integration and diversification.
+                </p>
+            </section>
+
+            <!-- Lesson 1-1: Introduction -->
+            <section id="introduction" class="mb-12 pb-8 border-b border-gray-200">
+                <h2 class="text-3xl font-bold mb-6 text-blue-900 note-heading">Lesson 1-1: Introduction: Corporate Scope</h2>
+                <h3 class="text-2xl font-semibold mb-4 sub-heading">What is Corporate Scope?</h3>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    Simply put, <span class="main-keyword">corporate scope</span> refers to the "footprint" of the company – which activities or businesses a company is engaged in, and how should they be managed.
+                </p>
+                <h3 class="text-2xl font-semibold mb-4 sub-heading">Three Dimensions of Corporate Scope:</h3>
+                <ul class="list-disc list-inside ml-6 text-gray-700 space-y-2 mb-4">
+                    <li><span class="main-keyword">Vertical Scope (Vertical Integration):</span> What stages of the value chain (or network) should the firm operate in?</li>
+                    <li><span class="main-keyword">Horizontal Scope (Diversification):</span> What range of products and services should the firm offer?</li>
+                    <li><span class="main-keyword">Geographic Scope:</span> Where in the world does the firm compete? (Note: This module focuses primarily on vertical and horizontal scope, with geographic scope covered in the International Strategy module.)</li>
+                </ul>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    These are <span class="highlight">real choices</span> companies make. For example:
+                    <ul class="list-disc list-inside ml-8 text-gray-700 space-y-2">
+                        <li><span class="font-semibold">Vertical Scope Example:</span> PepsiCo (2009) and Coca-Cola (2010) acquiring their bottlers is an example of <span class="main-keyword">forward integration</span>, adding a new stage to their value chain.</li>
+                        <li><span class="font-semibold">Horizontal Scope Example:</span> GE's shift in focus from financial services (GE Capital), media (NBC), and appliances to power systems, aviation, and renewable energy under CEOs Jack Welch and Larry Culp, demonstrates changing horizontal scope.</li>
+                    </ul>
+                </p>
+            </section>
+
+            <!-- Lesson 1-2: Vertical Scope Part 1 -->
+            <section id="vertical-scope-part1" class="mb-12 pb-8 border-b border-gray-200">
+                <h2 class="text-3xl font-bold mb-6 text-blue-900 note-heading">Lesson 1-2: Vertical Scope Part 1</h2>
+                <h3 class="text-2xl font-semibold mb-4 sub-heading">Defining Vertical Scope and Vertical Integration</h3>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    When discussing <span class="main-keyword">vertical scope</span>, two related questions arise:
+                </p>
+                <ul class="list-decimal list-inside ml-6 text-gray-700 space-y-2 mb-4">
+                    <li>Which parts of the <span class="main-keyword">value chain</span> (or value network) should a company operate in? (A business strategy question: which part is more profitable?)</li>
+                    <li>Should the <span class="main-keyword">same company be integrated across specific stages</span> of the value chain (or network)? (The classic <span class="main-keyword">vertical integration</span> question: does managing these parts within the same company create more value than if they were separate?)</li>
+                </ul>
+                <h3 class="text-2xl font-semibold mb-4 sub-heading">Vertical Integration Terminology:</h3>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    The <span class="main-keyword">value chain</span> illustrates primary and support activities:
+                </p>
+                <div class="flex justify-center mb-4">
+                    <img src="https://placehold.co/600x200/e0e7ff/1e40af?text=Value+Chain+Diagram" alt="Value Chain Diagram" class="w-full max-w-xl rounded-md shadow-md">
+                </div>
+                <ul class="list-disc list-inside ml-6 text-gray-700 space-y-2 mb-4">
+                    <li><span class="main-keyword">Forward Integration:</span> Moving closer to the customer (e.g., a producer getting into distribution and sales). PepsiCo acquiring bottlers is a forward integration example.</li>
+                    <li><span class="main-keyword">Backward Integration:</span> Moving closer to raw materials (e.g., a manufacturer getting into component production or raw material sourcing).</li>
+                    <li><span class="main-keyword">Outsourcing:</span> A vertical integration choice, such as deciding whether to build an IT system internally or outsource it.</li>
+                </ul>
+
+                <h3 class="text-2xl font-semibold mb-4 sub-heading">Example: University of Illinois and Coursera (Outsourcing)</h3>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    The University of Illinois contracts with Coursera to host its online courses. This is an outsourcing decision.
+                </p>
+                <p class="font-semibold text-gray-800 mb-2">Motivations for Outsourcing:</p>
+                <ul class="list-disc list-inside ml-6 text-gray-700 space-y-2 mb-4">
+                    <li><span class="main-keyword">Lack of Resources/Capabilities:</span> Outsourcing when the company lacks the internal quality or capabilities (e.g., University of Illinois lacking Coursera's software skills). This can be <span class="highlight">self-reinforcing</span>, as the partner keeps learning.</li>
+                    <li><span class="main-keyword">Ability to Aggregate Demand (Scale):</span> Partner firm can achieve greater scale (e.g., Coursera serving many universities, Walmart aggregating consumer demand).</li>
+                    <li><span class="main-keyword">Responsiveness to Market/Technology Trends:</span> Specialized external firms are often more responsive and at the cutting edge.</li>
+                </ul>
+                <p class="font-semibold text-gray-800 mb-2">Motivations for Vertical Integration:</p>
+                <ul class="list-disc list-inside ml-6 text-gray-700 space-y-2 mb-4">
+                    <li><span class="main-keyword">Market Power:</span> Creating entry barriers by controlling a key resource (though often limited by competition and antitrust laws).</li>
+                    <li><span class="main-keyword">Improving Quality/Cost:</span> More control over operations can lead to better quality or cost efficiency.</li>
+                    <li><span class="main-keyword">Planning, Coordinating, Control:</span> Easier to plan and coordinate operations when owned internally.</li>
+                    <li><span class="main-keyword">Investments in Specialized Assets:</span> Critical if the supplier needs to make investments specific to the buyer, which can lead to a "<span class="main-keyword">hold-up problem</span>."</li>
+                </ul>
+            </section>
+
+            <!-- Lesson 1-3: Vertical Scope Part 2 (Transaction Cost Economics) -->
+            <section id="vertical-scope-part2" class="mb-12 pb-8 border-b border-gray-200">
+                <h2 class="text-3xl font-bold mb-6 text-blue-900 note-heading">Lesson 1-3: Vertical Scope Part 2: Transaction Cost Economics (TCE)</h2>
+                <h3 class="text-2xl font-semibold mb-4 sub-heading">Transaction Cost Economics (TCE) / Theory of the Firm</h3>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    <span class="main-keyword">Transaction Cost Economics (TCE)</span>, primarily associated with Nobel laureate <span class="main-keyword">Oliver Williamson</span>, is a field of research that addresses when to vertically integrate. It deals with:
+                </p>
+                <ul class="list-disc list-inside ml-6 text-gray-700 space-y-2 mb-4">
+                    <li><span class="main-keyword">Transaction Costs:</span> Costs associated with economic exchanges (e.g., negotiating, monitoring, enforcing contracts). More prevalent in market exchanges/outsourcing.</li>
+                    <li><span class="main-keyword">Administrative Costs:</span> Costs associated with organizing activities within a hierarchy (e.g., bureaucracy, weak incentives, sclerotic response). More prevalent in vertical integration.</li>
+                </ul>
+
+                <h3 class="text-2xl font-semibold mb-4 sub-heading">Comparative Organizational Analysis (Williamson's Key Insight)</h3>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    Williamson suggests de-linking two issues:
+                </p>
+                <ul class="list-decimal list-inside ml-6 text-gray-700 space-y-2 mb-4">
+                    <li><span class="font-semibold">What is the objective?</span> (e.g., market power, efficiencies, capabilities).</li>
+                    <li><span class="font-semibold">What organizational form (outsourcing vs. vertical integration) best achieves this objective?</span></li>
+                </ul>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    Williamson's core mantra: <span class="highlight">"All organizational forms are flawed."</span> Markets provide <span class="main-keyword">better adaptation</span>, while hierarchies (firms) provide <span class="main-keyword">better coordination</span>. The task is to compare relative advantages and disadvantages.
+                </p>
+
+                <h3 class="text-2xl font-semibold mb-4 sub-heading">Three Key Transaction Costs (when outsourcing):</h3>
+                <ul class="list-disc list-inside ml-6 text-gray-700 space-y-2 mb-4">
+                    <li><span class="main-keyword">Adverse Selection:</span> Arises due to information asymmetries exists between firm and its transaction partner, say, a supplier.</span>. Illustrated by George Akerlof's "<span class="highlight">Lemons Problem</span>" (used car market: sellers know more about quality than buyers). A supplier might not deploy its best resources or technologies.</li>
+                    <li><span class="main-keyword">Moral Hazard:</span> Arises due to information asymmetries <span class="italic">(ex post - after the transaction)</span> where a party has private, unmeasurable performance information leading to "abuse" of a benefit. (e.g., a dealer reducing service quality if only sales are measured).</li>
+                    <li><span class="main-keyword">Hold-Up Problem (Williamson):</span> Occurs when one party gains an upper hand after the transaction due to <span class="main-keyword">asset specificity</span> (investments specific to the other party, e.g., customized machinery, tied-in IT systems). This can lead to <span class="main-keyword">opportunism</span> (self-interest seeking with guile). Also includes knowledge/technology leakage.</li>
+                </ul>
+
+                <h3 class="text-2xl font-semibold mb-4 sub-heading">Three Key Administrative Costs (when integrating):</h3>
+                <ul class="list-disc list-inside ml-6 text-gray-700 space-y-2 mb-4">
+                    <li><span class="main-keyword">Weak Incentives:</span> Internal units may be less focused on performance than external suppliers due to an expectation of continuity and being governed by <span class="highlight">fiat</span> (orders within a permissible zone).</li>
+                    <li><span class="main-keyword">Principal-Agent Problem:</span> Applies to owner-manager or manager-subordinate contexts. If performance is unobservable, the agent may underperform (akin to moral hazard but internal).</li>
+                    <li><span class="main-keyword">Lack of Dynamism:</span> Vertically integrated hierarchies can be less responsive to market/technology trends due to bureaucracy and inability to "selectively intervene" (treat internal units like external suppliers).</li>
+                </ul>
+
+                <h3 class="text-2xl font-semibold mb-4 sub-heading">Main Takeaway on Vertical Integration:</h3>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    There's <span class="highlight">no general prescription</span> for whether outsourcing or vertical integration is always better. The key is to <span class="main-keyword">align the attributes of the transaction with the appropriate governance mode</span>.
+                </p>
+                <ul class="list-disc list-inside ml-6 text-gray-700 space-y-2">
+                    <li><span class="font-semibold">Vertically integrate if:</span> Investment in specific assets is needed, technology leakage hazards exist, or partner performance is difficult to measure.</li>
+                    <li><span class="font-semibold">Outsource if:</span> Strong incentives for performance are needed, or more adaptation to market/technology trends is desired.</li>
+                </ul>
+            </section>
+
+            <!-- Lesson 1-4: Horizontal Scope Part 1 -->
+            <section id="horizontal-scope-part1" class="mb-12 pb-8 border-b border-gray-200">
+                <h2 class="text-3xl font-bold mb-6 text-blue-900 note-heading">Lesson 1-4: Horizontal Scope Part 1</h2>
+                <h3 class="text-2xl font-semibold mb-4 sub-heading">Horizontal Scope & Diversification</h3>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    Similar to vertical scope, two questions arise for <span class="main-keyword">horizontal scope</span> or <span class="main-keyword">diversification</span>:
+                </p>
+                <ul class="list-decimal list-inside ml-6 text-gray-700 space-y-2 mb-4">
+                    <li>Which businesses should a company operate in? (Business strategy question)</li>
+                    <li>Should the <span class="main-keyword">same company be integrated across a set of businesses</span>? (Key corporate strategy question)</li>
+                </ul>
+
+                <h3 class="text-2xl font-semibold mb-4 sub-heading">Diversification Example: University of Illinois Urbana-Champaign</h3>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    Consider a multi-specialty university like the University of Illinois (with a business school as part of a larger university) versus an independent business school.
+                </p>
+                <p class="font-semibold text-gray-800 mb-2">Advantages of being part of a larger university (Diversification):</p>
+                <ul class="list-disc list-inside ml-6 text-gray-700 space-y-2 mb-4">
+                    <li>Opportunity to connect with faculty and colleagues across campus for interdisciplinary learning and diverse perspectives.</li>
+                    <li>Access to resources from other colleges (e.g., Engineering for technology/coding).</li>
+                    <li>Larger student population leading to more diverse interactions and exposure to other fields.</li>
+                    <li>Possibility for double majors in strong programs outside of business.</li>
+                </ul>
+                <p class="font-semibold text-gray-800 mb-2">Disadvantages of being part of a larger university (Diversification):</p>
+                <ul class="list-disc list-inside ml-6 text-gray-700 space-y-2 mb-4">
+                    <li>Resources may be diverted to other university activities (e.g., service courses).</li>
+                    <li>Students can feel "lost" in a large pool; resources are shared, not exclusive to business students.</li>
+                    <li>Challenge in getting everyone working in the same direction due to broader enterprise goals.</li>
+                </ul>
+
+                <h3 class="text-2xl font-semibold mb-4 sub-heading">Horizontal Scope Terminology:</h3>
+                <ul class="list-disc list-inside ml-6 text-gray-700 space-y-2">
+                    <li><span class="main-keyword">Horizontal Mergers:</span> In public policy discussions, this term refers to merging with another company in the <span class="highlight">exact same industry</span>. This is about increasing the size of the company in the same business. For example, <span class="font-semibold">one automobile insurance company merging with another automobile insurance company</span> would be a horizontal merger.</li>
+                    <li><span class="main-keyword">Diversification:</span> More generally, when thinking of horizontal scope, it refers to the firm's footprint across a set of <span class="highlight">different, not the same, businesses</span>. That is, the firm's diversification.</li>
+                    <li><span class="main-keyword">Related (and Unrelated) Diversification:</span> These are common terminologies used within diversification, referring to whether the new businesses have underlying connections in their resources or capabilities.</li>
+                </ul>
+            </section>
+
+            <!-- Lesson 1-5: Horizontal Scope Part 2 (BCG Matrix) -->
+            <section id="horizontal-scope-part2" class="mb-12 pb-8 border-b border-gray-200">
+                <h2 class="text-3xl font-bold mb-6 text-blue-900 note-heading">Lesson 1-5: Horizontal Scope Part 2: The BCG Matrix and Conglomerates</h2>
+                <h3 class="text-2xl font-semibold mb-4 sub-heading">History of Conglomerates</h3>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    In the 1960s-1970s, <span class="main-keyword">conglomerates</span> (collections of unrelated businesses) were common in the US. Their heyday ended in the 1980s, as depicted in the movie <span class="highlight">"Wall Street"</span> with Gordon Gekko breaking them up. Gekko argued that these companies were mismanaged and destroying value due to bureaucracy and inefficiencies.
+                </p>
+
+                <h3 class="text-2xl font-semibold mb-4 sub-heading">The BCG Growth-Share Matrix (1970s)</h3>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    Developed by Boston Consulting Group for GE, the <span class="main-keyword">BCG Matrix</span> helps manage a portfolio of businesses (Strategic Business Units or SBUs) at various stages of their industry life cycle.
+                </p>
+                <div class="flex justify-center mb-4">
+                    <img src="https://placehold.co/600x400/e0e7ff/1e40af?text=BCG+Matrix+Diagram" alt="BCG Matrix Diagram" class="w-full max-w-2xl rounded-md shadow-md">
+                </div>
+                <p class="font-semibold text-gray-800 mb-2">Axes:</p>
+                <ul class="list-disc list-inside ml-6 text-gray-700 space-y-2 mb-4">
+                    <li><span class="font-semibold">Vertical Axis:</span> Market Growth / Industry Attractiveness</li>
+                    <li><span class="font-semibold">Horizontal Axis:</span> Relative Market Share / Company Strength</li>
+                </ul>
+                <p class="font-semibold text-gray-800 mb-2">Four SBU Types:</p>
+                <ul class="list-disc list-inside ml-6 text-gray-700 space-y-2 mb-4">
+                    <li><span class="main-keyword">Dogs:</span> Low market growth, low market share. Strategy: Harvest/Divest to raise cash.</li>
+                    <li><span class="main-keyword">Question Marks:</span> High market growth, low market share. Choice: Invest to build position or divest.</li>
+                    <li><span class="main-keyword">Stars:</span> High market growth, high market share. Future of the company. Strategy: Hold or invest for growth.</li>
+                    <li><span class="main-keyword">Cash Cows:</span> Low market growth, high market share. Yesterday's stars, generate excess cash. Strategy: Hold (less need to invest).</li>
+                </ul>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    The strategic goal is a <span class="highlight">balanced portfolio</span> between current and future success, and resource availability/needs. Conglomerates used the BCG matrix to redeploy cash from cash cows to stars, acting as their own bankers.
+                </p>
+
+                <h3 class="text-2xl font-semibold mb-4 sub-heading">Case Study: ITT Corporation</h3>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    <span class="highlight">ITT (International Telephone and Telegraph)</span> diversified aggressively into unrelated businesses (insurance, hotels, car rentals) under CEO Harold Geneen, believing "it's all about managing by the numbers."
+                </p>
+                <p class="font-semibold text-gray-800 mb-2">Decline of the Conglomerate Model:</p>
+                <ul class="list-disc list-inside ml-6 text-gray-700 space-y-2 mb-4">
+                    <li>General management knowledge was not enough; <span class="highlight">specialized knowledge</span> became necessary.</li>
+                    <li>Management capabilities became more common; conglomerates no longer offered unique value.</li>
+                    <li>Corporate headquarters became <span class="highlight">bloated and inefficient</span>.</li>
+                    <li>Focused incentives in each business were muted.</li>
+                </ul>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    ITT began selling off businesses in the 1980s. In 2011, it split into three parts: Xylem (water), Exelis (defense), and "new" ITT (engineered parts). The stock market rewarded this breakup with a ~20% increase, indicating that <span class="highlight">financial markets are more efficient at allocating cash</span> than internal transfers in diversified firms, and diversified firms suffer from <span class="highlight">bureaucratic inefficiencies</span>.
+                </p>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    This phenomenon is known as a <span class="main-keyword">diversification discount</span>.
+                </p>
+            </section>
+
+            <!-- Lesson 1-6: Horizontal Scope Part 3 -->
+            <section id="horizontal-scope-part3" class="mb-12 pb-8 border-b border-gray-200">
+                <h2 class="text-3xl font-bold mb-6 text-blue-900 note-heading">Lesson 1-6: Horizontal Scope Part 3</h2>
+                <h3 class="text-2xl font-semibold mb-4 sub-heading">Diversification and Performance</h3>
+                <div class="flex justify-center mb-4">
+                    <img src="https://placehold.co/600x400/e0e7ff/1e40af?text=Diversification+Performance+Graph" alt="Diversification and Performance Graph" class="w-full max-w-2xl rounded-md shadow-md">
+                </div>
+                <ul class="list-disc list-inside ml-6 text-gray-700 space-y-2 mb-4">
+                    <li><span class="main-keyword">Diversification Discount:</span> Unrelated diversification is generally associated with <span class="highlight">lower performance</span>, meaning the value of the combined business is less than the sum of its parts. (Gordon Gekko's strategy).</li>
+                    <li><span class="main-keyword">Diversification Premium:</span> The best performance is associated with <span class="highlight">related diversification</span>, where the value of a diversified firm is greater than its SBUs separately.</li>
+                </ul>
+
+                <h3 class="text-2xl font-semibold mb-4 sub-heading">Motivations for Diversification (Value Creation)</h3>
+                <ul class="list-disc list-inside ml-6 text-gray-700 space-y-2 mb-4">
+                    <li><span class="main-keyword">Market Power:</span> Reducing competition (though often problematic due to antitrust laws).</li>
+                    <li><span class="main-keyword">Synergies (Economies of Scope):</span> Complementarities between businesses.
+                        <ul class="list-circle list-inside ml-8 text-gray-700 space-y-1">
+                            <li><span class="font-semibold">Scale Common Resources:</span> Using existing resources (brands, IT systems, general management skills) across multiple businesses (e.g., Nike using its brand for clothes and shoes; Amazon's platform). Scalable resources today are more specialized.</li>
+                            <li><span class="font-semibold">Redeploy Slack Resources:</span> Transferring unique, firm-specific resources (e.g., Uber redeploying cars/drivers/talent to food delivery). Modern financial markets make cash a less unique redeployable resource.</li>
+                        </ul>
+                    </li>
+                    <li><span class="font-semibold">Less Accepted Motivations:</span> Reducing risks (shareholders can diversify portfolios themselves), Empire building (managerial hubris/misaligned incentives).</li>
+                    <li><span class="font-semibold">Pursue Profitable Opportunities:</span> If unrelated, often optimal to spin out early.</li>
+                </ul>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    The core motivations for value-creating diversification are <span class="highlight">resource and capability-based synergies</span>.
+                </p>
+
+                <h3 class="text-2xl font-semibold mb-4 sub-heading">Comparative Organizational Analysis for Diversification</h3>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    Apply Williamson's approach: De-link the objective from the organizational form. Consider market arrangements (alliances, contracts, licensing) as plausible alternatives to diversification.
+                </p>
+                <div class="flex justify-center mb-4">
+                    <img src="https://placehold.co/600x400/e0e7ff/1e40af?text=Comparative+Organizational+Analysis+Matrix" alt="Comparative Organizational Analysis Matrix" class="w-full max-w-2xl rounded-md shadow-md">
+                </div>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    John Deere's partnership with Hitachi for mining equipment and Honda/steel products in its dealerships demonstrates using alliances instead of direct diversification to achieve goals.
+                </p>
+
+                <h3 class="text-2xl font-semibold mb-4 sub-heading">Implications for Horizontal Scope (Two Key Tests)</h3>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    Diversification must satisfy two tests to be considered value-creating:
+                </p>
+                <ul class="list-disc list-inside ml-6 text-gray-700 space-y-2">
+                    <li><span class="main-keyword">The Better-Off Test:</span> Does the combination of businesses create value (do synergies exist)?</li>
+                    <li><span class="main-keyword">The Ownership Test:</span> To access this value, does the same company need to own the businesses (hierarchy) or can it be done better with a market-like arrangement?</li>
+                </ul>
+                <p class="text-gray-700 leading-relaxed mb-4 mt-4">
+                    <span class="main-keyword">Resources and Relatedness:</span> Relatedness in diversification implies relatedness in underlying <span class="highlight">firm-specific resources</span>. Synergies arise from these resources being scaled or redeployed across businesses, which can only be done inside a company.
+                </p>
+            </section>
+
+            <!-- Lesson 1-7: Managing Integrated Firms -->
+            <section id="managing-integrated-firms" class="mb-12 pb-8">
+                <h2 class="text-3xl font-bold mb-6 text-blue-900 note-heading">Lesson 1-7: Managing Integrated Firms</h2>
+                <h3 class="text-2xl font-semibold mb-4 sub-heading">Broad Approach So Far:</h3>
+                <ul class="list-disc list-inside ml-6 text-gray-700 space-y-2 mb-4">
+                    <li>Separate benefits sought from governance modes.</li>
+                    <li>Integration as an alternative to "market forms."</li>
+                    <li>Comparative organizational analysis.</li>
+                </ul>
+
+                <h3 class="text-2xl font-semibold mb-4 sub-heading">Strategy Extends Beyond Make-Buy Decisions:</h3>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    Why haven't PepsiCo and Coca-Cola always owned their bottlers? While integration can offer control and ensure investments in specific assets, independent bottlers offer better market understanding and incentives.
+                </p>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    Therefore, companies must think creatively to maintain market-like features even in integrated operations (e.g., commissions for managers in bottling operations) or ensure goals are met through contracts in outsourced operations (e.g., mandatory training for customer-facing personnel).
+                </p>
+
+                <h3 class="text-2xl font-semibold mb-4 sub-heading">Managing Diversified Units:</h3>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    For diversified firms like Alphabet (Google) and Amazon, which have units that could be independent companies, the approach varies:
+                </p>
+                <ul class="list-disc list-inside ml-6 text-gray-700 space-y-2 mb-4">
+                    <li><span class="main-keyword">More Autonomous Approaches:</span> Replicate market incentives (e.g., Google's Alphabet structure with Waymo as an independent subsidiary).</li>
+                    <li><span class="main-keyword">More Coordinated Approaches:</span> Reduce transaction costs through hierarchical organization, especially when synergies are from <span class="highlight">resource scaling/sharing</span> (e.g., Amazon integrating Whole Foods' IT systems for online grocery business, requiring active operational control).</li>
+                    <li><span class="main-keyword">Resource Redeployment:</span> Allows for more autonomy and financial controls (e.g., GE's approach to managing managerial talent as a corporate resource).</li>
+                </ul>
+
+                <h3 class="text-2xl font-semibold mb-4 sub-heading">A Spectrum of Organizational Modes:</h3>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    There's a spectrum from <span class="main-keyword">full integration ("Make")</span> to <span class="main-keyword">pure market modes ("Buy")</span>.
+                    <div class="flex justify-center mb-4">
+                        <img src="https://placehold.co/600x200/e0e7ff/1e40af?text=Organizational+Modes+Spectrum" alt="Organizational Modes Spectrum" class="w-full max-w-xl rounded-md shadow-md">
+                    </div>
+                </p>
+                <ul class="list-disc list-inside ml-6 text-gray-700 space-y-2 mb-4">
+                    <li><span class="font-semibold">"Buy" (Less Integrated):</span> Spot market transactions, short-term contracts. Offers better <span class="highlight">adaptation</span> and <span class="highlight">autonomy</span>.</li>
+                    <li><span class="font-semibold">Strategic Alliances (Middle):</span> Relational contracts, licensing, franchising, equity alliances, joint ventures.</li>
+                    <li><span class="font-semibold">"Make" (More Integrated):</span> Autonomous SBUs, Coordinated SBUs. Offers better <span class="highlight">coordination</span> and <span class="highlight">control</span>.</li>
+                </ul>
+                <p class="text-gray-700 leading-relaxed">
+                    The choice between autonomous and coordinated alternatives within the firm depends on the nature of synergies.
+                </p>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('searchInput');
+            const mainContent = document.querySelector('main');
+            let originalContent = mainContent.innerHTML; // Store original content
+
+            searchInput.addEventListener('input', () => {
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                mainContent.innerHTML = originalContent; // Reset content for each search
+
+                if (searchTerm.length > 0) {
+                    const elementsToSearch = mainContent.querySelectorAll('p, li, h1, h2, h3, h4, span.main-keyword, span.highlight'); // Select specific elements
+
+                    elementsToSearch.forEach(element => {
+                        let innerHTML = element.innerHTML;
+                        // Use a regular expression with the 'g' flag for global replacement
+                        // and 'i' flag for case-insensitive search
+                        const regex = new RegExp(`(${searchTerm})`, 'gi');
+
+                        // Only apply highlight if the search term is found within the element's text content
+                        if (element.textContent.toLowerCase().includes(searchTerm)) {
+                             innerHTML = innerHTML.replace(regex, '<span class="search-highlight">$1</span>');
+                             element.innerHTML = innerHTML;
+                        }
+                    });
+                }
+            });
+
+            // Smooth scrolling for sidebar navigation
+            document.querySelectorAll('nav a').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // Make sidebar visible for larger screens
+            const sidebar = document.querySelector('.sidebar');
+            const mediaQuery = window.matchMedia('(min-width: 769px)');
+
+            function handleMediaQueryChange(e) {
+                if (e.matches) {
+                    sidebar.classList.remove('hidden');
+                } else {
+                    // Optionally hide sidebar on smaller screens if desired for mobile, or keep it.
+                    // For this example, we keep it visible to allow mobile navigation.
+                    // sidebar.classList.add('hidden');
+                }
+            }
+
+            // Initial check
+            handleMediaQueryChange(mediaQuery);
+
+            // Listen for changes
+            mediaQuery.addEventListener('change', handleMediaQueryChange);
+        });
+    </script>
+</body>
+</html>
