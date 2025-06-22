@@ -10,21 +10,9 @@
         {
             "type": "chrome",
             "request": "launch",
-            "name": "CaptialOne Discover Merger",
-            "file": "${workspaceFolder}/Corporate-strategy/captialone-discover-merger.html"
-        },
-        {
-            "type": "chrome",
-            "request": "launch",
             "name": "Corporate Scope and Diversification",
             "file": "${workspaceFolder}/Corporate-strategy/corporate-scope-and-diversification.html"
-        }   ,
-        {
-            "type": "chrome",
-            "request": "launch",
-            "name": "Corporate Strategy Hub",
-            "file": "${workspaceFolder}/Corporate-strategy/corporate_strategy_hub.html"
-        }
+        }  
 
     ]
 }

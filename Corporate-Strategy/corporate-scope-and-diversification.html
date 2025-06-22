@@ -239,7 +239,7 @@
                     </a>
                 </li>
                 <li class="group relative">
-                    <a href="corporate_strategy_hub.html" class="block p-2 rounded-md hover:bg-blue-100 text-blue-700 font-medium transition-colors">
+                    <a href="corporate-strategy-reading-notes.html" class="block p-2 rounded-md hover:bg-blue-100 text-blue-700 font-medium transition-colors">
                         Reading Notes Hub
                         <span class="absolute left-full ml-2 top-1/2 -translate-y-1/2 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-20">
                             Go to the Corporate Strategy reading notes hub
@@ -662,7 +662,7 @@
             resultsTitle.textContent = `Search Results for "${query}"`;
             resultsDisplay.innerHTML = '';
             if (!query) {
-                resultsDisplay.innerHTML = '<p class="text-center text-gray-700">Enter a search term and click \u0027Search\u0027 to find content.</p>';
+                resultsDisplay.innerHTML = '<p class="text-center text-gray-700">Enter a search term and click \'Search\' to find content.</p>';
                 showSection('search-results-content');
                 return;
             }
@@ -689,8 +689,12 @@
             if (sectionId === 'search-results-content') {
                 document.getElementById('search-results-content').classList.remove('hidden');
             } else {
-                document.getElementById(sectionId)?.classList.remove('hidden');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                const section = document.getElementById(sectionId);
+                if (section) {
+                    section.classList.remove('hidden');
+                    // Scroll to the section for better UX
+                    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
             }
         }
         function jumpToSection(sectionId, query) {
@@ -709,13 +713,22 @@
         }
         // --- Event Listeners ---
         document.addEventListener('DOMContentLoaded', () => {
-            indexContent();
-            const searchInput = document.getElementById('search-input');
-            const searchButton = document.getElementById('search-button');
-            if (searchButton) searchButton.addEventListener('click', performSearch);
-            if (searchInput) searchInput.addEventListener('keydown', e => { if (e.key === 'Enter') performSearch(); });
-            // Show home by default
-            showSection('home');
+            // Internal navigation: handle sidebar and TOC links
+            document.querySelectorAll('nav.sidebar a[href^="#"]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const targetId = this.getAttribute('href').replace('#', '');
+                    const section = document.getElementById(targetId);
+                    if (section) {
+                        e.preventDefault();
+                        showSection(targetId);
+                        // Update URL hash for browser navigation
+                        history.replaceState(null, '', '#' + targetId);
+                    }
+                });
+            });
+            // Show section from hash on load
+            const initialSectionId = window.location.hash ? window.location.hash.substring(1) : 'home';
+            showSection(initialSectionId);
         });
     </script>
 </body>

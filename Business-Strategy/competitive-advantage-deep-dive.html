@@ -289,12 +289,12 @@
         document.addEventListener('DOMContentLoaded', () => {
             const navLinks = document.querySelectorAll('.nav-link');
             const contentSections = document.querySelectorAll('.content-section');
-            
+
             // Main Navigation
             navLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
-                    const targetId = link.dataset.target;
+                    const targetId = link.getAttribute('href').replace('#', '');
 
                     navLinks.forEach(l => l.classList.remove('active-nav'));
                     link.classList.add('active-nav');
@@ -306,23 +306,24 @@
                             section.classList.remove('active');
                         }
                     });
-                     // Scroll to the top of the selected section for better UX
+                    // Scroll to the top of the selected section for better UX
                     document.getElementById(targetId).scrollIntoView({ behavior: 'smooth', block: 'start' });
                 });
             });
 
             // Set initial active nav link and section
             const initialSectionId = window.location.hash ? window.location.hash.substring(1) : 'defining-advantage';
-            const initialNavLink = document.querySelector(`.nav-link[data-target="${initialSectionId}"]`);
+            const initialNavLink = document.querySelector(`.nav-link[href="#${initialSectionId}"]`);
             const initialContentSection = document.getElementById(initialSectionId);
 
+            navLinks.forEach(l => l.classList.remove('active-nav'));
+            contentSections.forEach(section => section.classList.remove('active'));
             if (initialNavLink) {
                 initialNavLink.classList.add('active-nav');
             }
             if (initialContentSection) {
                 initialContentSection.classList.add('active');
             }
-
 
             // Search Functionality (local to this page)
             const searchInput = document.getElementById('search-input');

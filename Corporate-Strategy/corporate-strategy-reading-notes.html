@@ -207,62 +207,8 @@
         </button>
     </div>
 
-    <!-- Home Page Section -->
-    <div id="home-page" class="main-content-section">
-        <h1 class="text-3xl sm:text-4xl font-extrabold text-primary-blue text-center mb-8 pb-4 border-b-4 border-accent-blue/30 tracking-tight">
-            Corporate Strategy Study Hub
-        </h1>
-
-        <div class="text-center mb-10">
-            <p class="text-lg text-dark-gray mb-4">Welcome to your central hub for learning about Corporate Strategy. Select a module below to begin your study!</p>
-        </div>
-
-        <h2 class="text-2xl font-bold text-secondary-blue mb-6 pb-2 border-b border-blue-200">Available Modules</h2>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-            <!-- Module 1 Card: Corporate-Level Strategies -->
-            <div class="bg-blue-100 rounded-xl shadow-md overflow-hidden transform hover:scale-105 transition-transform duration-300 ease-in-out cursor-pointer" onclick="showSection('module-1-content', 'intro')">
-                <div class="p-6">
-                    <h3 class="text-xl font-semibold text-primary-blue mb-2">Module 1: Corporate-Level Strategies</h3>
-                    <p class="text-gray-700 text-sm">Dive deep into the fundamental types of corporate strategies, including growth, stability, and retrenchment.</p>
-                    <button class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-blue hover:bg-secondary-blue focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-blue">
-                        Start Module
-                        <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                            <path fill-rule="evenodd" d="M10.293 15.707a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                            <path fill-rule="evenodd" d="M4.293 15.707a1 1 0 010-1.414L8.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Placeholder Module 2 Card -->
-            <div class="bg-gray-100 rounded-xl shadow-md overflow-hidden opacity-70 cursor-not-allowed">
-                <div class="p-6">
-                    <h3 class="text-xl font-semibold text-gray-600 mb-2">Module 2: Strategic Analysis</h3>
-                    <p class="text-gray-500 text-sm">Coming soon: Explore frameworks like Porter's Five Forces and SWOT analysis to understand industry dynamics.</p>
-                    <button class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-gray-400 bg-gray-200 cursor-not-allowed">
-                        Coming Soon
-                    </button>
-                </div>
-            </div>
-
-            <!-- Placeholder Module 3 Card -->
-            <div class="bg-gray-100 rounded-xl shadow-md overflow-hidden opacity-70 cursor-not-allowed">
-                <div class="p-6">
-                    <h3 class="text-xl font-semibold text-gray-600 mb-2">Module 3: Business-Level Strategies</h3>
-                    <p class="text-gray-500 text-sm">Coming soon: Learn about cost leadership, differentiation, and focus strategies for competitive advantage.</p>
-                    <button class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-gray-400 bg-gray-200 cursor-not-allowed">
-                        Coming Soon
-                    </button>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
     <!-- Module 1: Corporate-Level Strategies Content -->
-    <div id="module-1-content" class="main-content-section hidden">
+    <div id="module-1-content" class="main-content-section">
         <button class="mb-6 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-primary-blue bg-light-blue hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-blue" onclick="showSection('home-page')">
             <svg class="mr-2 -ml-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                 <path fill-rule="evenodd" d="M9.707 15.707a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 111.414 1.414L6.414 10l3.293 3.293a1 1 0 010 1.414z" clip-rule="evenodd" />
@@ -909,6 +855,9 @@
 
         // --- Event Listeners and Initial Load ---
         document.addEventListener('DOMContentLoaded', () => {
+            // Show module-1-content directly on load
+            showSection('module-1-content', 'intro');
+
             indexContent(); // Index content when the page loads
 
             const searchInput = document.getElementById('search-input');
@@ -933,10 +882,6 @@
                 const height = globalSearchContainer.offsetHeight;
                 document.body.style.paddingTop = `${height + 16}px`; // Add some extra space (16px = 1rem)
             }
-
-
-            // Show the home page by default when the page loads
-            showSection('home-page');
         });
 
         // Add click event listeners for module's internal tab buttons
