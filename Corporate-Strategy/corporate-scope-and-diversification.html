@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Corporate Strategy Module 1 Notes</title>
+    <!-- Tailwind CSS CDN for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
@@ -17,11 +18,67 @@
             border-radius: 4px;
             font-weight: 600;
         }
+        /* Search Bar Styles (modeled after corporate_strategy_hub.html) */
+        #global-search-container {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb;
+            max-width: 300px;
+        }
+        #global-search-container input {
+            flex-grow: 1;
+            padding: 0.5rem;
+            font-size: 0.875rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            outline: none;
+            transition: all 0.2s ease-in-out;
+        }
+        #global-search-container input:focus {
+            box-shadow: 0 0 0 2px #2563eb;
+            border-color: transparent;
+        }
+        #global-search-container button {
+            padding: 0.5rem 0.875rem;
+            font-size: 0.875rem;
+            background-color: #2563eb;
+            color: #fff;
+            border-radius: 0.375rem;
+            transition: all 0.2s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #global-search-container button:hover {
+            background-color: #1d4ed8;
+        }
+        #global-search-container button svg {
+            margin-left: 0.25rem;
+            height: 1rem;
+            width: 1rem;
+        }
+        /* Highlighting */
         .search-highlight {
-            background-color: #8b5cf6; /* Tailwind violet-500 */
-            color: white;
+            background-color: #fef08a;
             padding: 2px 4px;
             border-radius: 4px;
+            font-weight: bold;
+        }
+        .current-search-highlight {
+            background-color: #fde68a;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-weight: bold;
+            display: inline;
         }
         .note-heading {
             color: #1e40af; /* Tailwind blue-800 */
@@ -77,6 +134,31 @@
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
+    <!-- Global Search Bar (Fixed to Top Right) -->
+    <div id="global-search-container">
+        <input type="text" id="search-input" placeholder="Search...">
+        <button id="search-button">
+            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+            </svg>
+        </button>
+    </div>
+    <!-- Search Results Section -->
+    <div id="search-results-content" class="main-content-section hidden" style="max-width: 900px; margin: 2rem auto;">
+        <button class="mb-6 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-700" onclick="showSection('home')">
+            <svg class="mr-2 -ml-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M9.707 15.707a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 111.414 1.414L6.414 10l3.293 3.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+            </svg>
+            Back to Notes
+        </button>
+        <h1 id="search-results-title" class="text-3xl sm:text-4xl font-extrabold text-blue-900 text-center mb-8 pb-4 border-b-4 border-yellow-300/30 tracking-tight">
+            Search Results
+        </h1>
+        <div id="results-display" class="space-y-6 text-content-display">
+            <p class="text-center text-gray-700">Enter a search term and click 'Search' to find content.</p>
+        </div>
+    </div>
+
     <header class="bg-blue-900 text-white p-4 shadow-lg flex justify-between items-center fixed w-full z-10">
         <h1 class="text-2xl font-bold rounded-md">Corporate Strategy</h1>
         <div class="relative">
@@ -92,13 +174,87 @@
         <nav class="sidebar bg-gray-50 p-6 shadow-md rounded-br-lg md:block hidden">
             <h2 class="text-xl font-semibold mb-4 text-gray-800">Module 1: Corporate Scope</h2>
             <ul class="space-y-2">
-                <li><a href="#introduction" class="block p-2 rounded-md hover:bg-blue-100 text-blue-700 font-medium transition-colors">Lesson 1-1: Introduction</a></li>
-                <li><a href="#vertical-scope-part1" class="block p-2 rounded-md hover:bg-blue-100 text-blue-700 font-medium transition-colors">Lesson 1-2: Vertical Scope Part 1</a></li>
-                <li><a href="#vertical-scope-part2" class="block p-2 rounded-md hover:bg-blue-100 text-blue-700 font-medium transition-colors">Lesson 1-3: Vertical Scope Part 2 (TCE)</a></li>
-                <li><a href="#horizontal-scope-part1" class="block p-2 rounded-md hover:bg-blue-100 text-blue-700 font-medium transition-colors">Lesson 1-4: Horizontal Scope Part 1</a></li>
-                <li><a href="#horizontal-scope-part2" class="block p-2 rounded-md hover:bg-blue-100 text-blue-700 font-medium transition-colors">Lesson 1-5: Horizontal Scope Part 2 (BCG Matrix)</a></li>
-                <li><a href="#horizontal-scope-part3" class="block p-2 rounded-md hover:bg-blue-100 text-blue-700 font-medium transition-colors">Lesson 1-6: Horizontal Scope Part 3</a></li>
-                <li><a href="#managing-integrated-firms" class="block p-2 rounded-md hover:bg-blue-100 text-blue-700 font-medium transition-colors">Lesson 1-7: Managing Integrated Firms</a></li>
+                <li class="group relative">
+                    <a href="#home" class="block p-2 rounded-md hover:bg-blue-100 text-blue-700 font-medium transition-colors">
+                        Home
+                        <span class="absolute left-full ml-2 top-1/2 -translate-y-1/2 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-20">
+                            Go to the welcome section
+                        </span>
+                    </a>
+                </li>
+                <li class="group relative">
+                    <a href="#introduction" class="block p-2 rounded-md hover:bg-blue-100 text-blue-700 font-medium transition-colors">
+                        Lesson 1-1: Introduction
+                        <span class="absolute left-full ml-2 top-1/2 -translate-y-1/2 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-20">
+                            What is corporate scope?
+                        </span>
+                    </a>
+                </li>
+                <li class="group relative">
+                    <a href="#vertical-scope-part1" class="block p-2 rounded-md hover:bg-blue-100 text-blue-700 font-medium transition-colors">
+                        Lesson 1-2: Vertical Scope Part 1
+                        <span class="absolute left-full ml-2 top-1/2 -translate-y-1/2 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-20">
+                            Defining vertical scope and integration
+                        </span>
+                    </a>
+                </li>
+                <li class="group relative">
+                    <a href="#vertical-scope-part2" class="block p-2 rounded-md hover:bg-blue-100 text-blue-700 font-medium transition-colors">
+                        Lesson 1-3: Transaction Cost Economics (TCE)
+                        <span class="absolute left-full ml-2 top-1/2 -translate-y-1/2 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-20">
+                            Transaction Cost Economics
+                        </span>
+                    </a>
+                </li>
+                <li class="group relative">
+                    <a href="#horizontal-scope-part1" class="block p-2 rounded-md hover:bg-blue-100 text-blue-700 font-medium transition-colors">
+                        Lesson 1-4: Horizontal Scope Part 1
+                        <span class="absolute left-full ml-2 top-1/2 -translate-y-1/2 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-20">
+                            Horizontal scope & diversification
+                        </span>
+                    </a>
+                </li>
+                <li class="group relative">
+                    <a href="#horizontal-scope-part2" class="block p-2 rounded-md hover:bg-blue-100 text-blue-700 font-medium transition-colors">
+                        Lesson 1-5: Horizontal Scope Part 2 (BCG Matrix)
+                        <span class="absolute left-full ml-2 top-1/2 -translate-y-1/2 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-20">
+                            BCG Matrix and conglomerates
+                        </span>
+                    </a>
+                </li>
+                <li class="group relative">
+                    <a href="#horizontal-scope-part3" class="block p-2 rounded-md hover:bg-blue-100 text-blue-700 font-medium transition-colors">
+                        Lesson 1-6: Horizontal Scope Part 3
+                        <span class="absolute left-full ml-2 top-1/2 -translate-y-1/2 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-20">
+                            Diversification and performance
+                        </span>
+                    </a>
+                </li>
+                <li class="group relative">
+                    <a href="#managing-integrated-firms" class="block p-2 rounded-md hover:bg-blue-100 text-blue-700 font-medium transition-colors">
+                        Lesson 1-7: Managing Integrated Firms
+                        <span class="absolute left-full ml-2 top-1/2 -translate-y-1/2 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-20">
+                            Managing integrated and diversified firms
+                        </span>
+                    </a>
+                </li>
+                <li class="group relative">
+                    <a href="corporate_strategy_hub.html" class="block p-2 rounded-md hover:bg-blue-100 text-blue-700 font-medium transition-colors">
+                        Reading Notes Hub
+                        <span class="absolute left-full ml-2 top-1/2 -translate-y-1/2 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-20">
+                            Go to the Corporate Strategy reading notes hub
+                        </span>
+                    </a>
+                </li>
+                <li class="group relative">
+                    <a href="captialone-discover-merger.html" class="block p-2 rounded-md hover:bg-blue-100 text-blue-700 font-medium transition-colors">
+                        Capital One & Discover Merger
+                        <span class="absolute left-full ml-2 top-1/2 -translate-y-1/2 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-20">
+                            Navigate to Capital One & Discover merger case
+                        </span>
+                    </a>
+                </li>
+        
                 <li class="mt-4 pt-4 border-t border-gray-200">
                     <h3 class="font-semibold text-gray-600 mb-2">Future Modules</h3>
                     <ul class="space-y-2">
@@ -485,62 +641,81 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const searchInput = document.getElementById('searchInput');
-            const mainContent = document.querySelector('main');
-            let originalContent = mainContent.innerHTML; // Store original content
-
-            searchInput.addEventListener('input', () => {
-                const searchTerm = searchInput.value.toLowerCase().trim();
-                mainContent.innerHTML = originalContent; // Reset content for each search
-
-                if (searchTerm.length > 0) {
-                    const elementsToSearch = mainContent.querySelectorAll('p, li, h1, h2, h3, h4, span.main-keyword, span.highlight'); // Select specific elements
-
-                    elementsToSearch.forEach(element => {
-                        let innerHTML = element.innerHTML;
-                        // Use a regular expression with the 'g' flag for global replacement
-                        // and 'i' flag for case-insensitive search
-                        const regex = new RegExp(`(${searchTerm})`, 'gi');
-
-                        // Only apply highlight if the search term is found within the element's text content
-                        if (element.textContent.toLowerCase().includes(searchTerm)) {
-                             innerHTML = innerHTML.replace(regex, '<span class="search-highlight">$1</span>');
-                             element.innerHTML = innerHTML;
-                        }
-                    });
-                }
+        // --- Searchable Content Indexing ---
+        let searchableContent = [];
+        let currentHighlightQuery = '';
+        function indexContent() {
+            searchableContent = [];
+            // Index all sections with headings and content
+            document.querySelectorAll('section[id]').forEach(section => {
+                const id = section.id;
+                const title = section.querySelector('h1, h2, h3')?.innerText || id;
+                const text = section.innerText;
+                searchableContent.push({ id, title, text });
             });
-
-            // Smooth scrolling for sidebar navigation
-            document.querySelectorAll('nav a').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    document.querySelector(this.getAttribute('href')).scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                });
-            });
-
-            // Make sidebar visible for larger screens
-            const sidebar = document.querySelector('.sidebar');
-            const mediaQuery = window.matchMedia('(min-width: 769px)');
-
-            function handleMediaQueryChange(e) {
-                if (e.matches) {
-                    sidebar.classList.remove('hidden');
-                } else {
-                    // Optionally hide sidebar on smaller screens if desired for mobile, or keep it.
-                    // For this example, we keep it visible to allow mobile navigation.
-                    // sidebar.classList.add('hidden');
-                }
+        }
+        // --- Search Functionality ---
+        function performSearch() {
+            const query = document.getElementById('search-input').value.trim();
+            const resultsDisplay = document.getElementById('results-display');
+            const resultsTitle = document.getElementById('search-results-title');
+            resultsTitle.textContent = `Search Results for "${query}"`;
+            resultsDisplay.innerHTML = '';
+            if (!query) {
+                resultsDisplay.innerHTML = '<p class="text-center text-gray-700">Enter a search term and click \u0027Search\u0027 to find content.</p>';
+                showSection('search-results-content');
+                return;
             }
-
-            // Initial check
-            handleMediaQueryChange(mediaQuery);
-
-            // Listen for changes
-            mediaQuery.addEventListener('change', handleMediaQueryChange);
+            const lowerCaseQuery = query.toLowerCase();
+            let foundResults = false;
+            searchableContent.forEach(item => {
+                if (item.text.toLowerCase().includes(lowerCaseQuery)) {
+                    foundResults = true;
+                    // Highlight query in snippet
+                    const snippet = item.text.replace(new RegExp(`(${query})`, 'gi'), '<span class="search-highlight">$1</span>');
+                    resultsDisplay.innerHTML += `<div class='p-4 bg-gray-50 rounded-lg shadow border mb-4'><div class='font-bold text-blue-800 mb-2'>${item.title}</div><div class='text-gray-700 text-sm mb-2'>${snippet.substring(0, 400)}...</div><button class='text-blue-700 underline text-xs' onclick="jumpToSection('${item.id}', '${query}')">Go to section</button></div>`;
+                }
+            });
+            if (!foundResults) {
+                resultsDisplay.innerHTML = '<p class="text-center text-gray-700">No results found.</p>';
+            }
+            showSection('search-results-content');
+        }
+        // --- Section Navigation and Highlighting ---
+        function showSection(sectionId) {
+            // Hide all main content sections
+            document.querySelectorAll('main > section, #search-results-content').forEach(sec => sec.classList.add('hidden'));
+            // Show the requested section
+            if (sectionId === 'search-results-content') {
+                document.getElementById('search-results-content').classList.remove('hidden');
+            } else {
+                document.getElementById(sectionId)?.classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+        function jumpToSection(sectionId, query) {
+            showSection(sectionId);
+            currentHighlightQuery = query;
+            setTimeout(() => applyHighlightsToSection(sectionId, query), 100);
+        }
+        function applyHighlightsToSection(sectionId, query) {
+            if (!query) return;
+            const section = document.getElementById(sectionId);
+            if (!section) return;
+            const regex = new RegExp(`(${query})`, 'gi');
+            section.querySelectorAll('p, li, h2, h3, h4, h5, h6').forEach(element => {
+                element.innerHTML = element.innerText.replace(regex, '<span class="current-search-highlight">$1</span>');
+            });
+        }
+        // --- Event Listeners ---
+        document.addEventListener('DOMContentLoaded', () => {
+            indexContent();
+            const searchInput = document.getElementById('search-input');
+            const searchButton = document.getElementById('search-button');
+            if (searchButton) searchButton.addEventListener('click', performSearch);
+            if (searchInput) searchInput.addEventListener('keydown', e => { if (e.key === 'Enter') performSearch(); });
+            // Show home by default
+            showSection('home');
         });
     </script>
 </body>

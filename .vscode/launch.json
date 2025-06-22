@@ -5,18 +5,25 @@
     "version": "0.2.0",
     "configurations": [
         
-
+        
+// add a configuration to open the module1.html file in Chrome
         {
             "type": "chrome",
             "request": "launch",
-            "name": "Open module1.html",
-            "file": "c:\\Users\\jesli\\OneDrive\\Documents\\MBA\\MBA 544-Strategic Management\\studyguide\\Corporate-Strategy\\module1.html"
+            "name": "CaptialOne Discover Merger",
+            "file": "${workspaceFolder}/Corporate-strategy/captialone-discover-merger.html"
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Corporate Scope and Diversification",
+            "file": "${workspaceFolder}/Corporate-strategy/corporate-scope-and-diversification.html"
         }   ,
         {
             "type": "chrome",
             "request": "launch",
             "name": "Corporate Strategy Hub",
-            "file": "c:\\Users\\jesli\\OneDrive\\Documents\\MBA\\MBA 544-Strategic Management\\studyguide\\Corporate-Strategy\\corporate_strategy_hub.html"
+            "file": "${workspaceFolder}/Corporate-strategy/corporate_strategy_hub.html"
         }
 
     ]

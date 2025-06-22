@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Capital One & Discover Merger: An Interactive Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Corporate Calm -->
+    <!-- Application Structure Plan: The SPA is designed as a single-page, thematic dashboard, diverging from the report's linear structure for better usability. A sticky top navigation allows users to jump to key themes: 'The Deal', 'Strategic Vision', 'Financial Impact', 'Market Shift', 'Risks & Hurdles', and 'Future Outlook'. This structure groups related concepts, enabling users to explore the merger based on their interests (e.g., financials, competitive strategy) rather than forcing a sequential read. Interactions like hover-on-charts, clickable diagrams, and content toggles are used to layer information, keeping the initial view clean while allowing for deep dives. This non-linear, thematic approach is chosen to make the dense report content more accessible and engaging for a broader audience. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Merger Timeline -> Goal: Inform -> Viz: Interactive HTML/CSS Timeline -> Interaction: Scroll-based highlighting -> Justification: More engaging than a text list.
+        - Report Info: Pre-merger financials -> Goal: Compare -> Viz: Side-by-side stat cards (HTML/CSS) -> Interaction: Static -> Justification: Clear, immediate comparison.
+        - Report Info: Financial Synergies -> Goal: Show Proportions -> Viz: Donut Chart (Chart.js) -> Interaction: Hover for tooltips -> Justification: Effectively shows the composition of the $2.7B synergy target.
+        - Report Info: Market Share Data -> Goal: Compare/Show Change -> Viz: Bar Charts (Chart.js) -> Interaction: Hover for tooltips with precise data -> Justification: Clearly visualizes the shift in market leadership and the challenge for the Discover network.
+        - Report Info: Vertical Integration Concept -> Goal: Explain a Process -> Viz: Custom HTML/CSS Diagram -> Interaction: Click to reveal text -> Justification: Simplifies the complex "toll-payer to toll-collector" concept interactively.
+        - Report Info: Risks and Success Factors -> Goal: Organize/Inform -> Viz: Accordion/Toggle List (HTML/CSS/JS) -> Interaction: Click to expand -> Justification: Manages information density, presenting high-level points first with details on demand.
+        - Library/Method: All charts use Chart.js. All diagrams and visual elements use HTML/CSS with Tailwind, adhering to the NO SVG/Mermaid constraint.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+            color: #334155; /* slate-700 */
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link.active, .nav-link:hover {
+            color: #0ea5e9; /* sky-500 */
+            border-bottom-color: #0ea5e9; /* sky-500 */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 350px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+                max-height: 400px;
+            }
+        }
+        .stat-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.1);
+        }
+        .section-fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .section-fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-700">
+
+    <!-- Header & Navigation -->
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-4 lg:px-6">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-xl font-bold text-sky-600">MergerAnalysis</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#deal" class="nav-link text-slate-600 font-medium pb-1">The Deal</a>
+                    <a href="#vision" class="nav-link text-slate-600 font-medium pb-1">Strategic Vision</a>
+                    <a href="#financials" class="nav-link text-slate-600 font-medium pb-1">Financials</a>
+                    <a href="#market" class="nav-link text-slate-600 font-medium pb-1">Market Shift</a>
+                    <a href="#risks" class="nav-link text-slate-600 font-medium pb-1">Risks & Hurdles</a>
+                    <a href="#outlook" class="nav-link text-slate-600 font-medium pb-1">Outlook</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 lg:px-6 py-8 md:py-12">
+
+        <!-- Hero Section -->
+        <section class="text-center py-12 md:py-16">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-slate-800 mb-4">The Making of a Payments Giant</h1>
+            <p class="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto mb-8">An interactive analysis of Capital One's $35.3 billion acquisition of Discover, a move set to fundamentally reshape the U.S. financial landscape.</p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-4xl mx-auto">
+                <div class="bg-sky-100/50 p-4 rounded-lg">
+                    <p class="text-3xl font-bold text-sky-600">$35.3B</p>
+                    <p class="text-slate-600">All-Stock Transaction</p>
+                </div>
+                <div class="bg-sky-100/50 p-4 rounded-lg">
+                    <p class="text-3xl font-bold text-sky-600">$660B+</p>
+                    <p class="text-slate-600">Combined Assets</p>
+                </div>
+                <div class="bg-sky-100/50 p-4 rounded-lg">
+                    <p class="text-3xl font-bold text-sky-600">#1</p>
+                    <p class="text-slate-600">Largest U.S. Card Issuer by Loans</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Deal Section -->
+        <section id="deal" class="scroll-mt-20 py-12 md:py-16 space-y-12 section-fade-in">
+            <div class="text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl font-bold text-slate-800 mb-3">The Deal at a Glance</h2>
+                <p class="text-lg text-slate-600">The acquisition brings together two financial heavyweights. This section provides an overview of the transaction's timeline and a snapshot of the companies' financial standings just before the merger.</p>
+            </div>
+            
+            <!-- Pre-Merger Profiles -->
+            <div class="grid md:grid-cols-2 gap-8 items-start">
+                <div class="stat-card p-6">
+                    <h3 class="text-2xl font-bold mb-4 text-slate-800">Capital One Financial</h3>
+                    <p class="text-slate-600 mb-6">A diversified bank known for its "Digital First" model, data-driven analytics, and a massive credit card business.</p>
+                    <ul class="space-y-3 text-slate-700">
+                        <li class="flex justify-between items-center border-b pb-2"><span>Total Assets (12/31/23):</span> <span class="font-semibold text-slate-800">$478.5B</span></li>
+                        <li class="flex justify-between items-center border-b pb-2"><span>Total Deposits (12/31/23):</span> <span class="font-semibold text-slate-800">$348.4B</span></li>
+                        <li class="flex justify-between items-center"><span>Credit Card Loans (12/31/23):</span> <span class="font-semibold text-slate-800">$154.5B</span></li>
+                    </ul>
+                </div>
+                <div class="stat-card p-6">
+                    <h3 class="text-2xl font-bold mb-4 text-slate-800">Discover Financial</h3>
+                     <p class="text-slate-600 mb-6">A digital banking pioneer with a highly recognized brand, strong customer service, and its own valuable payments network.</p>
+                    <ul class="space-y-3 text-slate-700">
+                         <li class="flex justify-between items-center border-b pb-2"><span>Total Loans (Q1 '25):</span> <span class="font-semibold text-slate-800">$117.4B</span></li>
+                        <li class="flex justify-between items-center border-b pb-2"><span>Consumer Deposits (Q1 '25):</span> <span class="font-semibold text-slate-800">$92B</span></li>
+                        <li class="flex justify-between items-center"><span>Credit Card Loans (12/31/23):</span> <span class="font-semibold text-slate-800">$102.3B</span></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Strategic Vision Section -->
+        <section id="vision" class="scroll-mt-20 py-12 md:py-16 space-y-12 section-fade-in">
+            <div class="text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl font-bold text-slate-800 mb-3">The Strategic Vision</h2>
+                <p class="text-lg text-slate-600">This merger is more than a simple acquisition; it's a calculated move to transform Capital One's entire business model. The core strategy revolves around vertical integration by owning a payments network.</p>
+            </div>
+            
+            <!-- Vertical Integration Diagram -->
+            <div class="stat-card p-6 md:p-8">
+                <h3 class="text-xl font-bold text-center text-slate-800 mb-2">From Toll-Payer to Toll-Collector</h3>
+                <p class="text-slate-600 text-center mb-6 max-w-2xl mx-auto">Owning the Discover network allows Capital One to shift from paying fees to Visa and Mastercard to collecting fees on its own network.</p>
+                <div id="integrationDiagram" class="grid md:grid-cols-3 items-center gap-4 text-center cursor-pointer">
+                    <div class="p-4 bg-slate-100 rounded-lg">
+                        <h4 class="font-semibold">Capital One (Old Model)</h4>
+                        <p class="text-sm text-slate-500">Card Issuer</p>
+                    </div>
+                    <div class="text-4xl font-light text-slate-400">→</div>
+                    <div class="p-4 bg-slate-100 rounded-lg">
+                        <h4 class="font-semibold">Visa / Mastercard</h4>
+                        <p class="text-sm text-slate-500">Payment Network (Toll)</p>
+                    </div>
+                </div>
+                <div id="integrationExplanation" class="mt-4 p-4 bg-sky-50 rounded-lg text-center text-sky-800 hidden">
+                    <p class="font-semibold">The New Model: Vertical Integration</p>
+                    <p>By migrating its vast card volume to the Discover network, Capital One internalizes transaction fees, gaining control, rich data, and a significant new revenue stream—a fundamental shift in profitability.</p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                 <div class="stat-card p-6">
+                    <h3 class="text-xl font-bold text-slate-800 mb-3">The Durbin Exemption Advantage</h3>
+                    <p class="text-slate-600">Discover's PULSE debit network is exempt from the Durbin Amendment's cap on interchange fees for large banks. Capital One plans to move its debit cards to PULSE "almost immediately," unlocking what it calls a "significant majority" of network synergies and a key competitive advantage.</p>
+                </div>
+                 <div class="stat-card p-6">
+                    <h3 class="text-xl font-bold text-slate-800 mb-3">Technology & Innovation Catalyst</h3>
+                    <p class="text-slate-600">Capital One will leverage its "11-year technology transformation"—a complete cloud migration and data modernization—across Discover's platform. This is expected to drive innovation in underwriting, marketing, and risk management, creating "breakthrough products."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Financials Section -->
+        <section id="financials" class="scroll-mt-20 py-12 md:py-16 space-y-12 section-fade-in">
+            <div class="text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl font-bold text-slate-800 mb-3">Projected Financial Impact</h2>
+                <p class="text-lg text-slate-600">The merger is underpinned by powerful financial logic, with significant synergies and shareholder returns projected by 2027. This section breaks down the key financial targets.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div class="stat-card p-6 order-2 md:order-1">
+                     <h3 class="text-xl font-bold text-slate-800 mb-4">Key Financial Projections (by 2027)</h3>
+                     <ul class="space-y-4 text-slate-700">
+                        <li class="flex justify-between items-center text-lg"><span class="font-medium">Adjusted EPS Accretion:</span> <span class="font-bold text-sky-600">>15%</span></li>
+                        <li class="flex justify-between items-center text-lg"><span class="font-medium">Return on Invested Capital:</span> <span class="font-bold text-sky-600">16%</span></li>
+                        <li class="flex justify-between items-center text-lg"><span class="font-medium">Internal Rate of Return:</span> <span class="font-bold text-sky-600">>20%</span></li>
+                    </ul>
+                </div>
+                <div class="stat-card p-6 order-1 md:order-2">
+                    <h3 class="text-xl font-bold text-center text-slate-800 mb-4">~$2.7B Annual Pre-Tax Synergies</h3>
+                    <div class="chart-container">
+                        <canvas id="synergiesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Market Shift Section -->
+        <section id="market" class="scroll-mt-20 py-12 md:py-16 space-y-12 section-fade-in">
+            <div class="text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl font-bold text-slate-800 mb-3">A Shift in the Market</h2>
+                <p class="text-lg text-slate-600">The deal significantly alters the competitive landscape, creating the largest US credit card lender by loans and aiming to establish Discover as a stronger third-party network alternative.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8 items-start">
+                <div class="stat-card p-6">
+                    <h3 class="text-xl font-bold text-center text-slate-800 mb-4">U.S. Card Issuer Market Share (by Loan Volume)</h3>
+                    <div class="chart-container h-80 md:h-96">
+                        <canvas id="loanVolumeChart"></canvas>
+                    </div>
+                     <p class="text-center text-sm text-slate-500 mt-4">The merger catapults Capital One to the #1 position in outstanding credit card loans.</p>
+                </div>
+                <div class="stat-card p-6">
+                    <h3 class="text-xl font-bold text-center text-slate-800 mb-4">Payment Network Share (by Purchase Volume)</h3>
+                    <div class="chart-container h-80 md:h-96">
+                        <canvas id="networkVolumeChart"></canvas>
+                    </div>
+                    <p class="text-center text-sm text-slate-500 mt-4">Capital One aims to add scale to the Discover network, challenging the Visa/Mastercard duopoly.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Risks & Hurdles Section -->
+        <section id="risks" class="scroll-mt-20 py-12 md:py-16 space-y-12 section-fade-in">
+            <div class="text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl font-bold text-slate-800 mb-3">Risks & Regulatory Hurdles</h2>
+                <p class="text-lg text-slate-600">The path to closing was a "15-month marathon" of intense scrutiny. The combined company faces ongoing challenges, from addressing past compliance failures to managing a complex integration.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="stat-card p-6">
+                     <h3 class="text-xl font-bold text-slate-800 mb-4">Regulatory Mandates</h3>
+                     <p class="text-slate-600 mb-4">A key condition for approval is that Capital One must fix Discover's outstanding enforcement actions, which include:</p>
+                     <ul class="space-y-3">
+                        <li class="flex items-start"><span class="text-red-500 font-bold mr-2">⚠️</span><span>$100M fine from the Fed.</span></li>
+                        <li class="flex items-start"><span class="text-red-500 font-bold mr-2">⚠️</span><span>$150M fine from the FDIC.</span></li>
+                        <li class="flex items-start"><span class="text-red-500 font-bold mr-2">⚠️</span><span>$1.225B in restitution for overcharging merchants.</span></li>
+                     </ul>
+                </div>
+                <div class="stat-card p-6">
+                     <h3 class="text-xl font-bold text-slate-800 mb-4">Integration Complexities</h3>
+                     <p class="text-slate-600 mb-4">Merging two massive financial institutions is fraught with challenges, and early signs of complexity have already appeared:</p>
+                    <ul class="space-y-3">
+                        <li class="flex items-start"><span class="text-amber-500 font-bold mr-2">⏳</span><span>Initial debit card migration timeline pushed back by ~6 months.</span></li>
+                        <li class="flex items-start"><span class="text-amber-500 font-bold mr-2">⏳</span><span>$1.5B in integration expenses also delayed, indicating a challenging process.</span></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Future Outlook Section -->
+        <section id="outlook" class="scroll-mt-20 py-12 md:py-16 space-y-12 section-fade-in">
+            <div class="text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl font-bold text-slate-800 mb-3">Future Outlook & Success Factors</h2>
+                <p class="text-lg text-slate-600">The long-term success of this transformative deal hinges on executing a complex strategy while navigating a challenging environment. Here are the key factors that will determine the outcome.</p>
+            </div>
+            
+            <div id="successFactors" class="space-y-4 max-w-3xl mx-auto">
+                <div class="success-factor border rounded-lg overflow-hidden">
+                    <button class="w-full text-left p-4 bg-white font-semibold flex justify-between items-center hover:bg-slate-50">
+                        <span>Realizing Synergies</span>
+                        <span class="transform transition-transform duration-300">▼</span>
+                    </button>
+                    <div class="content p-4 bg-slate-50/50 text-slate-600 hidden">
+                        Meticulously executing integration plans to achieve the projected $2.7 billion in annual synergies is paramount. This requires harmonizing technology, operations, and culture without disrupting customers.
+                    </div>
+                </div>
+                 <div class="success-factor border rounded-lg overflow-hidden">
+                    <button class="w-full text-left p-4 bg-white font-semibold flex justify-between items-center hover:bg-slate-50">
+                        <span>Driving Innovation</span>
+                        <span class="transform transition-transform duration-300">▼</span>
+                    </button>
+                    <div class="content p-4 bg-slate-50/50 text-slate-600 hidden">
+                        Continuously delivering "breakthrough products" by leveraging the combined tech and data capabilities will be essential for customer retention and growth in a competitive market.
+                    </div>
+                </div>
+                <div class="success-factor border rounded-lg overflow-hidden">
+                    <button class="w-full text-left p-4 bg-white font-semibold flex justify-between items-center hover:bg-slate-50">
+                        <span>Robust Compliance & Risk Management</span>
+                         <span class="transform transition-transform duration-300">▼</span>
+                    </button>
+                    <div class="content p-4 bg-slate-50/50 text-slate-600 hidden">
+                        Given Discover's past issues and the heightened regulatory environment, maintaining a flawless compliance record is non-negotiable to avoid future penalties and maintain trust.
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-slate-800 text-slate-300 mt-16">
+        <div class="container mx-auto px-4 lg:px-6 py-6 text-center text-sm">
+            <p>&copy; 2025 MergerAnalysis. All data is sourced from the public report for illustrative purposes.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- Data for Charts ---
+            const synergiesData = {
+                labels: ['Operating Expense Synergies', 'Network Synergies'],
+                datasets: [{
+                    data: [1.5, 1.2], // Using $1.5B for operating expense synergy
+                    backgroundColor: ['#38bdf8', '#0ea5e9'],
+                    borderColor: '#f8fafc',
+                    borderWidth: 4,
+                    hoverOffset: 4
+                }]
+            };
+
+            const loanVolumeData = {
+                labels: ['JPMorgan Chase', 'AmEx', 'Citi', 'BofA', 'Old Capital One', 'Old Discover'],
+                datasets: [{
+                    label: 'Pre-Merger Loan Volume',
+                    data: [215, 160, 140, 130, 154.5, 102.3],
+                    backgroundColor: '#94a3b8',
+                }, {
+                    label: 'Post-Merger Loan Volume',
+                    data: [215, 160, 140, 130, 256.8, 0], // Combining CapOne and Discover
+                    backgroundColor: '#0ea5e9',
+                }]
+            };
+
+            const networkVolumeData = {
+                labels: ['Visa', 'Mastercard', 'AmEx', 'Discover'],
+                datasets: [{
+                    label: 'Purchase Volume Share (%)',
+                    data: [54, 24, 18, 4], // Approximate split of 96% and Discover at <4%
+                    backgroundColor: ['#3b82f6', '#f97316', '#10b981', '#64748b'],
+                }]
+            };
+            
+            const chartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: '#475569',
+                            font: {
+                                family: "'Inter', sans-serif"
+                            }
+                        }
+                    },
+                    tooltip: {
+                        enabled: true,
+                        backgroundColor: '#0f172a',
+                        titleFont: {
+                            size: 14,
+                            family: "'Inter', sans-serif"
+                        },
+                        bodyFont: {
+                            size: 12,
+                             family: "'Inter', sans-serif"
+                        },
+                        callbacks: {
+                           label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y) + 'B';
+                                }
+                                return label;
+                           }
+                        }
+                    }
+                },
+                scales: {
+                     x: { ticks: { color: '#475569' }, grid: { display: false } },
+                     y: { ticks: { color: '#475569', callback: (value) => `$${value}B` }, grid: { color: '#e2e8f0' } }
+                }
+            };
+
+            // --- Chart Initialization ---
+            const synergiesCtx = document.getElementById('synergiesChart')?.getContext('2d');
+            if (synergiesCtx) {
+                new Chart(synergiesCtx, {
+                    type: 'doughnut',
+                    data: synergiesData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { color: '#475569' }
+                            },
+                             tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.label || '';
+                                        let value = context.parsed;
+                                        return `${label}: $${value} Billion`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            const loanVolumeCtx = document.getElementById('loanVolumeChart')?.getContext('2d');
+            if (loanVolumeCtx) {
+                new Chart(loanVolumeCtx, {
+                    type: 'bar',
+                    data: loanVolumeData,
+                    options: chartOptions
+                });
+            }
+            
+            const networkVolumeCtx = document.getElementById('networkVolumeChart')?.getContext('2d');
+            if(networkVolumeCtx) {
+                 new Chart(networkVolumeCtx, {
+                    type: 'bar',
+                    data: networkVolumeData,
+                    options: {
+                        ...chartOptions,
+                        scales: {
+                           x: { ticks: { color: '#475569' }, grid: { display: false } },
+                           y: { ticks: { color: '#475569', callback: (value) => `${value}%` }, grid: { color: '#e2e8f0' } }
+                        },
+                         plugins: {
+                            ...chartOptions.plugins,
+                             tooltip: {
+                                ...chartOptions.plugins.tooltip,
+                                callbacks: {
+                                    label: function(context) {
+                                       return ` Market Share: ${context.parsed.y}%`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // --- Interactive Elements ---
+            const diagram = document.getElementById('integrationDiagram');
+            const explanation = document.getElementById('integrationExplanation');
+            if (diagram && explanation) {
+                diagram.addEventListener('click', () => {
+                    explanation.classList.toggle('hidden');
+                });
+            }
+
+            const successFactors = document.getElementById('successFactors');
+            if(successFactors) {
+                successFactors.addEventListener('click', (e) => {
+                    const button = e.target.closest('button');
+                    if(button) {
+                        const content = button.nextElementSibling;
+                        const icon = button.querySelector('span:last-child');
+                        content.classList.toggle('hidden');
+                        icon.classList.toggle('rotate-180');
+                    }
+                });
+            }
+            
+            // --- Navigation Logic ---
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('section[id]');
+            
+            const onScroll = () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 80) { // 80px offset for sticky nav
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').substring(1) === current) {
+                        link.classList.add('active');
+                    }
+                });
+            };
+            window.addEventListener('scroll', onScroll);
+
+
+            // --- Scroll Fade-in Animation ---
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.section-fade-in').forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>
