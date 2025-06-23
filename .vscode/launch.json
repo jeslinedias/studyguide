@@ -3,16 +3,18 @@
     // Hover to view descriptions of existing attributes.
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
-    "configurations": [
-        
-        
-// add a configuration to open the module1.html file in Chrome
+    "configurations": [  
         {
             "type": "chrome",
             "request": "launch",
             "name": "Corporate Scope and Diversification",
             "file": "${workspaceFolder}/Corporate-strategy/corporate-scope-and-diversification.html"
-        }  
-
+        },
+        {
+            "type": "msedge",
+            "request": "launch",
+            "name": "Creative Thinking hub",
+            "file": "${workspaceFolder}/Creative-Thinking/creative-thinking-hub.html"
+        }
     ]
 }
