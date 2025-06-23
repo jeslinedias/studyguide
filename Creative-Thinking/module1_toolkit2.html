@@ -11,9 +11,9 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f0f4f8;
-            color: #333;
-            line-height: 1.6;
+            background-color: #e2e8f0; /* Lighter grey for a professional background */
+            color: #2d3748; /* Darker text for readability */
+            line-height: 1.75; /* Improved line height for readability */
             scroll-behavior: smooth;
         }
         .container {
@@ -22,108 +22,131 @@
             padding: 30px;
             background-color: #ffffff;
             border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); /* More pronounced shadow */
         }
         h1 {
             color: #1a202c;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 20px;
+            font-size: 3.2rem; /* Increased size for main title */
+            font-weight: 800; /* Made bolder */
+            margin-bottom: 30px; /* More space below */
             text-align: center;
+            border-bottom: 3px solid #4a5568; /* Solid underline for main title */
+            padding-bottom: 10px;
         }
         h2 {
             color: #2d3748;
-            font-size: 1.8rem;
-            font-weight: 600;
-            margin-top: 30px;
-            margin-bottom: 15px;
-            padding-bottom: 5px;
+            font-size: 2.2rem; /* Increased size for h2 */
+            font-weight: 700; /* Made bolder */
+            margin-top: 40px; /* More space above */
+            margin-bottom: 20px; /* More space below */
+            border-bottom: 2px solid #a0aec0; /* Lighter underline for sub-sections */
+            padding-bottom: 8px; /* More padding */
         }
         h3 {
             color: #4a5568;
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin-top: 20px;
-            margin-bottom: 10px;
+            font-size: 1.8rem; /* Increased size for h3 */
+            font-weight: 700; /* Made bolder */
+            margin-top: 30px; /* More space above */
+            margin-bottom: 15px; /* More space below */
         }
         ul {
             list-style-type: disc;
-            margin-left: 20px;
-            margin-bottom: 10px;
+            margin-left: 25px; /* Slightly more indent */
+            margin-bottom: 12px;
         }
         ol {
             list-style-type: decimal;
-            margin-left: 20px;
-            margin-bottom: 10px;
+            margin-left: 25px;
+            margin-bottom: 12px;
         }
         li {
-            margin-bottom: 8px;
+            margin-bottom: 10px; /* More space between list items */
         }
         strong {
-            color: #2b6cb0;
+            color: #2c5282; /* Professional blue for strong text */
             font-weight: 700;
         }
         .highlight {
-            background-color: #fff3c4;
+            background-color: #fcebaf; /* Muted yellow highlight */
             padding: 2px 5px;
             border-radius: 4px;
+            font-weight: 600;
         }
         .example {
             font-style: italic;
             color: #5f6b7d;
-            border-left: 4px solid #a0aec0;
-            padding-left: 10px;
-            margin-top: 15px;
-            margin-bottom: 15px;
+            border-left: 5px solid #6cb2eb; /* Stronger, professional blue border */
+            padding-left: 15px; /* More padding */
+            margin-top: 20px;
+            margin-bottom: 20px;
+            background-color: #f7faff; /* Very light blue background for examples */
+            padding-top: 10px;
+            padding-bottom: 10px;
+            border-radius: 6px;
+        }
+        .quote-box {
+            font-style: italic;
+            color: #2c5282;
+            border-left: 5px solid #4299e1;
+            padding: 15px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            background-color: #e0f2f7; /* Light blue background for quotes */
+            border-radius: 6px;
+            font-weight: 500;
         }
         .back-link-top {
             display: inline-flex;
             align-items: center;
-            padding: 10px 15px;
-            background-color: #4299e1;
+            padding: 12px 18px; /* Larger padding */
+            background-color: #3182ce; /* Professional blue */
             color: white;
             border-radius: 8px;
             text-decoration: none;
             font-weight: 600;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
         }
         .back-link-top:hover {
-            background-color: #3182ce;
+            background-color: #2b6cb0; /* Darker blue on hover */
             transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
         }
         .back-link-top svg {
-            margin-right: 8px;
+            margin-right: 10px; /* More space for icon */
+            font-size: 1.1rem; /* Slightly larger icon */
         }
         .tabs {
             display: flex;
             flex-wrap: wrap;
             border-bottom: 2px solid #cbd5e0;
-            margin-bottom: 20px;
+            margin-bottom: 25px; /* More space below tabs */
         }
         .tab-button {
-            padding: 12px 20px;
+            padding: 14px 22px; /* Larger tabs */
             cursor: pointer;
             border: 1px solid transparent;
             border-bottom: none;
             border-top-left-radius: 8px;
             border-top-right-radius: 8px;
-            background-color: #edf2f7;
+            background-color: #edf2f7; /* Light grey tab */
             color: #4a5568;
             font-weight: 600;
             transition: all 0.3s ease;
-            margin-right: 5px;
+            margin-right: 8px; /* More space between tabs */
             margin-bottom: -2px;
         }
         .tab-button:hover {
             background-color: #e2e8f0;
+            color: #2d3748;
         }
         .tab-button.active {
             background-color: #ffffff;
             border-color: #cbd5e0;
             border-bottom-color: #ffffff;
             color: #2d3748;
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05); /* Subtle shadow for active tab */
         }
         .tab-content {
             display: none;
@@ -136,48 +159,52 @@
         #scrollToTopBtn {
             display: none;
             position: fixed;
-            bottom: 30px;
-            right: 30px;
+            bottom: 35px; /* Slightly higher */
+            right: 35px; /* Slightly more inward */
             z-index: 99;
             border: none;
             outline: none;
             background-color: #4299e1;
             color: white;
             cursor: pointer;
-            padding: 15px;
+            padding: 16px; /* Larger button */
             border-radius: 50%;
-            font-size: 1.5rem;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            transition: background-color 0.3s ease, transform 0.2s ease;
+            font-size: 1.6rem; /* Larger icon */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25); /* More prominent shadow */
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
         }
         #scrollToTopBtn:hover {
             background-color: #3182ce;
-            transform: translateY(-3px);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
         .ai-feature-box {
-            background-color: #f7fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 20px;
-            margin-top: 20px;
-            margin-bottom: 20px;
-            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+            background-color: #f7faff; /* Light blueish grey for AI box */
+            border: 1px solid #bfd3e6; /* Softer border */
+            border-radius: 10px; /* Slightly more rounded */
+            padding: 25px;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.08); /* More subtle inner shadow */
         }
         .ai-button {
-            background-color: #48bb78;
+            background-color: #38a169; /* Slightly darker green for AI button */
             color: white;
-            padding: 8px 15px;
+            padding: 10px 18px; /* Larger padding */
             border-radius: 8px;
             font-weight: 600;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, transform 0.2s ease;
             cursor: pointer;
             border: none;
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
         .ai-button:hover {
-            background-color: #38a169;
+            background-color: #2f855a; /* Even darker green on hover */
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
         }
         .loading-spinner {
             border: 3px solid rgba(255, 255, 255, 0.3);
@@ -188,12 +215,89 @@
             animation: spin 1s linear infinite;
             display: inline-block;
             vertical-align: middle;
-            margin-left: 8px;
+            margin-left: 10px; /* More space */
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        .summary-output {
+            background-color: #ebf8ff; /* Light blue for summary output */
+            border-left: 5px solid #4299e1; /* Strong blue border */
+            padding: 18px;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            color: #2c5282; /* Dark blue text */
+            line-height: 1.8;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            margin-top: 20px;
+        }
+        .error-message {
+            background-color: #fff0f0; /* Light red for errors */
+            color: #c53030; /* Dark red text */
+            border: 1px solid #fbd38d; /* Yellowish border for caution */
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+
+        /* Search specific styles */
+        .search-box {
+            background-color: #e6eef5; /* Lighter background for search */
+            border: 1px solid #cce0f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+        .search-input {
+            flex-grow: 1;
+            padding: 10px 15px;
+            border: 1px solid #a7b7c7;
+            border-radius: 6px;
+            font-size: 1rem;
+            color: #2d3748;
+        }
+        .search-button {
+            background-color: #4299e1;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .search-button:hover {
+            background-color: #3182ce;
+            transform: translateY(-1px);
+        }
+        .search-results-nav {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .search-result-highlight {
+            background-color: #ffeb3b; /* Bright yellow for search highlight */
+            color: #333;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        .current-highlight {
+            background-color: #ff9800; /* Orange for the currently active highlight */
+            color: white;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        /* Responsive adjustments */
         @media (max-width: 768px) {
             .tabs {
                 flex-direction: column;
@@ -201,17 +305,41 @@
             }
             .tab-button {
                 margin-right: 0;
-                margin-bottom: 5px;
+                margin-bottom: 8px;
                 border-radius: 8px;
             }
             .tab-button.active {
                 border-bottom-color: #cbd5e0;
+                box-shadow: none;
             }
             #scrollToTopBtn {
                 bottom: 20px;
                 right: 20px;
-                padding: 12px;
-                font-size: 1.2rem;
+                padding: 14px;
+                font-size: 1.3rem;
+            }
+            .container {
+                margin: 20px auto;
+                padding: 20px;
+            }
+            h1 {
+                font-size: 2.5rem; /* Adjusted for smaller screens */
+            }
+            h2 {
+                font-size: 1.8rem; /* Adjusted for smaller screens */
+            }
+            h3 {
+                font-size: 1.5rem; /* Adjusted for smaller screens */
+            }
+            .search-box {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .search-button {
+                width: 100%;
+            }
+            .search-results-nav button {
+                flex-grow: 1;
             }
         }
     </style>
@@ -227,6 +355,24 @@
 
         <h1 class="text-3xl lg:text-4xl">Creativity Toolkit II: Creative Collaboration - Module 1</h1>
 
+        <!-- Search Box -->
+        <div class="search-box rounded-lg">
+            <input type="text" id="searchInput" class="search-input" placeholder="Search notes...">
+            <button class="search-button" onclick="performSearch()">
+                <i class="fas fa-search mr-2"></i> Search
+            </button>
+            <div id="searchResultsNav" class="search-results-nav hidden">
+                <button class="search-button" onclick="navigateHighlight(-1)">
+                    <i class="fas fa-arrow-left mr-2"></i> Previous
+                </button>
+                <span id="highlightCount" class="px-4 py-2 flex items-center justify-center font-semibold text-gray-700"></span>
+                <button class="search-button" onclick="navigateHighlight(1)">
+                    Next <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+            <div id="searchError" class="error-message hidden w-full"></div>
+        </div>
+
         <!-- Tab Buttons -->
         <div class="tabs" id="moduleTabs">
             <button class="tab-button active" data-tab="tab1">Social Influence on Ideas</button>
@@ -238,34 +384,41 @@
             <h2>1. Lesson 1-1: Social Influence on Creative Ideas</h2>
             <h3>1.1 The Social Context of Creativity</h3>
             <ul>
-                <li>Creativity is often influenced by social interactions and group dynamics.</li>
-                <li>Ideas rarely emerge in a vacuum; they are shaped by collaboration and feedback.</li>
+                <li>Creativity is rarely a solitary act; it is deeply influenced by social interactions and group dynamics.</li>
+                <li>Ideas evolve and refine through collaboration, feedback, and shared understanding.</li>
             </ul>
 
             <h3>1.2 How Social Influence Can Help Creativity</h3>
             <ul>
-                <li><strong>Diverse Perspectives:</strong> Collaboration brings together different viewpoints, leading to richer ideas and solutions.</li>
-                <li><strong>Constructive Criticism:</strong> Feedback from others can help refine and improve ideas, identifying flaws or new opportunities.</li>
-                <li><strong>Motivation and Support:</strong> A supportive social environment can encourage risk-taking and persistence.</li>
-                <li><strong>Crosstalk:</strong> Informal interactions can lead to unexpected connections between ideas (as seen in Creativity Toolkit I).</li>
+                <li><strong>Diverse Perspectives:</strong> Bringing together individuals with varied backgrounds, expertise, and viewpoints enriches the ideation process, leading to more robust and novel solutions.</li>
+                <li><strong>Constructive Criticism:</strong> Well-delivered feedback helps to identify weaknesses, refine concepts, and uncover new possibilities that the creator might have overlooked.
+                    <div class="example">Imagine a team designing a new product. One engineer focuses on functionality, while a marketing specialist considers user experience and market appeal. Their different perspectives lead to a more comprehensive design.</div>
+                </li>
+                <li><strong>Motivation and Support:</strong> A positive and encouraging social environment fosters psychological safety, making individuals more willing to take risks and persist through challenges.</li>
+                <li><strong>Crosstalk:</strong> Informal conversations and interactions between individuals from different domains can spark unexpected connections and lead to groundbreaking insights. This is often an unplanned benefit of collaborative environments.
+                    <div class="example">As mentioned in Toolkit I, the development of fractal geometry by Benoit Mandelbrot was sparked by "crosstalk" between income distribution patterns and communication line noise.</div>
+                </li>
             </ul>
 
             <h3>1.3 Potential Pitfalls of Social Influence</h3>
+            <p>While beneficial, social influence can also hinder creativity if not managed well:</p>
             <ul>
-                <li><strong>Groupthink:</strong> Desire for harmony or conformity in a group can lead to irrational or dysfunctional decision-making. Individuals suppress dissenting viewpoints.</li>
-                <li><strong>Production Blocking:</strong> In brainstorming, only one person can speak at a time, limiting the flow of ideas.</li>
-                <li><strong>Evaluation Apprehension:</strong> Fear of being judged can inhibit individuals from sharing novel or "risky" ideas.</li>
-                <li><strong>Conformity Pressures:</strong> Tendency to align with the majority opinion, even if it contradicts one's own beliefs.</li>
-                <li><strong>Lack of Psychological Safety:</strong> If team members don't feel safe to express themselves, creativity will be stifled.</li>
+                <li><strong>Groupthink:</strong> A psychological phenomenon where the desire for harmony or conformity in a group leads to irrational or dysfunctional decision-making. Individuals suppress dissenting viewpoints to maintain group cohesion.
+                    <div class="example">The Challenger space shuttle disaster is often cited as an example where engineers' warnings about O-ring failures were suppressed due to pressure to launch, leading to a catastrophic outcome.</div>
+                </li>
+                <li><strong>Production Blocking:</strong> In group brainstorming sessions, only one person can speak at a time, preventing others from simultaneously expressing their ideas. This limits the overall volume and diversity of generated ideas.</li>
+                <li><strong>Evaluation Apprehension:</strong> Fear of being judged, criticized, or appearing foolish can inhibit individuals from sharing novel or "risky" ideas, especially those that deviate from the norm.</li>
+                <li><strong>Conformity Pressures:</strong> The tendency for individuals to align their thoughts, feelings, or behaviors with the majority opinion, even if it contradicts one's own beliefs or insights.</li>
+                <li><strong>Lack of Psychological Safety:</strong> If team members do not feel safe to express their thoughts, ask questions, or admit mistakes without fear of negative consequences, creativity will be severely stifled.</li>
             </ul>
 
             <h3>1.4 Strategies for Maximizing Positive Social Influence</h3>
             <ul>
-                <li><strong>Structured Brainstorming:</strong> Techniques like "brainwriting" or "nominal group technique" can mitigate production blocking.</li>
-                <li><strong>Foster Psychological Safety:</strong> Leaders must explicitly encourage open dialogue and assure that mistakes are learning opportunities.</li>
-                <li><strong>Encourage Dissent:</strong> Actively seek out and value opposing viewpoints to challenge assumptions.</li>
-                <li><strong>Diversity of Thought:</strong> Bring together individuals with varied backgrounds, expertise, and thinking styles.</li>
-                <li><strong>Rotate Roles:</strong> Change leadership or presentation roles to avoid dominant voices.</li>
+                <li><strong>Structured Brainstorming Techniques:</strong> Employ methods like "brainwriting" (where ideas are written down silently) or "nominal group technique" to mitigate production blocking and evaluation apprehension.</li>
+                <li><strong>Foster Psychological Safety:</strong> Leaders must explicitly encourage open dialogue, emphasize that mistakes are learning opportunities, and actively protect diverse opinions.</li>
+                <li><strong>Encourage Dissent and Debate:</strong> Actively seek out and value opposing viewpoints. Frame disagreements as opportunities for deeper understanding and innovation.</li>
+                <li><strong>Promote Diversity of Thought:</strong> Build teams with individuals possessing varied backgrounds, expertise, cognitive styles, and life experiences to ensure a rich pool of perspectives.</li>
+                <li><strong>Rotate Roles and Leadership:</strong> Regularly change leadership or presentation roles within a team to prevent the emergence of dominant voices and encourage broader participation.</li>
             </ul>
             <div class="ai-feature-box rounded-lg mt-6">
                 <h3 class="text-lg font-bold mb-3">✨ Summarize Tab Content</h3>
@@ -273,11 +426,11 @@
                     Summarize Tab 1
                     <span id="summaryLoadingSpinner_tab1" class="loading-spinner hidden"></span>
                 </button>
-                <div id="summaryOutput_tab1" class="mt-4 p-4 bg-purple-50 text-purple-800 border border-purple-200 rounded-lg hidden">
+                <div id="summaryOutput_tab1" class="mt-4 summary-output hidden">
                     <p class="font-semibold">Summary:</p>
                     <p id="summaryText_tab1" class="mt-2"></p>
                 </div>
-                <div id="summaryError_tab1" class="mt-4 p-4 bg-red-100 text-red-700 border border-red-300 rounded-lg hidden"></div>
+                <div id="summaryError_tab1" class="mt-4 error-message hidden"></div>
             </div>
         </div>
 
@@ -285,48 +438,53 @@
             <h2>2. Lesson 1-2: Pitching Ideas Effectively</h2>
             <h3>2.1 The Importance of Pitching</h3>
             <ul>
-                <li>A great idea is only valuable if it can be communicated and accepted by others.</li>
-                <li>Effective pitching is crucial for gaining support, resources, and implementation.</li>
-                <li>It's about selling your vision, not just listing features.</li>
+                <li>A brilliant idea remains just an idea until it can be effectively communicated and accepted by others.</li>
+                <li>Effective pitching is crucial for gaining necessary support, securing resources, and ultimately leading to implementation and impact.</li>
+                <li>It's not merely about presenting facts; it's about selling a vision and inspiring action.</li>
             </ul>
 
-            <h3>2.2 Understanding Your Audience</h3>
+            <h3>2.2 Understanding Your Audience: The Foundation of a Strong Pitch</h3>
+            <p>Tailoring your message to your audience is paramount. Consider:</p>
             <ul>
-                <li><strong>Who are they?</strong> What are their roles, expertise, and priorities?</li>
-                <li><strong>What are their limits?</strong> What existing beliefs or constraints might make them resistant to your idea?
-                    <div class="example">Pitching a complex technical solution to a non-technical audience requires simplifying jargon and focusing on benefits.</div>
+                <li><strong>Who are they?</strong> Understand their roles, level of expertise, decision-making authority, and daily priorities.
+                    <div class="quote-box">"What we've done is given you really tools that you can use to formulate your strategy for pitching ideas effectively. So, knowing your audience what their limits are and what their interests are and then knowing how to formulate your approach that is best suited for whoever you're talking to."</div>
                 </li>
-                <li><strong>What are their interests?</strong> How does your idea align with their goals, values, or concerns?
-                    <div class="example">When pitching a new project to management, highlight its financial benefits and strategic alignment, not just its innovative aspects.</div>
+                <li><strong>What are their limits?</strong> Identify any existing beliefs, biases, or constraints that might make them resistant or hesitant towards your idea.
+                    <div class="example">If you're pitching a highly technical software solution to a non-technical executive board, you must simplify complex jargon and focus on the business value rather than the intricate technical details. Their "limit" might be technical understanding.</div>
                 </li>
-                <li>Tailor your message to resonate with their specific needs and perspectives.</li>
+                <li><strong>What are their interests?</strong> How does your idea align with their personal or organizational goals, values, concerns, or success metrics?
+                    <div class="example">When proposing a new sustainability initiative, focus on how it benefits the company's public image, reduces costs in the long run, and meets corporate social responsibility targets, rather than just the environmental impact.</div>
+                </li>
+                <div class="quote-box">"Right what's the context, who are they, what do they care about? Right. Why would this strike them is interesting and important."</div>
             </ul>
 
-            <h3>2.3 Crafting Your Pitch</h3>
+            <h3>2.3 Crafting Your Pitch: Key Elements</h3>
             <ul>
-                <li><strong>Start with the Problem:</strong> Clearly articulate the problem your idea solves. This creates relevance.</li>
-                <li><strong>Highlight Novelty AND Usefulness:</strong> Emphasize both aspects of creativity. Explain *why* it's new and *how* it's valuable.</li>
-                <li><strong>Use Storytelling:</strong> Engage emotions and make the idea memorable. Paint a picture of the future.
-                    <div class="example">Instead of just stating product features, tell a story about how a user's life is improved by it.</div>
+                <li><strong>Start with the Problem:</strong> Begin by clearly and compellingly articulating the problem your idea solves. This immediately establishes relevance and urgency.</li>
+                <li><strong>Highlight Novelty AND Usefulness:</strong> Emphasize both aspects that define creativity. Explain *why* your idea is new or different, and equally important, *how* it is valuable, effective, or beneficial.</li>
+                <li><strong>Use Storytelling:</strong> Engage emotions and make your idea memorable by weaving it into a compelling narrative. Paint a vivid picture of the future with your idea in place.
+                    <div class="example">Instead of merely listing features of a new app, tell a story about a typical user's struggle before the app and their seamless, improved experience after using it.</div>
                 </li>
-                <li><strong>Keep it Concise:</strong> Get to the point quickly, especially for busy audiences. The "elevator pitch."</li>
-                <li><strong>Anticipate Objections:</strong> Address potential concerns proactively.</li>
-                <li><strong>Call to Action:</strong> Clearly state what you want the audience to do next (e.g., provide feedback, approve funding).</li>
+                <li><strong>Keep it Concise:</strong> Respect your audience's time. Get to the point quickly, especially for initial pitches (the "elevator pitch" concept).</li>
+                <li><strong>Anticipate Objections:</strong> Proactively address potential concerns, questions, or counter-arguments your audience might have. This demonstrates thoroughness and builds trust.</li>
+                <li><strong>Clear Call to Action:</strong> Clearly state what you want your audience to do next, whether it's providing feedback, approving funding, joining the team, or taking the next step.
+                    <div class="quote-box">"...how can I get them to that point so that they can jump up and down. And endorse your idea and share it with others."</div>
+                </li>
             </ul>
 
             <h3>2.4 Non-Verbal Communication and Delivery</h3>
             <ul>
-                <li><strong>Enthusiasm and Passion:</strong> Convey your belief in the idea.</li>
-                <li><strong>Confidence:</strong> Stand tall, make eye contact, speak clearly.</li>
-                <li><strong>Body Language:</strong> Use open and inviting gestures.</li>
-                <li><strong>Adaptability:</strong> Be ready to adjust your pitch based on audience reactions and questions.</li>
+                <li><strong>Enthusiasm and Passion:</strong> Your belief in the idea is infectious. Convey genuine excitement.</li>
+                <li><strong>Confidence:</strong> Maintain strong posture, make appropriate eye contact, and speak clearly and audibly.</li>
+                <li><strong>Body Language:</strong> Use open and inviting gestures; avoid closed-off postures.</li>
+                <li><strong>Adaptability:</strong> Be prepared to adjust your pitch on the fly based on audience reactions, questions, and interjections. Listen as much as you speak.</li>
             </ul>
 
             <h3>2.5 Persistence and Iteration in Pitching</h3>
             <ul>
-                <li>Just like ideas, pitches often need refinement.</li>
-                <li>If a pitch is rejected, learn from the experience and iterate on your approach.</li>
-                <li>Don't give up after the first "no."</li>
+                <li>Just like the creative process itself, pitching often requires iteration and refinement.</li>
+                <li>If a pitch is rejected or receives lukewarm reception, treat it as valuable feedback. Learn from the experience, understand the reasons for resistance, and refine your approach.</li>
+                <li><span class="highlight">Don't give up after the first "no"; persistence is key to getting novel ideas accepted.</span></li>
             </ul>
             <div class="ai-feature-box rounded-lg mt-6">
                 <h3 class="text-lg font-bold mb-3">✨ Summarize Tab Content</h3>
@@ -334,11 +492,11 @@
                     Summarize Tab 2
                     <span id="summaryLoadingSpinner_tab2" class="loading-spinner hidden"></span>
                 </button>
-                <div id="summaryOutput_tab2" class="mt-4 p-4 bg-purple-50 text-purple-800 border border-purple-200 rounded-lg hidden">
+                <div id="summaryOutput_tab2" class="mt-4 summary-output hidden">
                     <p class="font-semibold">Summary:</p>
                     <p id="summaryText_tab2" class="mt-2"></p>
                 </div>
-                <div id="summaryError_tab2" class="mt-4 p-4 bg-red-100 text-red-700 border border-red-300 rounded-lg hidden"></div>
+                <div id="summaryError_tab2" class="mt-4 error-message hidden"></div>
             </div>
         </div>
     </div>
@@ -349,6 +507,9 @@
     </button>
 
     <script>
+        let currentHighlights = [];
+        let currentHighlightIndex = -1;
+
         // Tab functionality
         document.addEventListener('DOMContentLoaded', () => {
             const tabsContainer = document.getElementById('moduleTabs');
@@ -357,6 +518,12 @@
 
             tabButtons.forEach(button => {
                 button.addEventListener('click', () => {
+                    // Clear previous search highlights when switching tabs
+                    clearHighlights();
+                    document.getElementById('searchResultsNav').classList.add('hidden');
+                    document.getElementById('searchError').classList.add('hidden');
+                    document.getElementById('searchInput').value = '';
+
                     tabButtons.forEach(btn => btn.classList.remove('active'));
                     tabContents.forEach(content => content.classList.remove('active'));
 
@@ -389,6 +556,105 @@
             document.documentElement.scrollTop = 0;
         }
 
+        // Search functionality
+        function clearHighlights() {
+            currentHighlights.forEach(span => {
+                const parent = span.parentNode;
+                if (parent) {
+                    parent.replaceChild(document.createTextNode(span.textContent), span);
+                    parent.normalize(); // Merges adjacent text nodes
+                }
+            });
+            currentHighlights = [];
+            currentHighlightIndex = -1;
+            document.getElementById('highlightCount').textContent = '';
+        }
+
+        function performSearch() {
+            clearHighlights();
+            const searchTerm = document.getElementById('searchInput').value.trim();
+            const activeTabContent = document.querySelector('.tab-content.active');
+            const searchErrorDiv = document.getElementById('searchError');
+            const searchNav = document.getElementById('searchResultsNav');
+            const highlightCountSpan = document.getElementById('highlightCount');
+
+            searchErrorDiv.classList.add('hidden');
+            searchNav.classList.add('hidden');
+            highlightCountSpan.textContent = '';
+
+            if (searchTerm.length === 0) {
+                searchErrorDiv.textContent = "Please enter a search term.";
+                searchErrorDiv.classList.remove('hidden');
+                return;
+            }
+
+            const regex = new RegExp(`(${searchTerm})`, 'gi');
+            let found = 0;
+
+            // Function to recursively search and replace text nodes
+            function highlightText(node) {
+                if (node.nodeType === Node.TEXT_NODE) {
+                    const text = node.nodeValue;
+                    if (regex.test(text)) {
+                        const fragment = document.createDocumentFragment();
+                        let lastIndex = 0;
+                        text.replace(regex, (match, p1, offset) => {
+                            if (offset > lastIndex) {
+                                fragment.appendChild(document.createTextNode(text.substring(lastIndex, offset)));
+                            }
+                            const span = document.createElement('span');
+                            span.className = 'search-result-highlight';
+                            span.textContent = match;
+                            currentHighlights.push(span);
+                            fragment.appendChild(span);
+                            found++;
+                            lastIndex = offset + match.length;
+                        });
+                        if (lastIndex < text.length) {
+                            fragment.appendChild(document.createTextNode(text.substring(lastIndex)));
+                        }
+                        node.parentNode.replaceChild(fragment, node);
+                    }
+                } else if (node.nodeType === Node.ELEMENT_NODE &&
+                           !node.classList.contains('ai-feature-box') &&
+                           !node.classList.contains('search-box') &&
+                           node.tagName !== 'SCRIPT' &&
+                           node.tagName !== 'STYLE') {
+                    Array.from(node.childNodes).forEach(highlightText);
+                }
+            }
+
+            highlightText(activeTabContent);
+
+            if (found > 0) {
+                currentHighlightIndex = 0;
+                updateHighlight();
+                searchNav.classList.remove('hidden');
+            } else {
+                searchErrorDiv.textContent = `No results found for "${searchTerm}".`;
+                searchErrorDiv.classList.remove('hidden');
+            }
+        }
+
+        function updateHighlight() {
+            currentHighlights.forEach((span, index) => {
+                if (index === currentHighlightIndex) {
+                    span.classList.add('current-highlight');
+                    span.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                } else {
+                    span.classList.remove('current-highlight');
+                }
+            });
+            document.getElementById('highlightCount').textContent = `Result ${currentHighlightIndex + 1} of ${currentHighlights.length}`;
+        }
+
+        function navigateHighlight(direction) {
+            if (currentHighlights.length === 0) return;
+
+            currentHighlightIndex = (currentHighlightIndex + direction + currentHighlights.length) % currentHighlights.length;
+            updateHighlight();
+        }
+
         // LLM Summarization Function
         async function summarizeContent(tabId) {
             const tabContentElement = document.getElementById(tabId);
@@ -404,7 +670,7 @@
 
             // Extract only the text content, ignoring HTML tags and examples for summary
             let contentToSummarize = tabContentElement.cloneNode(true); // Clone to avoid modifying original DOM
-            contentToSummarize.querySelectorAll('.example, .ai-feature-box').forEach(el => el.remove());
+            contentToSummarize.querySelectorAll('.example, .ai-feature-box, .quote-box, .search-box').forEach(el => el.remove()); // Also remove search box
             contentToSummarize = contentToSummarize.textContent.replace(/\s\s+/g, ' ').trim();
 
             const prompt = `Please provide a concise summary of the following text, focusing on the main points and key takeaways. Keep it under 200 words:\n\n"${contentToSummarize}"`;
