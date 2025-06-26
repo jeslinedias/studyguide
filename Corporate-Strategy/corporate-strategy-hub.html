@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corporate Strategy</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lora Font (for body text) -->
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Open Sans Font (for header title - new professional font) -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Lora', serif; /* Body text font */
+            background-color: #f3f4f6; /* Light gray background */
+        }
+        /* Specific font for the main title */
+        h1.corporate-strategy-title {
+            font-family: 'Open Sans', sans-serif; /* Changed font to Open Sans */
+        }
+        /* Custom styles for card hover effect */
+        .card-hover-effect {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .card-hover-effect:hover {
+            transform: translateY(-5px); /* Lift card slightly */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Add stronger shadow */
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-between">
+    <!-- Header Banner Section -->
+    <header class="w-full bg-blue-700 text-white shadow-lg py-6 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between">
+            <!-- Title -->
+            <div class="text-center md:text-left mb-4 md:mb-0">
+                <h1 class="text-4xl font-extrabold leading-tight corporate-strategy-title">Corporate Strategy</h1>
+                <p class="mt-2 text-lg text-blue-200">Navigate through key strategic modules</p>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="w-full md:w-auto flex justify-center">
+                <div class="relative flex items-center w-full max-w-md">
+                    <input type="text" placeholder="Search modules..." class="w-full pl-4 pr-10 py-2 rounded-full bg-white text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-300">
+                    <button type="submit" class="absolute right-0 top-0 mt-0 mr-0 p-2 rounded-full text-gray-600 hover:text-gray-900 focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-4xl w-full flex-grow flex flex-col items-center justify-center py-10 px-4 sm:px-6 lg:px-8">
+        <!-- Navigation Cards Section -->
+        <main class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
+            <!-- Card 1: Corporate Scope -->
+            <div class="bg-white rounded-2xl shadow-lg p-8 flex flex-col items-center justify-center text-center card-hover-effect">
+                <div class="bg-indigo-100 text-indigo-700 p-4 rounded-full mb-6">
+                    <!-- Icon for Corporate Scope: Corporate office building -->
+                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m-1 4h1m4-4h1m-1 4h1m-1 4h1M19 21h-2.5a2.5 2.5 0 01-2.5-2.5v-5a2.5 2.5 0 012.5-2.5H19"></path>
+                    </svg>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Corporate Scope</h2>
+                <p class="text-gray-600 mb-6">Define the boundaries and activities of the corporation.</p>
+                <a href="corporate-scope-and-diversification.html" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-8 rounded-full transition duration-300 ease-in-out shadow-md hover:shadow-lg">
+                    Explore
+                </a>
+            </div>
+
+            <!-- Card 2: Corporate Transactions -->
+            <div class="bg-white rounded-2xl shadow-lg p-8 flex flex-col items-center justify-center text-center card-hover-effect">
+                <div class="bg-green-100 text-green-700 p-4 rounded-full mb-6">
+                    <!-- Icon for Corporate Transactions: Dollar bill between two organizations/figures -->
+                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 011-4 2 2 011 4z"></path>
+                        <!-- Added dollar bill and two organization-like shapes -->
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.105 0-2 .895-2 2s.895 2 2 2m0-4h.01M12 8l-3 3M12 8l3 3M12 12l-3-3m3 3l3-3"></path>
+                        <rect x="7" y="10" width="10" height="6" rx="1" ry="1"></rect>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16h3M17 16h3M7 16V9a2 2 0 012-2h6a2 2 0 012 2v7"></path>
+                    </svg>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Corporate Transactions</h2>
+                <p class="text-gray-600 mb-6">Understand mergers, acquisitions, and divestitures.</p>
+                <a href="#" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-8 rounded-full transition duration-300 ease-in-out shadow-md hover:shadow-lg">
+                    Explore
+                </a>
+            </div>
+
+            <!-- Card 3: Global Strategy -->
+            <div class="bg-white rounded-2xl shadow-lg p-8 flex flex-col items-center justify-center text-center card-hover-effect">
+                <div class="bg-purple-100 text-purple-700 p-4 rounded-full mb-6">
+                    <!-- Icon for Global Strategy: Globe with grid lines -->
+                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10m0-20A15.3 15.3 0 008 12a15.3 15.3 0 004 10m-4-10h8m-8-4a15.3 155.3 0 018 0m-8 8a15.3 15.3 0 018 0"></path>
+                    </svg>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Global Strategy</h2>
+                <p class="text-gray-600 mb-6">Develop strategies for international markets.</p>
+                <a href="#" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-8 rounded-full transition duration-300 ease-in-out shadow-md hover:shadow-lg">
+                    Explore
+                </a>
+            </div>
+
+            <!-- Card 4: Stakeholders and Governance -->
+            <div class="bg-white rounded-2xl shadow-lg p-8 flex flex-col items-center justify-center text-center card-hover-effect">
+                <div class="bg-red-100 text-red-700 p-4 rounded-full mb-6">
+                    <!-- Icon for Stakeholders and Governance: Group of people or building -->
+                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h-5m-11 0h11v-3.5a2.5 2.5 0 012.5-2.5h2.5a2.5 2.5 0 012.5 2.5V20h-5m-11 0h11v-3.5a2.5 2.5 0 012.5-2.5h2.5a2.5 2.5 0 012.5 2.5V20h-5"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 11a4 4 0 110-8 4 4 0 010 8zm0 0a6 6 0 016 6v3H3v-3a6 6 0 016-6z"></path>
+                    </svg>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Stakeholders and Governance</h2>
+                <p class="text-gray-600 mb-6">Manage relationships with stakeholders and corporate governance.</p>
+                <a href="#" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-8 rounded-full transition duration-300 ease-in-out shadow-md hover:shadow-lg">
+                    Explore
+                </a>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="mt-12 text-center text-gray-500 text-sm py-4 w-full">
+        <p>&copy; 2025 Corporate Strategy. All rights reserved.</p>
+    </footer>
+</body>
+</html>

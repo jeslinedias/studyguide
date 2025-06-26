@@ -7,8 +7,8 @@
         {
             "type": "chrome",
             "request": "launch",
-            "name": "Corporate Scope and Diversification",
-            "file": "${workspaceFolder}/Corporate-strategy/corporate-scope-and-diversification.html"
+            "name": "Corporate Strategy Hub",
+            "file": "${workspaceFolder}/Corporate-strategy/corporate-strategy-hub.html"
         },
         {
             "type": "msedge",
