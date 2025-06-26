@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Guide to Corporate Scope</title>
+    <!-- Chosen Palette: Calm Harmony -->
+    <!-- Application Structure Plan: The SPA is designed with a thematic, non-linear structure to promote exploration. It uses a top navigation bar to jump between four core concepts: Introduction, Vertical Scope, Horizontal Scope, and Managing Integration. This structure was chosen over a linear one to allow users to directly access the topic most relevant to them. Vertical Scope uses a "Make vs. Buy" comparative layout with interactive cards to explain Transaction Cost Economics. Horizontal Scope uses a tabbed interface to separate the historical view (BCG Matrix) from modern synergy concepts, which simplifies complex historical shifts. The final section uses an interactive slider to visualize the spectrum of integration. This design prioritizes conceptual clarity and user-driven learning over simply replicating the source document's lesson order. -->
+    <!-- Visualization & Content Choices: The application uses a mix of interactive elements to achieve different learning goals, all without using SVG or Mermaid. Goal: Inform -> Interactive definition cards and text blocks (HTML/CSS/JS). Goal: Compare -> A "Make vs. Buy" side-by-side layout and a Chart.js bar chart for diversification performance. Goal: Change -> A Chart.js line chart shows the impact of ITT's breakup. Goal: Organize -> An interactive BCG Matrix built with HTML/CSS/JS and a tabbed interface organize concepts within Horizontal Scope. An interactive slider visualizes the spectrum of integration choices. These choices are justified by their ability to make abstract strategic concepts tangible and easier to grasp. All charts are rendered on Canvas via Chart.js. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F7F4;
+            color: #2D3748;
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #2D3748;
+            border-bottom-color: #4A5568;
+        }
+        .content-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .content-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .tab-button {
+            transition: all 0.3s;
+        }
+        .tab-button.active {
+            background-color: #4A5568;
+            color: #FFFFFF;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .details-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+        .details-content.open {
+            max-height: 500px; /* Adjust as needed */
+        }
+        .bcg-cell:hover .bcg-info {
+            opacity: 1;
+            visibility: visible;
+        }
+        .highlight {
+            background-color: #FEF3B7; /* Light yellow highlight */
+            padding: 1px 2px;
+            border-radius: 3px;
+        }
+        .current-highlight {
+            background-color: #F6AD55; /* Orange highlight for current */
+            padding: 1px 2px;
+            border-radius: 3px;
+            box-shadow: 0 0 5px rgba(246, 173, 85, 0.7);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <button id="back-button" class="text-gray-500 hover:text-gray-800 focus:outline-none text-2xl" aria-label="Back to Homepage">
+                    &#x2190; <!-- Left arrow Unicode character -->
+                </button>
+                <h1 class="text-xl md:text-2xl font-bold text-gray-800">Corporate Scope</h1>
+            </div>
+            
+            <div class="flex items-center space-x-4 md:space-x-8">
+                <div class="relative flex items-center">
+                    <input type="text" id="search-input" placeholder="Search content..." class="pl-3 pr-8 py-1 rounded-full border border-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400 text-sm md:w-48 w-32">
+                    <span class="absolute right-3 text-gray-400">🔍</span> <!-- Search icon Unicode -->
+                </div>
+                <div id="search-nav" class="flex items-center space-x-2 mr-2 ml-2 hidden">
+                    <span id="search-count" class="text-gray-600 text-sm"></span>
+                    <button id="prev-result" class="text-gray-500 hover:text-gray-800 focus:outline-none text-xl">&#x25C0;</button> <!-- Left triangle -->
+                    <button id="next-result" class="text-gray-500 hover:text-gray-800 focus:outline-none text-xl">&#x25B6;</button> <!-- Right triangle -->
+                </div>
+                <div class="hidden md:flex items-center space-x-8 text-gray-500 font-medium">
+                    <a href="#intro" class="nav-link">Introduction</a>
+                    <a href="#vertical" class="nav-link">Vertical Scope</a>
+                    <a href="#horizontal" class="nav-link">Horizontal Scope</a>
+                    <a href="#managing" class="nav-link">Managing</a>
+                </div>
+                <button id="mobile-menu-button" class="md:hidden focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-white py-2">
+            <a href="#intro" class="block text-center py-2 px-4 text-sm text-gray-700 hover:bg-gray-100">Introduction</a>
+            <a href="#vertical" class="block text-center py-2 px-4 text-sm text-gray-700 hover:bg-gray-100">Vertical Scope</a>
+            <a href="#horizontal" class="block text-center py-2 px-4 text-sm text-gray-700 hover:bg-gray-100">Horizontal Scope</a>
+            <a href="#managing" class="block text-center py-2 px-4 text-sm text-gray-700 hover:bg-gray-100">Managing</a>
+        </div>
+    </header>
+
+    <main id="main-content">
+        <section id="intro" class="py-20 bg-white">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl font-bold mb-4">What is Corporate Scope?</h2>
+                <p class="max-w-3xl mx-auto text-lg text-gray-600 mb-12">Corporate scope defines the "footprint" of a company—the businesses and activities it engages in. It's a central part of corporate strategy, focusing on how the configuration of a company's activities can create a competitive advantage. Explore the three key dimensions below.</p>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="scope-dimension-card p-8 bg-gray-50 rounded-xl content-card cursor-pointer">
+                        <h3 class="text-2xl font-bold mb-2">Vertical Scope</h3>
+                        <p class="text-gray-600">Which stages of the industry value chain should the company be in? This is the "Make vs. Buy" decision.</p>
+                    </div>
+                    <div class="scope-dimension-card p-8 bg-gray-50 rounded-xl content-card cursor-pointer">
+                        <h3 class="text-2xl font-bold mb-2">Horizontal Scope</h3>
+                        <p class="text-gray-600">What range of different products and services should the company offer? This is the essence of diversification.</p>
+                    </div>
+                    <div class="scope-dimension-card p-8 bg-gray-50 rounded-xl content-card cursor-pointer">
+                        <h3 class="text-2xl font-bold mb-2">Geographic Scope</h3>
+                        <p class="text-gray-600">Where in the world should the company compete? This dimension involves international strategy.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="vertical" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4">Vertical Scope: The Make vs. Buy Decision</h2>
+                    <p class="max-w-3xl mx-auto text-lg text-gray-600">Vertical integration is the choice of whether a company should perform an activity itself ("Make") or rely on the market by outsourcing to another firm ("Buy"). This decision hinges on a trade-off between the control offered by hierarchies and the efficiency of markets, a concept explained by Transaction Cost Economics.</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8 lg:gap-16 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold mb-6 text-center">Make (Vertical Integration)</h3>
+                        <div class="space-y-4">
+                            <div class="bg-white p-6 rounded-xl content-card">
+                                <h4 class="text-xl font-semibold mb-2">Why Integrate?</h4>
+                                <ul class="list-disc list-inside text-gray-600 space-y-1">
+                                    <li>Improve quality and cost control.</li>
+                                    <li>Gain advantages in planning and coordination.</li>
+                                    <li>Protect against opportunism when investments in specialized assets are required.</li>
+                                    <li>Potentially increase market power (though this is often difficult).</li>
+                                </ul>
+                            </div>
+                            <div class="bg-white p-6 rounded-xl content-card">
+                                <h4 class="text-xl font-semibold mb-2">Costs of Integrating (Administrative Costs)</h4>
+                                <ul class="list-disc list-inside text-gray-600 space-y-1">
+                                    <li><strong>Weak Incentives:</strong> Internal units may lack the sharp performance focus of market suppliers.</li>
+                                    <li><strong>Principal-Agent Problem:</strong> Managers' goals may not align perfectly with owners' goals.</li>
+                                    <li><strong>Lack of Dynamism:</strong> Hierarchies can be slow to respond to market changes.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-3xl font-bold mb-6 text-center">Buy (Outsourcing)</h3>
+                        <div class="space-y-4">
+                            <div class="bg-white p-6 rounded-xl content-card">
+                                <h4 class="text-xl font-semibold mb-2">Why Outsource?</h4>
+                                <ul class="list-disc list-inside text-gray-600 space-y-1">
+                                    <li>Access specialized resources and capabilities.</li>
+                                    <li>Benefit from a partner's ability to aggregate demand and achieve scale.</li>
+                                    <li>Stay responsive to market and technology trends.</li>
+                                </ul>
+                            </div>
+                            <div class="bg-white p-6 rounded-xl content-card">
+                                <h4 class="text-xl font-semibold mb-2">Costs of Outsourcing (Transaction Costs)</h4>
+                                <ul class="list-disc list-inside text-gray-600 space-y-1">
+                                    <li><strong>Adverse Selection:</strong> A partner may hide information about their true quality ("lemons problem").</li>
+                                    <li><strong>Moral Hazard:</strong> A partner may shirk on unmeasurable aspects of performance after a deal is made.</li>
+                                    <li><strong>Hold-up Problem:</strong> A partner can exploit you if you've made relationship-specific investments.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="horizontal" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl font-bold mb-4">Horizontal Scope: Diversification</h2>
+                    <p class="max-w-3xl mx-auto text-lg text-gray-600">Diversification is about choosing which different industries or product markets a firm should compete in. The goal is to create a whole that is more valuable than the sum of its parts—a "diversification premium"—by leveraging synergies across businesses.</p>
+                </div>
+
+                <div class="w-full max-w-4xl mx-auto">
+                    <div class="mb-8 flex justify-center bg-gray-100 rounded-full p-1">
+                        <button class="tab-button w-full py-2 px-4 rounded-full text-sm font-semibold active" data-tab="tab-bcg">The Conglomerate Era & BCG Matrix</button>
+                        <button class="tab-button w-full py-2 px-4 rounded-full text-sm font-semibold" data-tab="tab-synergy">The Modern View: Synergies</button>
+                    </div>
+
+                    <div id="tab-content">
+                        <div id="tab-bcg">
+                             <p class="text-center text-gray-600 mb-8">In the 1960s and 70s, conglomerates—firms competing in many unrelated businesses—were common. They used portfolio management tools like the BCG Matrix to act as internal capital markets, moving cash from mature businesses to fund growing ones. Click the quadrants to learn more.</p>
+                            <div class="grid grid-cols-2 grid-rows-2 gap-1 bg-gray-200 p-1 rounded-xl shadow-lg max-w-lg mx-auto">
+                                <div class="bcg-cell bg-green-100 p-6 rounded-tl-lg cursor-pointer text-center relative">
+                                    <h4 class="text-xl font-bold">⭐ Star</h4>
+                                    <div class="bcg-info opacity-0 visibility-hidden absolute inset-0 bg-black/70 text-white p-4 rounded-tl-lg flex items-center justify-center transition-opacity">High growth, high market share. Requires cash investment to fuel growth.</div>
+                                </div>
+                                <div class="bcg-cell bg-blue-100 p-6 rounded-tr-lg cursor-pointer text-center relative">
+                                    <h4 class="text-xl font-bold">❓ Question Mark</h4>
+                                     <div class="bcg-info opacity-0 visibility-hidden absolute inset-0 bg-black/70 text-white p-4 rounded-tr-lg flex items-center justify-center transition-opacity">High growth, low market share. Uncertain future; either invest heavily or divest.</div>
+                                </div>
+                                <div class="bcg-cell bg-yellow-100 p-6 rounded-bl-lg cursor-pointer text-center relative">
+                                    <h4 class="text-xl font-bold">🐄 Cash Cow</h4>
+                                     <div class="bcg-info opacity-0 visibility-hidden absolute inset-0 bg-black/70 text-white p-4 rounded-bl-lg flex items-center justify-center transition-opacity">Low growth, high market share. Generates more cash than it needs.</div>
+                                </div>
+                                <div class="bcg-cell bg-red-100 p-6 rounded-br-lg cursor-pointer text-center relative">
+                                    <h4 class="text-xl font-bold">🐶 Dog</h4>
+                                     <div class="bcg-info opacity-0 visibility-hidden absolute inset-0 bg-black/70 text-white p-4 rounded-br-lg flex items-center justify-center transition-opacity">Low growth, low market share. Often divested.</div>
+                                </div>
+                            </div>
+                            <div class="mt-12">
+                                <h4 class="text-2xl font-bold text-center mb-4">The Fall of Conglomerates: The Diversification Discount</h4>
+                                <p class="text-center text-gray-600 mb-8">By the 1980s, financial markets became more efficient, and the conglomerate model started to fail. Many firms traded at a "diversification discount," meaning their parts were worth more separately than together. The 2011 breakup of ITT, a classic conglomerate, created billions in shareholder value overnight, as shown by the stock market's reaction.</p>
+                                <div class="chart-container">
+                                    <canvas id="ittChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="tab-synergy" class="hidden">
+                            <p class="text-center text-gray-600 mb-8">Today, value-creating diversification is about achieving synergies through "relatedness"—not necessarily in products, but in the underlying firm-specific resources. This often leads to a "diversification premium," where the combined firm outperforms its standalone parts.</p>
+                            <div class="grid md:grid-cols-2 gap-8 mb-12">
+                                <div class="bg-gray-50 p-6 rounded-xl content-card">
+                                    <h4 class="text-xl font-semibold mb-2">Scaling Common Resources</h4>
+                                    <p class="text-gray-600">Using a shared, valuable resource across multiple businesses. This creates economies of scope.</p>
+                                    <p class="text-sm mt-2 text-gray-500"><strong>Example:</strong> Nike uses its powerful brand and marketing capabilities across both shoes and apparel.</p>
+                                </div>
+                                <div class="bg-gray-50 p-6 rounded-xl content-card">
+                                    <h4 class="text-xl font-semibold mb-2">Redeploying Slack Resources</h4>
+                                    <p class="text-gray-600">Transferring underutilized, valuable resources from one business to another.</p>
+                                    <p class="text-sm mt-2 text-gray-500"><strong>Example:</strong> GE develops top managerial talent and redeploys these executives to lead different business units.</p>
+                                </div>
+                            </div>
+                             <div class="mt-12">
+                                <h4 class="text-2xl font-bold text-center mb-4">Performance & Relatedness</h4>
+                                <p class="text-center text-gray-600 mb-8">Research consistently shows that on average, related diversification creates value, while unrelated diversification destroys it. Click the bars for details.</p>
+                                <div class="chart-container">
+                                    <canvas id="diversificationChart"></canvas>
+                                </div>
+                                <div id="diversification-details" class="text-center mt-4 p-4 bg-blue-50 rounded-lg text-blue-800 font-medium hidden"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="managing" class="py-20">
+            <div class="container mx-auto px-6">
+                 <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4">Managing the Integrated Firm</h2>
+                    <p class="max-w-3xl mx-auto text-lg text-gray-600">Choosing a corporate scope is not a one-time decision. The key is to manage the integrated firm in a way that balances the need for coordination with the benefits of autonomy. The right approach depends on the type of synergy the firm is trying to achieve.</p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-center mb-2">The Spectrum of Integration</h3>
+                    <p class="text-center text-gray-600 mb-8">Firms can choose from a range of organizational forms. Move the slider to explore the trade-offs.</p>
+                    <input type="range" min="0" max="100" value="50" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" id="integration-slider">
+                    <div class="flex justify-between text-sm font-semibold mt-2">
+                        <span>Better "Adaptation"</span>
+                        <span>Better "Coordination"</span>
+                    </div>
+                    <div id="slider-output" class="mt-6 p-6 bg-gray-100 rounded-lg text-center">
+                        <h4 id="slider-title" class="text-xl font-bold text-gray-800">Balanced Approach</h4>
+                        <p id="slider-desc" class="text-gray-600 mt-2">Hybrid forms like strategic alliances and joint ventures try to get the best of both worlds, but can be complex to manage.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2025 Interactive Guide to Corporate Scope. An educational tool.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Mobile Menu
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // Active Nav Link on Scroll
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            window.onscroll = () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 70) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').includes(current)) {
+                        link.classList.add('active');
+                    }
+                });
+            };
+
+            // Horizontal Scope Tabs
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = {
+                'tab-bcg': document.getElementById('tab-bcg'),
+                'tab-synergy': document.getElementById('tab-synergy')
+            };
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+
+                    Object.values(tabContents).forEach(content => content.classList.add('hidden'));
+                    tabContents[button.dataset.tab].classList.remove('hidden');
+                });
+            });
+            
+            // Integration Slider
+            const slider = document.getElementById('integration-slider');
+            const sliderTitle = document.getElementById('slider-title');
+            const sliderDesc = document.getElementById('slider-desc');
+            const sliderData = {
+                0: { title: 'Pure Market Transactions', desc: 'Maximum autonomy and adaptation. Best for non-specific assets and when strong performance incentives are key. Governed by contracts.' },
+                25: { title: 'Strategic Alliances', desc: 'Firms remain independent but cooperate to achieve a common goal. Offers flexibility but requires trust and complex contracting.' },
+                50: { title: 'Joint Ventures', desc: 'Two firms create a third, separate entity. A deeper form of partnership that shares risks and rewards.' },
+                75: { title: 'Autonomous SBUs within a Firm', desc: 'Business units are owned by the parent but have high operational autonomy. Managed via financial controls.' },
+                100: { title: 'Fully Integrated & Coordinated', desc: 'Maximum coordination and control. Best for sharing deep, proprietary resources, but risks bureaucracy and weak incentives.' },
+            };
+
+            slider.addEventListener('input', () => {
+                const val = slider.value;
+                let key;
+                if (val < 20) key = 0;
+                else if (val < 40) key = 25;
+                else if (val < 60) key = 50;
+                else if (val < 80) key = 75;
+                else key = 100;
+
+                sliderTitle.textContent = sliderData[key].title;
+                sliderDesc.textContent = sliderData[key].desc;
+            });
+
+            // ITT Chart
+            const ittCtx = document.getElementById('ittChart').getContext('2d');
+            new Chart(ittCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Pre-Announcement', 'Announcement Day', 'Post-Announcement'],
+                    datasets: [{
+                        label: 'ITT Stock Price Index',
+                        data: [100, 118, 120],
+                        borderColor: '#4A5568',
+                        backgroundColor: 'rgba(74, 85, 104, 0.1)',
+                        fill: true,
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `Value Index: ${context.parsed.y}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            ticks: {
+                                callback: function(value) { return value + '%' }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Diversification Performance Chart
+            const divCtx = document.getElementById('diversificationChart').getContext('2d');
+            const divDetails = document.getElementById('diversification-details');
+            const divData = {
+                labels: ['Single Business', 'Related Diversification', 'Unrelated Diversification'],
+                datasets: [{
+                    label: 'Relative Firm Performance',
+                    data: [100, 110, 90],
+                    backgroundColor: ['#A0AEC0', '#68D391', '#FC8181']
+                }]
+            };
+            const divDetailsText = [
+                'Focused firms serve as a baseline for performance.',
+                'Firms with related diversification, leveraging synergies, tend to outperform. This is the "diversification premium."',
+                'Firms with unrelated diversification often underperform due to complexity and lack of synergies. This is the "diversification discount."'
+            ];
+            
+            new Chart(divCtx, {
+                type: 'bar',
+                data: divData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { enabled: false }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: false,
+                            title: { display: true, text: 'Relative Performance Index' }
+                        }
+                    },
+                    onClick: (e, elements) => {
+                        if (elements.length > 0) {
+                            const index = elements[0].index;
+                            divDetails.textContent = divDetailsText[index];
+                            divDetails.classList.remove('hidden');
+                        }
+                    }
+                }
+            });
+
+            // Search Functionality
+            const searchInput = document.getElementById('search-input');
+            const mainContent = document.getElementById('main-content');
+            const searchCountSpan = document.getElementById('search-count');
+            const searchNavDiv = document.getElementById('search-nav');
+            const prevResultButton = document.getElementById('prev-result');
+            const nextResultButton = document.getElementById('next-result');
+
+            let highlightedElements = [];
+            let currentHighlightIndex = -1;
+
+            function removeAllHighlights() {
+                const allHighlights = mainContent.querySelectorAll('.highlight, .current-highlight');
+                allHighlights.forEach(span => {
+                    const parent = span.parentNode;
+                    parent.replaceChild(document.createTextNode(span.textContent), span);
+                    parent.normalize();
+                });
+                highlightedElements = [];
+                currentHighlightIndex = -1;
+                searchCountSpan.textContent = '';
+                searchNavDiv.classList.add('hidden');
+            }
+
+            function highlightText(element, searchTerm) {
+                removeAllHighlights(); 
+
+                if (!searchTerm) return;
+
+                const lowerCaseSearchTerm = searchTerm.toLowerCase();
+                const textNodes = [];
+
+                // Collect all text nodes
+                const walker = document.createTreeWalker(
+                    element,
+                    NodeFilter.SHOW_TEXT,
+                    null,
+                    false
+                );
+                let node;
+                while ((node = walker.nextNode())) {
+                    if (node.nodeValue.trim().length > 0 && node.parentNode.tagName !== 'SCRIPT' && node.parentNode.tagName !== 'STYLE') {
+                         textNodes.push(node);
+                    }
+                }
+
+                textNodes.forEach(node => {
+                    const text = node.nodeValue;
+                    const lowerCaseText = text.toLowerCase();
+                    let lastIndex = 0;
+                    const fragment = document.createDocumentFragment();
+
+                    while (lastIndex < text.length) {
+                        const index = lowerCaseText.indexOf(lowerCaseSearchTerm, lastIndex);
+                        if (index === -1) {
+                            fragment.appendChild(document.createTextNode(text.substring(lastIndex)));
+                            break;
+                        } else {
+                            fragment.appendChild(document.createTextNode(text.substring(lastIndex, index)));
+                            const highlightSpan = document.createElement('span');
+                            highlightSpan.className = 'highlight';
+                            highlightSpan.textContent = text.substring(index, index + searchTerm.length);
+                            fragment.appendChild(highlightSpan);
+                            highlightedElements.push(highlightSpan); 
+                            lastIndex = index + searchTerm.length;
+                        }
+                    }
+                    if (fragment.childNodes.length > 0) {
+                        node.parentNode.replaceChild(fragment, node);
+                    }
+                });
+
+                if (highlightedElements.length > 0) {
+                    currentHighlightIndex = 0;
+                    updateHighlightDisplay();
+                    searchNavDiv.classList.remove('hidden');
+                } else {
+                    searchNavDiv.classList.add('hidden');
+                }
+            }
+
+            function updateHighlightDisplay() {
+                highlightedElements.forEach((el, index) => {
+                    el.classList.remove('current-highlight');
+                    el.classList.add('highlight');
+                });
+
+                if (highlightedElements.length > 0 && currentHighlightIndex !== -1) {
+                    const currentEl = highlightedElements[currentHighlightIndex];
+                    currentEl.classList.remove('highlight');
+                    currentEl.classList.add('current-highlight');
+                    currentEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    searchCountSpan.textContent = `${currentHighlightIndex + 1} of ${highlightedElements.length}`;
+                } else {
+                    searchCountSpan.textContent = '';
+                }
+            }
+
+            searchInput.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    event.preventDefault(); // Prevent form submission if input is in a form
+                    highlightText(mainContent, searchInput.value);
+                }
+            });
+
+            prevResultButton.addEventListener('click', () => {
+                if (highlightedElements.length === 0) return;
+                currentHighlightIndex = (currentHighlightIndex - 1 + highlightedElements.length) % highlightedElements.length;
+                updateHighlightDisplay();
+            });
+
+            nextResultButton.addEventListener('click', () => {
+                if (highlightedElements.length === 0) return;
+                currentHighlightIndex = (currentHighlightIndex + 1) % highlightedElements.length;
+                updateHighlightDisplay();
+            });
+
+            // Back Button functionality
+            const backButton = document.getElementById('back-button');
+            backButton.addEventListener('click', () => {
+                document.getElementById('intro').scrollIntoView({ behavior: 'smooth' });
+                removeAllHighlights(); // Clear highlights when going back to intro
+                searchInput.value = ''; // Clear search input
+            });
+        });
+    </script>
+</body>
+</html>

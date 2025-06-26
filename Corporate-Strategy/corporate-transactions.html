@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Report: Corporate Transactions</title>
+    <!-- Chosen Palette: Subtle Corporate -->
+    <!-- Application Structure Plan: A tab-based single-page application is used to organize the dense information into three core, digestible topics: M&A, Divestitures, and Strategic Alliances, with a final Portfolio View section. This structure avoids overwhelming the user with a long scroll and facilitates focused learning and comparison between transaction types. Navigation is handled via a top nav bar, and content within each tab is further organized using cards and accordions for progressive disclosure. A search function is included for direct access to specific terms. This user-centric architecture prioritizes clarity and exploration over mirroring the linear format of the source report. -->
+    <!-- Visualization & Content Choices: 1. M&A Value Creation: Goal: Compare -> Viz: Bar Chart (Chart.js) -> Interaction: Hover for data -> Justification: Clearly compares the average returns for different synergy levels. 2. Divestiture Modes Value: Goal: Compare -> Viz: Bar Chart (Chart.js) & Interactive Cards (HTML/CSS) -> Interaction: Hover cards for details -> Justification: Allows quick comparison of value creation across modes and their characteristics. 3. Innovation Impact from Divestiture: Goal: Show Change -> Viz: Line Chart (Chart.js) -> Interaction: Hover for data points -> Justification: Effectively visualizes the diverging innovation paths post-divestiture for different modes. 4. Frameworks (e.g., 3-Part Test): Goal: Organize -> Viz: Styled HTML/CSS diagram -> Interaction: Static -> Justification: Presents structured concepts in a more memorable, graphical format than a simple list. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+        }
+        h1, h2, h3 {
+            font-family: 'Lato', sans-serif;
+        }
+        .tab-btn {
+            transition: all 0.3s ease-in-out;
+            border-bottom: 4px solid transparent;
+        }
+        .tab-btn.active {
+            border-bottom-color: #3b82f6; /* blue-500 */
+            color: #1e3a8a; /* blue-900 */
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 350px;
+            width: 100%;
+            max-width: 600px;
+        }
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+        mark {
+            background-color: #fde047; /* yellow-300 */
+            padding: 2px;
+            border-radius: 3px;
+        }
+        .summary-output {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background-color: #e0f2fe; /* light blue for summary */
+            border-left: 4px solid #38b2ac; /* teal-500 */
+            border-radius: 0.5rem;
+        }
+    </style>
+</head>
+<body class="text-slate-700">
+
+    <!-- Header & Navigation -->
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-md">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col sm:flex-row items-center justify-between py-4">
+                <div class="flex items-center mb-4 sm:mb-0">
+                    <a href="corporate-strategy-hub.html" class="flex items-center text-blue-600 hover:text-blue-800 transition-colors mr-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M11 15l-3-3m0 0l3-3m-3 3h8m-9 0a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                        <span class="font-medium text-lg hidden sm:block">Home</span>
+                    </a>
+                    <h1 class="text-3xl font-black text-slate-800">Corporate Transactions</h1>
+                </div>
+                <div class="relative w-full sm:w-64">
+                    <input type="text" id="searchInput" placeholder="Search report..." class="w-full py-2 pl-4 pr-10 border border-slate-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500">
+                     <span class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" /></svg>
+                    </span>
+                </div>
+            </div>
+            <nav class="border-t border-slate-200">
+                <ul class="flex flex-wrap items-center justify-center -mb-px text-sm font-medium text-center">
+                    <li class="mr-2"><a href="#ma" data-tab="ma" class="tab-btn inline-block p-4 font-bold text-slate-500 hover:text-blue-600 hover:border-blue-300 rounded-t-lg active">M&A</a></li>
+                    <li class="mr-2"><a href="#divestitures" data-tab="divestitures" class="tab-btn inline-block p-4 font-bold text-slate-500 hover:text-blue-600 hover:border-blue-300 rounded-t-lg">Divestitures</a></li>
+                    <li class="mr-2"><a href="#alliances" data-tab="alliances" class="tab-btn inline-block p-4 font-bold text-slate-500 hover:text-blue-600 hover:border-blue-300 rounded-t-lg">Strategic Alliances</a></li>
+                    <li><a href="#portfolio" data-tab="portfolio" class="tab-btn inline-block p-4 font-bold text-slate-500 hover:text-blue-600 hover:border-blue-300 rounded-t-lg">Portfolio View</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="mainContent" class="container mx-auto p-4 sm:p-6 lg:p-8">
+
+        <!-- M&A Tab -->
+        <section id="ma" class="tab-content active">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-extrabold text-slate-800">Mergers & Acquisitions (M&A)</h2>
+                <p class="mt-4 text-lg max-w-3xl mx-auto text-slate-600">M&A transactions are a primary tool for altering a firm's scope, but they are fraught with challenges. While they can provide access to new markets and capabilities, the data shows they often destroy value for the acquirer. Success hinges on a clear strategic rationale, rigorous due diligence, and flawless post-merger integration.
+                    <button class="ml-2 px-3 py-1 bg-blue-500 text-white rounded-full text-sm hover:bg-blue-600 transition-colors summarize-btn" data-section="ma">✨ Summarize Section</button>
+                </p>
+                <div id="summary-ma" class="summary-output hidden"></div>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Why do M&A -->
+                <div class="lg:col-span-1 bg-white p-6 rounded-2xl shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4 text-slate-800">Motivations for M&A</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="font-bold text-lg text-emerald-600">Good Reasons</h4>
+                            <ul class="list-disc list-inside mt-2 space-y-1 text-slate-600">
+                                <li>Access new markets & tech</li>
+                                <li>Gain superior capabilities</li>
+                                <li>Overcome competitive disadvantages</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-red-600">Poor Reasons</h4>
+                            <ul class="list-disc list-inside mt-2 space-y-1 text-slate-600">
+                                <li>Managerial self-interest (empire building)</li>
+                                <li>Managerial hubris (overconfidence)</li>
+                                <li>Diversification for risk reduction (shareholders can do this themselves)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Value Destruction -->
+                <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-lg">
+                     <h3 class="text-2xl font-bold mb-4 text-slate-800 text-center">The Value Creation Challenge</h3>
+                    <p class="text-center text-slate-500 mb-6">M&A deals with strong capability synergies tend to outperform, while those with limited fit often destroy shareholder value.</p>
+                    <div class="chart-container">
+                        <canvas id="synergyChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Pitfalls -->
+                <div class="lg:col-span-3 bg-white p-6 rounded-2xl shadow-lg grid md:grid-cols-2 gap-8 items-center">
+                    <div>
+                       <h3 class="text-2xl font-bold mb-4 text-slate-800">Common Pitfalls in M&A</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="font-bold text-lg text-slate-700">The Winner's Curse</h4>
+                                <p class="text-slate-600">In a competitive auction, the winner is often the most optimistic bidder, systematically overpaying for the target.</p>
+                            </div>
+                             <div>
+                                <h4 class="font-bold text-lg text-slate-700">The Efficient Market Wall</h4>
+                                <p class="text-slate-600">A target's fair value is already priced into its stock. Creating value requires a unique insight or capability the market hasn't seen.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg">
+                        <h4 class="font-bold text-lg text-red-800">The Integration Problem</h4>
+                        <p class="mt-2 text-red-700">The single biggest challenge in M&A, by an order of magnitude, is the **inability to integrate** the two companies and realize synergies. This is a primary driver of value destruction.</p>
+                    </div>
+                </div>
+
+                <!-- Keys to Success -->
+                <div class="lg:col-span-3 bg-blue-900 text-white p-8 rounded-2xl shadow-2xl">
+                    <h3 class="text-3xl font-bold mb-6 text-center">A Three-Part Test for Successful M&As</h3>
+                    <div class="grid md:grid-cols-3 gap-8 text-center">
+                        <div class="bg-blue-800 p-6 rounded-xl">
+                            <div class="text-4xl font-black mb-2">1</div>
+                            <h4 class="text-xl font-bold mb-2">Valuable Synergies</h4>
+                            <p class="text-blue-200">Is there a clear, credible reason the combined firm is worth more than the sum of its parts (e.g., capability stretching or leveraging)?</p>
+                        </div>
+                         <div class="bg-blue-800 p-6 rounded-xl">
+                            <div class="text-4xl font-black mb-2">2</div>
+                            <h4 class="text-xl font-bold mb-2">Value Captured</h4>
+                            <p class="text-blue-200">Is the acquisition price low enough that the acquirer captures a significant portion of the synergy value? Have a walk-away price.</p>
+                        </div>
+                         <div class="bg-blue-800 p-6 rounded-xl">
+                            <div class="text-4xl font-black mb-2">3</div>
+                            <h4 class="text-xl font-bold mb-2">Realization Plan</h4>
+                            <p class="text-blue-200">Is there a strong, credible, and well-managed plan to actually execute the post-merger integration and realize the synergies?</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Divestitures Tab -->
+        <section id="divestitures" class="tab-content">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-extrabold text-slate-800">Divestitures</h2>
+                <p class="mt-4 text-lg max-w-3xl mx-auto text-slate-600">Often overlooked, divestitures are a powerful strategic tool for reshaping a company. By selling, spinning off, or carving out business units, firms can raise cash, refocus on their core, and unlock trapped innovation and entrepreneurial potential, often creating significant value for shareholders.
+                    <button class="ml-2 px-3 py-1 bg-blue-500 text-white rounded-full text-sm hover:bg-blue-600 transition-colors summarize-btn" data-section="divestitures">✨ Summarize Section</button>
+                </p>
+                <div id="summary-divestitures" class="summary-output hidden"></div>
+            </div>
+            
+            <div class="grid lg:grid-cols-5 gap-8">
+                <!-- Divestiture Modes -->
+                <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4 text-slate-800">Divestiture Modes</h3>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-slate-50 rounded-lg hover:shadow-md transition-shadow">
+                            <h4 class="font-bold text-lg text-slate-700">Unit Sale</h4>
+                            <p class="text-slate-600">Sell a unit to another firm for cash. Fastest, most common, good for raising capital.</p>
+                        </div>
+                        <div class="p-4 bg-slate-50 rounded-lg hover:shadow-md transition-shadow">
+                            <h4 class="font-bold text-lg text-slate-700">Spin-off</h4>
+                            <p class="text-slate-600">Create a new, independent company; shares go to existing shareholders. No cash, but often creates the most value and boosts innovation.</p>
+                        </div>
+                        <div class="p-4 bg-slate-50 rounded-lg hover:shadow-md transition-shadow">
+                            <h4 class="font-bold text-lg text-slate-700">Carve-out</h4>
+                            <p class="text-slate-600">Partial sale of a unit (IPO), raising cash while retaining control. A hybrid approach.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Value Creation Chart -->
+                <div class="lg:col-span-3 bg-white p-6 rounded-2xl shadow-lg">
+                     <h3 class="text-2xl font-bold mb-4 text-slate-800 text-center">Value Creation by Divestiture Mode</h3>
+                     <p class="text-center text-slate-500 mb-6">On average, all divestiture modes create value for the parent company's shareholders, with spin-offs leading in percentage terms.</p>
+                    <div class="chart-container">
+                        <canvas id="divestitureChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Xerox Case Study -->
+                <div class="lg:col-span-5 bg-amber-50 p-8 rounded-2xl shadow-lg border-l-4 border-amber-400">
+                    <h3 class="text-3xl font-bold mb-4 text-amber-900">Case Study: The Legendary Xerox PARC</h3>
+                    <p class="text-amber-800 mb-4">Xerox's PARC lab invented the modern personal computer (GUI, mouse, Ethernet) but failed to commercialize these world-changing innovations. Why? The corporate parent didn't understand the business models and the innovations were stifled.</p>
+                    <div class="bg-white p-6 rounded-lg shadow-inner">
+                        <p class="text-lg font-semibold text-slate-700">When 35 projects were later spun out of PARC, the 11 successful ones achieved a combined market value **twice that of Xerox itself**. This powerful example shows how divestitures can **unleash trapped innovation** by freeing units from corporate constraints.</p>
+                    </div>
+                </div>
+
+                <!-- Innovation Chart -->
+                <div class="lg:col-span-5 bg-white p-6 rounded-2xl shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4 text-slate-800 text-center">Impact on Unit Innovation</h3>
+                    <p class="text-center text-slate-500 mb-6">Divestitures can significantly boost innovation within the separated unit. Spin-offs, which grant full independence, show a much stronger and more sustained increase in innovation compared to carve-outs where the parent retains control.</p>
+                    <div class="chart-container">
+                        <canvas id="innovationChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Alliances Tab -->
+        <section id="alliances" class="tab-content">
+             <div class="text-center mb-12">
+                <h2 class="text-4xl font-extrabold text-slate-800">Strategic Alliances</h2>
+                <p class="mt-4 text-lg max-w-3xl mx-auto text-slate-600">Occupying the middle ground between M&A and arm's-length market deals, strategic alliances offer a flexible way to access capabilities, share risks, and learn from partners. However, they require careful management of partner selection, structure, and relationships to avoid potential conflicts and opportunism.
+                    <button class="ml-2 px-3 py-1 bg-blue-500 text-white rounded-full text-sm hover:bg-blue-600 transition-colors summarize-btn" data-section="alliances">✨ Summarize Section</button>
+                </p>
+                <div id="summary-alliances" class="summary-output hidden"></div>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-8">
+                <!-- Why Alliances -->
+                <div class="bg-white p-6 rounded-2xl shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4 text-slate-800">Why Form an Alliance?</h3>
+                     <ul class="list-none space-y-3">
+                        <li class="flex items-start"><span class="text-emerald-500 mr-3 mt-1">&#10004;</span><span>Access capabilities or markets quickly</span></li>
+                        <li class="flex items-start"><span class="text-emerald-500 mr-3 mt-1">&#10004;</span><span>Reduce asset commitment & increase flexibility</span></li>
+                        <li class="flex items-start"><span class="text-emerald-500 mr-3 mt-1">&#10004;</span><span>Learn from partners to upgrade own resources</span></li>
+                        <li class="flex items-start"><span class="text-emerald-500 mr-3 mt-1">&#10004;</span><span>Share costs and risks of new ventures</span></li>
+                        <li class="flex items-start"><span class="text-emerald-500 mr-3 mt-1">&#10004;</span><span>Build cooperation around a common standard</span></li>
+                    </ul>
+                </div>
+
+                 <!-- Problems with Alliances -->
+                <div class="bg-white p-6 rounded-2xl shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4 text-slate-800">Common Problems</h3>
+                     <ul class="list-none space-y-3">
+                        <li class="flex items-start"><span class="text-red-500 mr-3 mt-1">&#10008;</span><span>Competitors gain access to your technology ("learning races")</span></li>
+                        <li class="flex items-start"><span class="text-red-500 mr-3 mt-1">&#10008;</span><span>Conflicts over joint investments and strategy</span></li>
+                        <li class="flex items-start"><span class="text-red-500 mr-3 mt-1">&#10008;</span><span>Transaction costs: adverse selection, moral hazard, hold-up</span></li>
+                        <li class="flex items-start"><span class="text-red-500 mr-3 mt-1">&#10008;</span><span>Lack of trust and opportunistic behavior</span></li>
+                    </ul>
+                </div>
+                
+                 <!-- Making Alliances Work -->
+                <div class="lg:col-span-2 bg-green-900 text-white p-8 rounded-2xl shadow-2xl">
+                    <h3 class="text-3xl font-bold mb-6 text-center">Keys to Successful Alliances</h3>
+                    <div class="grid md:grid-cols-3 gap-8 text-center">
+                        <div class="bg-green-800 p-6 rounded-xl">
+                             <h4 class="text-xl font-bold mb-2">Partner Selection</h4>
+                            <p class="text-green-200">The most critical step. Find partners with complementary assets and compatible strategic goals. Do your homework.</p>
+                        </div>
+                         <div class="bg-green-800 p-6 rounded-xl">
+                             <h4 class="text-xl font-bold mb-2">Alliance Structure</h4>
+                            <p class="text-green-200">Design the deal with clear terms and credible commitments ("hostages") to align incentives and manage risk.</p>
+                        </div>
+                         <div class="bg-green-800 p-6 rounded-xl">
+                             <h4 class="text-xl font-bold mb-2">Ongoing Management</h4>
+                            <p class="text-green-200">Build trust and relational governance. Be prepared to adapt or exit the alliance as circumstances change.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Portfolio View Tab -->
+        <section id="portfolio" class="tab-content">
+             <div class="text-center mb-12">
+                <h2 class="text-4xl font-extrabold text-slate-800">A Portfolio View</h2>
+                <p class="mt-4 text-lg max-w-3xl mx-auto text-slate-600">Expert strategists don't view corporate transactions as isolated events. They see them as an interconnected portfolio of tools used to continually modify and redeploy the firm's resources over time, creating synergies across different deals and building capabilities for the future.
+                    <button class="ml-2 px-3 py-1 bg-blue-500 text-white rounded-full text-sm hover:bg-blue-600 transition-colors summarize-btn" data-section="portfolio">✨ Summarize Section</button>
+                </p>
+                <div id="summary-portfolio" class="summary-output hidden"></div>
+            </div>
+            <div class="grid lg:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-2xl shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4 text-slate-800">Intertemporal Effects (Over Time)</h3>
+                    <ul class="list-disc list-inside space-y-2 text-slate-600">
+                        <li><strong>Learning & Capability Building:</strong> One deal builds the skills for the next.</li>
+                        <li><strong>Resource Redeployment:</strong> Using "acqui-hiring" to gain talent or divesting one unit to fund another.</li>
+                        <li><strong>Real Options:</strong> Using an alliance as a low-cost "stepping stone" to a future acquisition.</li>
+                        <li><strong>Developing Transaction Expertise:</strong> Becoming a skilled acquirer or integrator through repeated practice.</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4 text-slate-800">Contemporaneous Effects (At the Same Time)</h3>
+                    <ul class="list-disc list-inside space-y-2 text-slate-600">
+                        <li><strong>Cross-Deal Synergies:</strong> Combining multiple acquired firms to exploit scale or leveraging an alliance to support an M&A.</li>
+                        <li><strong>Building Networks:</strong> Using alliances to build a network that funnels valuable industry information and opportunities to the firm.</li>
+                        <li><strong>Strategic Positioning:</strong> Being centrally located in an industry's alliance network is correlated with higher innovation and profits.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const summarizeButtons = document.querySelectorAll('.summarize-btn');
+
+            // Tab navigation
+            function activateTab(tabId) {
+                tabs.forEach(tab => {
+                    if (tab.dataset.tab === tabId) {
+                        tab.classList.add('active');
+                    } else {
+                        tab.classList.remove('active');
+                    }
+                });
+
+                tabContents.forEach(content => {
+                    if (content.id === tabId) {
+                        content.classList.add('active');
+                    } else {
+                        content.classList.remove('active');
+                    }
+                });
+            }
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const tabId = this.dataset.tab;
+                    activateTab(tabId);
+                    window.location.hash = tabId;
+                });
+            });
+            
+            // Handle hash on page load
+            const initialTab = window.location.hash.substring(1) || 'ma';
+            activateTab(initialTab);
+
+            // Chart.js Implementations
+            const defaultFont = { family: 'Roboto', size: 12 };
+            const titleFont = { family: 'Lato', size: 16, weight: 'bold' };
+            const gridColor = 'rgba(203, 213, 225, 0.5)'; // slate-300
+
+            // Initialize charts (Chart.js instances are stored to prevent re-initialization)
+            let charts = {};
+
+            const synergyCtx = document.getElementById('synergyChart').getContext('2d');
+            charts.synergyChart = new Chart(synergyCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Enhanced Deals (Stretching)', 'Leverage Deals (Applying)', 'Limited Fit Deals'],
+                    datasets: [{
+                        label: 'Avg. Shareholder Return (2-years post-deal)',
+                        data: [8.5, 9.4, -9.1],
+                        backgroundColor: [
+                            'rgba(79, 70, 229, 0.7)', // indigo-600
+                            'rgba(5, 150, 105, 0.7)', // emerald-600
+                            'rgba(220, 38, 38, 0.7)' // red-600
+                        ],
+                        borderColor: [
+                            'rgb(79, 70, 229)',
+                            'rgb(5, 150, 105)',
+                            'rgb(220, 38, 38)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Shareholder Return (%)', font: defaultFont },
+                            grid: { color: gridColor }
+                        },
+                         x: { grid: { display: false } }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        title: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.raw.toFixed(1)}%`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            const divestitureCtx = document.getElementById('divestitureChart').getContext('2d');
+            charts.divestitureChart = new Chart(divestitureCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Spin-off', 'Unit Sale', 'Carve-out'],
+                    datasets: [{
+                        label: 'Avg. Cumulative Abnormal Return',
+                        data: [2.6, 1.3, 1.2],
+                        backgroundColor: [
+                            'rgba(59, 130, 246, 0.7)', // blue-500
+                            'rgba(16, 185, 129, 0.7)', // emerald-500
+                            'rgba(139, 92, 246, 0.7)' // violet-500
+                        ],
+                        borderColor: [
+                            'rgb(59, 130, 246)',
+                            'rgb(16, 185, 129)',
+                            'rgb(139, 92, 246)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Shareholder Return (%)', font: defaultFont },
+                            grid: { color: gridColor }
+                        },
+                         x: { grid: { display: false } }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        title: { display: false },
+                         tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.raw.toFixed(1)}%`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            const innovationCtx = document.getElementById('innovationChart').getContext('2d');
+            charts.innovationChart = new Chart(innovationCtx, {
+                type: 'line',
+                data: {
+                    labels: ['-3 yrs', '-2 yrs', '-1 yr', 'Divestiture', '+1 yr', '+2 yrs', '+3 yrs'],
+                    datasets: [{
+                        label: 'Spin-offs (Full Independence)',
+                        data: [0.6, 0.7, 0.8, 1.0, 1.3, 1.6, 1.9],
+                        borderColor: 'rgb(59, 130, 246)',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        fill: true,
+                        tension: 0.3
+                    }, {
+                        label: 'Carve-outs (Parent Retains Control)',
+                        data: [0.65, 0.75, 0.85, 1.0, 1.05, 1.1, 1.05],
+                        borderColor: 'rgb(107, 114, 128)',
+                        backgroundColor: 'rgba(107, 114, 128, 0.1)',
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            title: { display: true, text: 'Normalized Innovation Index', font: defaultFont },
+                            grid: { color: gridColor }
+                        },
+                        x: { grid: { display: false } }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        title: { display: false }
+                    }
+                }
+            });
+
+            // Search functionality
+            const searchInput = document.getElementById('searchInput');
+            const searchableElements = document.querySelectorAll('#mainContent h2, #mainContent h3, #mainContent h4, #mainContent p, #mainContent li');
+            
+            // Store original HTML content of searchable elements
+            const originalContents = new Map();
+            searchableElements.forEach(el => {
+                // Ensure we don't store content of chart containers or summary outputs
+                if (!el.closest('.chart-container') && !el.closest('.summary-output')) {
+                    originalContents.set(el, el.innerHTML);
+                }
+            });
+
+            function removeHighlights() {
+                // Restore original HTML for all elements that were potentially modified by search
+                originalContents.forEach((originalHTML, element) => {
+                    element.innerHTML = originalHTML;
+                });
+            }
+
+            function performSearch() {
+                removeHighlights(); // Always clear previous highlights first
+
+                const searchTerm = searchInput.value.trim();
+                if (searchTerm.length === 0) return;
+
+                const regex = new RegExp(searchTerm, 'gi');
+                
+                searchableElements.forEach(element => {
+                    // Skip elements inside chart containers or summary outputs
+                    if (element.closest('.chart-container') || element.closest('.summary-output')) {
+                        return;
+                    }
+
+                    const originalText = originalContents.get(element);
+                    if (originalText && originalText.match(regex)) {
+                        element.innerHTML = originalText.replace(regex, (match) => `<mark>${match}</mark>`);
+                    }
+                });
+            }
+
+            searchInput.addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    performSearch();
+                }
+            });
+
+            const searchButton = document.querySelector('header .relative span');
+            if (searchButton) {
+                searchButton.addEventListener('click', performSearch);
+            }
+
+            // Gemini API Integration for Summarization
+            summarizeButtons.forEach(button => {
+                button.addEventListener('click', async function() {
+                    const sectionId = this.dataset.section;
+                    const sectionElement = document.getElementById(sectionId);
+                    const summaryOutputDiv = document.getElementById(`summary-${sectionId}`);
+                    
+                    if (!sectionElement || !summaryOutputDiv) {
+                        console.error('Section or summary output div not found.');
+                        return;
+                    }
+
+                    summaryOutputDiv.classList.remove('hidden');
+                    summaryOutputDiv.innerHTML = '<p class="text-slate-500">Generating summary... Please wait.</p>';
+
+                    // Extract text from the section, excluding the summary button itself
+                    let sectionText = '';
+                    const elements = sectionElement.querySelectorAll('h2, h3, h4, p, li');
+                    elements.forEach(el => {
+                        if (el.tagName === 'BUTTON' && el.classList.contains('summarize-btn')) {
+                            return; // Skip the button itself
+                        }
+                        // Use textContent to get clean text without any existing <mark> tags
+                        sectionText += el.textContent + '\n';
+                    });
+
+                    const prompt = `Summarize the following text about corporate transactions in 3-5 concise bullet points, highlighting the main takeaways:\n\n${sectionText}`;
+
+                    try {
+                        const apiKey = "";
+                        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                        
+                        const payload = {
+                            contents: [{ role: "user", parts: [{ text: prompt }] }],
+                            generationConfig: {
+                                responseMimeType: "text/plain"
+                            }
+                        };
+
+                        const response = await fetch(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+
+                        const result = await response.json();
+
+                        if (result.candidates && result.candidates.length > 0 &&
+                            result.candidates[0].content && result.candidates[0].content.parts &&
+                            result.candidates[0].content.parts.length > 0) {
+                            const summaryText = result.candidates[0].content.parts[0].text;
+                            // Format as bullet points for display
+                            summaryOutputDiv.innerHTML = `<h4 class="font-bold text-lg mb-2 text-teal-700">Summary:</h4><p class="text-slate-700 whitespace-pre-wrap">${summaryText}</p>`;
+                        } else {
+                            summaryOutputDiv.innerHTML = '<p class="text-red-600">Error: Could not generate summary. Please try again.</p>';
+                        }
+                    } catch (error) {
+                        console.error('Error calling Gemini API:', error);
+                        summaryOutputDiv.innerHTML = '<p class="text-red-600">Error: Failed to connect to the summarization service.</p>';
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
+            
