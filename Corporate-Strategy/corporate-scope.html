@@ -6,7 +6,7 @@
     <title>Interactive Guide to Corporate Scope</title>
     <!-- Chosen Palette: Calm Harmony -->
     <!-- Application Structure Plan: The SPA is designed with a thematic, non-linear structure to promote exploration. It uses a top navigation bar to jump between four core concepts: Introduction, Vertical Scope, Horizontal Scope, and Managing Integration. This structure was chosen over a linear one to allow users to directly access the topic most relevant to them. Vertical Scope uses a "Make vs. Buy" comparative layout with interactive cards to explain Transaction Cost Economics. Horizontal Scope uses a tabbed interface to separate the historical view (BCG Matrix) from modern synergy concepts, which simplifies complex historical shifts. The final section uses an interactive slider to visualize the spectrum of integration. This design prioritizes conceptual clarity and user-driven learning over simply replicating the source document's lesson order. -->
-    <!-- Visualization & Content Choices: The application uses a mix of interactive elements to achieve different learning goals, all without using SVG or Mermaid. Goal: Inform -> Interactive definition cards and text blocks (HTML/CSS/JS). Goal: Compare -> A "Make vs. Buy" side-by-side layout and a Chart.js bar chart for diversification performance. Goal: Change -> A Chart.js line chart shows the impact of ITT's breakup. Goal: Organize -> An interactive BCG Matrix built with HTML/CSS/JS and a tabbed interface organize concepts within Horizontal Scope. An interactive slider visualizes the spectrum of integration choices. These choices are justified by their ability to make abstract strategic concepts tangible and easier to grasp. All charts are rendered on Canvas via Chart.js. -->
+    <!-- Visualization & Content Choices: The application uses a mix of interactive elements to achieve different learning goals, all without using SVG or Mermaid. Goal: Inform -> Interactive definition cards and text blocks (HTML/CSS/JS). Goal: Compare -> A "Make vs. Buy" side-by-side layout and a Chart.js bar chart for diversification performance. Goal: Change -> A Chart.js line chart shows the impact of ITT's breakup. Goal: Organize -> An interactive BCG Matrix built with HTML/CSS/JS and a dedicated text display panel for details. A tabbed interface organizes concepts within Horizontal Scope. An interactive slider visualizes the spectrum of integration choices. These choices are justified by their ability to make abstract strategic concepts tangible and easier to grasp. All charts are rendered on Canvas via Chart.js. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -63,16 +63,23 @@
         .details-content.open {
             max-height: 500px; /* Adjust as needed */
         }
-        .bcg-cell:hover .bcg-info {
-            opacity: 1;
-            visibility: visible;
+        /* No longer needed for pop-up display, but keep .bcg-cell for styling */
+        .bcg-cell {
+            position: relative; /* Keep for potential future use or consistent spacing */
         }
-        .highlight {
+        /* Styling for Persistent Key Phrases */
+        .key-phrase-highlight {
+            background-color: #E0BBE4; /* Light purple */
+            padding: 1px 2px;
+            border-radius: 3px;
+        }
+        /* Styling for Dynamic Search Highlights */
+        .search-highlight {
             background-color: #FEF3B7; /* Light yellow highlight */
             padding: 1px 2px;
             border-radius: 3px;
         }
-        .current-highlight {
+        .current-search-highlight {
             background-color: #F6AD55; /* Orange highlight for current */
             padding: 1px 2px;
             border-radius: 3px;
@@ -85,21 +92,23 @@
     <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
         <nav class="container mx-auto px-6 py-4 flex items-center justify-between">
             <div class="flex items-center space-x-4">
-                <button id="back-button" class="text-gray-500 hover:text-gray-800 focus:outline-none text-2xl" aria-label="Back to Homepage">
+                <button id="back-button" class="text-gray-500 hover:text-gray-800 focus:outline-none text-2xl" aria-label="Back to Homepage" onclick="window.location.href='corporate-strategy-hub.html'">
                     &#x2190; <!-- Left arrow Unicode character -->
                 </button>
                 <h1 class="text-xl md:text-2xl font-bold text-gray-800">Corporate Scope</h1>
             </div>
             
             <div class="flex items-center space-x-4 md:space-x-8">
-                <div class="relative flex items-center">
-                    <input type="text" id="search-input" placeholder="Search content..." class="pl-3 pr-8 py-1 rounded-full border border-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400 text-sm md:w-48 w-32">
-                    <span class="absolute right-3 text-gray-400">🔍</span> <!-- Search icon Unicode -->
-                </div>
-                <div id="search-nav" class="flex items-center space-x-2 mr-2 ml-2 hidden">
-                    <span id="search-count" class="text-gray-600 text-sm"></span>
-                    <button id="prev-result" class="text-gray-500 hover:text-gray-800 focus:outline-none text-xl">&#x25C0;</button> <!-- Left triangle -->
-                    <button id="next-result" class="text-gray-500 hover:text-gray-800 focus:outline-none text-xl">&#x25B6;</button> <!-- Right triangle -->
+                <div class="flex items-center">
+                    <div class="relative flex items-center">
+                        <input type="text" id="search-input" placeholder="Search content..." class="pl-3 pr-8 py-1 rounded-full border border-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400 text-sm md:w-48 w-32">
+                        <span class="absolute right-3 text-gray-400">🔍</span> <!-- Search icon Unicode -->
+                    </div>
+                    <div id="search-nav" class="flex items-center space-x-2 ml-2 hidden">
+                        <span id="search-count" class="text-gray-600 text-sm"></span>
+                        <button id="prev-result" class="text-gray-500 hover:text-gray-800 focus:outline-none text-xl">&#x25C0;</button> <!-- Left triangle -->
+                        <button id="next-result" class="text-gray-500 hover:text-gray-800 focus:outline-none text-xl">&#x25B6;</button> <!-- Right triangle -->
+                    </div>
                 </div>
                 <div class="hidden md:flex items-center space-x-8 text-gray-500 font-medium">
                     <a href="#intro" class="nav-link">Introduction</a>
@@ -124,19 +133,19 @@
         <section id="intro" class="py-20 bg-white">
             <div class="container mx-auto px-6 text-center">
                 <h2 class="text-4xl font-bold mb-4">What is Corporate Scope?</h2>
-                <p class="max-w-3xl mx-auto text-lg text-gray-600 mb-12">Corporate scope defines the "footprint" of a company—the businesses and activities it engages in. It's a central part of corporate strategy, focusing on how the configuration of a company's activities can create a competitive advantage. Explore the three key dimensions below.</p>
+                <p class="max-w-3xl mx-auto text-lg text-gray-600 mb-12">Corporate scope defines the "footprint" of a company—the businesses and activities it engages in. It's a central part of corporate strategy, focusing on how the configuration and coordination of a company's multi-business activities can create a competitive advantage. This module focuses primarily on vertical and horizontal scope, which represent real strategic choices companies make.</p>
                 <div class="grid md:grid-cols-3 gap-8">
                     <div class="scope-dimension-card p-8 bg-gray-50 rounded-xl content-card cursor-pointer">
                         <h3 class="text-2xl font-bold mb-2">Vertical Scope</h3>
-                        <p class="text-gray-600">Which stages of the industry value chain should the company be in? This is the "Make vs. Buy" decision.</p>
+                        <p class="text-gray-600">Which stages of the industry value chain should the company be in? This is the "Make vs. Buy" decision, involving activities from raw materials to customer service. <br> <strong>Example:</strong> PepsiCo acquiring its bottlers (forward integration).</p>
                     </div>
                     <div class="scope-dimension-card p-8 bg-gray-50 rounded-xl content-card cursor-pointer">
                         <h3 class="text-2xl font-bold mb-2">Horizontal Scope</h3>
-                        <p class="text-gray-600">What range of different products and services should the company offer? This is the essence of diversification.</p>
+                        <p class="text-gray-600">What range of different products and services should the company offer? This is the essence of diversification, expanding into new but often related businesses. <br> <strong>Example:</strong> GE's shift from financial services and media to aviation and renewable energy over time.</p>
                     </div>
                     <div class="scope-dimension-card p-8 bg-gray-50 rounded-xl content-card cursor-pointer">
                         <h3 class="text-2xl font-bold mb-2">Geographic Scope</h3>
-                        <p class="text-gray-600">Where in the world should the company compete? This dimension involves international strategy.</p>
+                        <p class="text-gray-600">Where in the world should the company compete? This dimension involves international strategy and decisions about global markets. While crucial, it's addressed in other modules.</p>
                     </div>
                 </div>
             </div>
@@ -146,27 +155,27 @@
             <div class="container mx-auto px-6">
                 <div class="text-center mb-16">
                     <h2 class="text-4xl font-bold mb-4">Vertical Scope: The Make vs. Buy Decision</h2>
-                    <p class="max-w-3xl mx-auto text-lg text-gray-600">Vertical integration is the choice of whether a company should perform an activity itself ("Make") or rely on the market by outsourcing to another firm ("Buy"). This decision hinges on a trade-off between the control offered by hierarchies and the efficiency of markets, a concept explained by Transaction Cost Economics.</p>
+                    <p class="max-w-3xl mx-auto text-lg text-gray-600">Vertical integration is the choice of whether a company should perform an activity itself ("Make") or rely on the market by outsourcing to another firm ("Buy"). This decision hinges on a trade-off between the control offered by hierarchies (firms) and the efficiency of markets, a concept explained by Transaction Cost Economics.</p>
                 </div>
                 <div class="grid md:grid-cols-2 gap-8 lg:gap-16 items-start">
                     <div>
                         <h3 class="text-3xl font-bold mb-6 text-center">Make (Vertical Integration)</h3>
                         <div class="space-y-4">
                             <div class="bg-white p-6 rounded-xl content-card">
-                                <h4 class="text-xl font-semibold mb-2">Why Integrate?</h4>
+                                <h4 class="text-xl font-semibold mb-2">Why Integrate? (Motivations)</h4>
                                 <ul class="list-disc list-inside text-gray-600 space-y-1">
-                                    <li>Improve quality and cost control.</li>
-                                    <li>Gain advantages in planning and coordination.</li>
-                                    <li>Protect against opportunism when investments in specialized assets are required.</li>
-                                    <li>Potentially increase market power (though this is often difficult).</li>
+                                    <li><strong>Improve quality and cost control:</strong> Directly overseeing operations can lead to higher quality outputs and potentially lower costs.</li>
+                                    <li><strong>Gain advantages in planning and coordination:</strong> Internal operations allow for smoother, more agile planning and coordination across different stages of the value chain.</li>
+                                    <li><strong>Protect against opportunism when investments in specialized assets are required:</strong> If a partner needs to invest heavily in assets customized for your needs, vertical integration can prevent them from holding you up later. <br> <em>Example: If a car manufacturer needs a supplier to build a unique machine for a specific car part, owning the supplier protects against price hikes later.</em></li>
+                                    <li><strong>Potentially increase market power:</strong> By controlling a key resource or stage, a firm might create barriers to entry for competitors. <br> <em>Example: Owning a popular online platform might reduce competition in online education.</em></li>
                                 </ul>
                             </div>
                             <div class="bg-white p-6 rounded-xl content-card">
                                 <h4 class="text-xl font-semibold mb-2">Costs of Integrating (Administrative Costs)</h4>
                                 <ul class="list-disc list-inside text-gray-600 space-y-1">
-                                    <li><strong>Weak Incentives:</strong> Internal units may lack the sharp performance focus of market suppliers.</li>
-                                    <li><strong>Principal-Agent Problem:</strong> Managers' goals may not align perfectly with owners' goals.</li>
-                                    <li><strong>Lack of Dynamism:</strong> Hierarchies can be slow to respond to market changes.</li>
+                                    <li><strong>Weak Incentives:</strong> Internal units may lack the sharp, market-driven performance focus of external suppliers who face the threat of losing business. They might operate with an "expectation of continuity."</li>
+                                    <li><strong>Principal-Agent Problem:</strong> When the "principal" (e.g., owner, CEO) cannot perfectly observe the "agent's" (e.g., manager, division) actions or outcomes, the agent may not always act in the principal's best interest. <br> <em>Example: A division might underperform on unmeasurable quality aspects if only sales are rewarded.</em></li>
+                                    <li><strong>Lack of Dynamism:</strong> Large hierarchies can become bureaucratic and slow to respond to rapidly changing market or technology trends, making it hard to "selectively intervene" and impose market-like pressures on internal units.</li>
                                 </ul>
                             </div>
                         </div>
@@ -175,19 +184,19 @@
                         <h3 class="text-3xl font-bold mb-6 text-center">Buy (Outsourcing)</h3>
                         <div class="space-y-4">
                             <div class="bg-white p-6 rounded-xl content-card">
-                                <h4 class="text-xl font-semibold mb-2">Why Outsource?</h4>
+                                <h4 class="text-xl font-semibold mb-2">Why Outsource? (Motivations)</h4>
                                 <ul class="list-disc list-inside text-gray-600 space-y-1">
-                                    <li>Access specialized resources and capabilities.</li>
-                                    <li>Benefit from a partner's ability to aggregate demand and achieve scale.</li>
-                                    <li>Stay responsive to market and technology trends.</li>
+                                    <li><strong>Access specialized resources and capabilities:</strong> Partner firms may have unique expertise or assets that would be difficult or costly for the company to develop internally. <br> <em>Example: The University of Illinois outsourcing its online course hosting to Coursera due to Coursera's specialized software and technology skills.</em></li>
+                                    <li><strong>Benefit from a partner's ability to aggregate demand and achieve scale:</strong> An outsourced partner serving many clients can achieve economies of scale that a single firm cannot. <br> <em>Example: An appliance company outsourcing steel production to a large steel manufacturer that serves many industries.</em></li>
+                                    <li><strong>Stay responsive to market and technology trends:</strong> Dedicated external firms, focused on a specific activity, are often more agile and up-to-date with industry advancements. If they don't perform, you can switch.</li>
                                 </ul>
                             </div>
                             <div class="bg-white p-6 rounded-xl content-card">
                                 <h4 class="text-xl font-semibold mb-2">Costs of Outsourcing (Transaction Costs)</h4>
                                 <ul class="list-disc list-inside text-gray-600 space-y-1">
-                                    <li><strong>Adverse Selection:</strong> A partner may hide information about their true quality ("lemons problem").</li>
-                                    <li><strong>Moral Hazard:</strong> A partner may shirk on unmeasurable aspects of performance after a deal is made.</li>
-                                    <li><strong>Hold-up Problem:</strong> A partner can exploit you if you've made relationship-specific investments.</li>
+                                    <li><strong>Adverse Selection (Ex Ante Information Asymmetry):</strong> One party has private information before the transaction, leading to a suboptimal deal. <br> <em>Example: George Akerlof's "lemons problem" where used car sellers know more about car quality than buyers, making buyers suspicious of all used cars. In business, a supplier might assign its less skilled personnel to your project.</em></li>
+                                    <li><strong>Moral Hazard (Ex Post Information Asymmetry):</strong> One party takes excessive risks or shirks on unobservable performance after a contract is signed, knowing the other party bears the consequences. <br> <em>Example: An outsourced distribution partner might reduce service quality to cut costs, if their contract only rewards total sales, not customer satisfaction.</em></li>
+                                    <li><strong>Hold-up Problem:</strong> Arises after specific investments are made, giving one party leverage to renegotiate terms opportunistically. <br> <em>Example: A software developer customizing a system for a single client could demand higher fees later, as the client is dependent on the customized system.</em></li>
                                 </ul>
                             </div>
                         </div>
@@ -200,7 +209,7 @@
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12">
                     <h2 class="text-4xl font-bold mb-4">Horizontal Scope: Diversification</h2>
-                    <p class="max-w-3xl mx-auto text-lg text-gray-600">Diversification is about choosing which different industries or product markets a firm should compete in. The goal is to create a whole that is more valuable than the sum of its parts—a "diversification premium"—by leveraging synergies across businesses.</p>
+                    <p class="max-w-3xl mx-auto text-lg text-gray-600">Diversification is about choosing which different industries or product markets a firm should compete in. The goal is to create a whole that is more valuable than the sum of its parts—a "diversification premium"—by leveraging synergies across businesses. It's not just about size, but about strategic fit and value creation.</p>
                 </div>
 
                 <div class="w-full max-w-4xl mx-auto">
@@ -211,50 +220,51 @@
 
                     <div id="tab-content">
                         <div id="tab-bcg">
-                             <p class="text-center text-gray-600 mb-8">In the 1960s and 70s, conglomerates—firms competing in many unrelated businesses—were common. They used portfolio management tools like the BCG Matrix to act as internal capital markets, moving cash from mature businesses to fund growing ones. Click the quadrants to learn more.</p>
+                             <p class="text-center text-gray-600 mb-8">In the 1960s and 70s, conglomerates—firms competing in many unrelated businesses—were common. They managed a "portfolio" of Strategic Business Units (SBUs) using tools like the BCG Matrix to act as internal capital markets, moving cash from mature businesses to fund growing ones. Hover over the quadrants to learn more about how they categorized their businesses.</p>
                             <div class="grid grid-cols-2 grid-rows-2 gap-1 bg-gray-200 p-1 rounded-xl shadow-lg max-w-lg mx-auto">
-                                <div class="bcg-cell bg-green-100 p-6 rounded-tl-lg cursor-pointer text-center relative">
+                                <div class="bcg-cell bg-green-100 p-6 rounded-tl-lg cursor-pointer text-center" data-quadrant="star">
                                     <h4 class="text-xl font-bold">⭐ Star</h4>
-                                    <div class="bcg-info opacity-0 visibility-hidden absolute inset-0 bg-black/70 text-white p-4 rounded-tl-lg flex items-center justify-center transition-opacity">High growth, high market share. Requires cash investment to fuel growth.</div>
                                 </div>
-                                <div class="bcg-cell bg-blue-100 p-6 rounded-tr-lg cursor-pointer text-center relative">
+                                <div class="bcg-cell bg-blue-100 p-6 rounded-tr-lg cursor-pointer text-center" data-quadrant="question-mark">
                                     <h4 class="text-xl font-bold">❓ Question Mark</h4>
-                                     <div class="bcg-info opacity-0 visibility-hidden absolute inset-0 bg-black/70 text-white p-4 rounded-tr-lg flex items-center justify-center transition-opacity">High growth, low market share. Uncertain future; either invest heavily or divest.</div>
                                 </div>
-                                <div class="bcg-cell bg-yellow-100 p-6 rounded-bl-lg cursor-pointer text-center relative">
+                                <div class="bcg-cell bg-yellow-100 p-6 rounded-bl-lg cursor-pointer text-center" data-quadrant="cash-cow">
                                     <h4 class="text-xl font-bold">🐄 Cash Cow</h4>
-                                     <div class="bcg-info opacity-0 visibility-hidden absolute inset-0 bg-black/70 text-white p-4 rounded-bl-lg flex items-center justify-center transition-opacity">Low growth, high market share. Generates more cash than it needs.</div>
                                 </div>
-                                <div class="bcg-cell bg-red-100 p-6 rounded-br-lg cursor-pointer text-center relative">
+                                <div class="bcg-cell bg-red-100 p-6 rounded-br-lg cursor-pointer text-center" data-quadrant="dog">
                                     <h4 class="text-xl font-bold">🐶 Dog</h4>
-                                     <div class="bcg-info opacity-0 visibility-hidden absolute inset-0 bg-black/70 text-white p-4 rounded-br-lg flex items-center justify-center transition-opacity">Low growth, low market share. Often divested.</div>
                                 </div>
                             </div>
+                            <!-- New div for displaying BCG quadrant details -->
+                            <div id="bcg-detail-panel" class="max-w-2xl mx-auto p-6 mt-8 bg-gray-100 rounded-lg shadow-inner text-center text-gray-700">
+                                Hover over a BCG quadrant (Star, Question Mark, Cash Cow, or Dog) to see its detailed description here.
+                            </div>
+
                             <div class="mt-12">
                                 <h4 class="text-2xl font-bold text-center mb-4">The Fall of Conglomerates: The Diversification Discount</h4>
-                                <p class="text-center text-gray-600 mb-8">By the 1980s, financial markets became more efficient, and the conglomerate model started to fail. Many firms traded at a "diversification discount," meaning their parts were worth more separately than together. The 2011 breakup of ITT, a classic conglomerate, created billions in shareholder value overnight, as shown by the stock market's reaction.</p>
+                                <p class="text-center text-gray-600 mb-8">By the 1980s, global financial markets became more efficient at allocating capital than internal corporate mechanisms, contributing to the decline of conglomerates. Many diversified firms traded at a "diversification discount," meaning the market valued the combined company at less than the sum of its individual businesses would be worth if operated independently. The 2011 breakup of ITT, a classic conglomerate, provides a clear example: its stock value increased significantly, creating billions in shareholder wealth, as investors saw greater value in the separated, focused entities.</p>
                                 <div class="chart-container">
                                     <canvas id="ittChart"></canvas>
                                 </div>
                             </div>
                         </div>
                         <div id="tab-synergy" class="hidden">
-                            <p class="text-center text-gray-600 mb-8">Today, value-creating diversification is about achieving synergies through "relatedness"—not necessarily in products, but in the underlying firm-specific resources. This often leads to a "diversification premium," where the combined firm outperforms its standalone parts.</p>
+                            <p class="text-center text-gray-600 mb-8">Today, value-creating diversification is about achieving synergies through "relatedness"—not necessarily in products, but in the underlying firm-specific resources or capabilities. This often leads to a "diversification premium," where the combined firm outperforms its standalone parts because of unique advantages created through integration.</p>
                             <div class="grid md:grid-cols-2 gap-8 mb-12">
                                 <div class="bg-gray-50 p-6 rounded-xl content-card">
                                     <h4 class="text-xl font-semibold mb-2">Scaling Common Resources</h4>
-                                    <p class="text-gray-600">Using a shared, valuable resource across multiple businesses. This creates economies of scope.</p>
-                                    <p class="text-sm mt-2 text-gray-500"><strong>Example:</strong> Nike uses its powerful brand and marketing capabilities across both shoes and apparel.</p>
+                                    <p class="text-gray-600">This involves leveraging a shared, valuable resource or capability across multiple businesses to achieve economies of scope or enhance competitive advantage.</p>
+                                    <p class="text-sm mt-2 text-gray-500"><strong>Examples:</strong> <br> - Nike uses its powerful global brand and marketing capabilities across both its athletic shoes and apparel divisions. <br> - Amazon leverages its core technology platform, initially for books, to support a vast range of e-commerce and cloud computing (AWS) businesses.</p>
                                 </div>
                                 <div class="bg-gray-50 p-6 rounded-xl content-card">
                                     <h4 class="text-xl font-semibold mb-2">Redeploying Slack Resources</h4>
-                                    <p class="text-gray-600">Transferring underutilized, valuable resources from one business to another.</p>
-                                    <p class="text-sm mt-2 text-gray-500"><strong>Example:</strong> GE develops top managerial talent and redeploys these executives to lead different business units.</p>
+                                    <p class="text-gray-600">This refers to transferring underutilized, valuable resources or capabilities from one business unit to another where they can create new value.</p>
+                                    <p class="text-sm mt-2 text-gray-500"><strong>Examples:</strong> <br> - Uber can redeploy its network of drivers and its ride-hailing technology infrastructure to support its food delivery service (Uber Eats). <br> - GE historically developed top managerial talent within one division and then redeployed these highly skilled executives to lead other diverse business units, leveraging a corporate pool of talent.</p>
                                 </div>
                             </div>
                              <div class="mt-12">
                                 <h4 class="text-2xl font-bold text-center mb-4">Performance & Relatedness</h4>
-                                <p class="text-center text-gray-600 mb-8">Research consistently shows that on average, related diversification creates value, while unrelated diversification destroys it. Click the bars for details.</p>
+                                <p class="text-center text-gray-600 mb-8">Research consistently shows that on average, related diversification creates value, while unrelated diversification tends to destroy it. Click the bars to see the details of each performance level.</p>
                                 <div class="chart-container">
                                     <canvas id="diversificationChart"></canvas>
                                 </div>
@@ -270,11 +280,11 @@
             <div class="container mx-auto px-6">
                  <div class="text-center mb-16">
                     <h2 class="text-4xl font-bold mb-4">Managing the Integrated Firm</h2>
-                    <p class="max-w-3xl mx-auto text-lg text-gray-600">Choosing a corporate scope is not a one-time decision. The key is to manage the integrated firm in a way that balances the need for coordination with the benefits of autonomy. The right approach depends on the type of synergy the firm is trying to achieve.</p>
+                    <p class="max-w-3xl mx-auto text-lg text-gray-600">Choosing a corporate scope (whether vertical integration or horizontal diversification) is not a static, one-time decision. The key to long-term success is effectively managing the integrated firm in a way that balances the need for central coordination with the benefits of operational autonomy for individual units. The optimal approach depends heavily on the specific type of synergy the firm is trying to achieve.</p>
                 </div>
                 <div class="bg-white p-8 rounded-xl shadow-lg">
                     <h3 class="text-2xl font-bold text-center mb-2">The Spectrum of Integration</h3>
-                    <p class="text-center text-gray-600 mb-8">Firms can choose from a range of organizational forms. Move the slider to explore the trade-offs.</p>
+                    <p class="text-center text-gray-600 mb-8">Firms can choose from a wide range of organizational forms, from pure market transactions to full internal integration. This spectrum represents a trade-off between "adaptation" (flexibility, market incentives) and "coordination" (control, efficiency). Move the slider to explore the characteristics of each major point on this spectrum.</p>
                     <input type="range" min="0" max="100" value="50" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" id="integration-slider">
                     <div class="flex justify-between text-sm font-semibold mt-2">
                         <span>Better "Adaptation"</span>
@@ -282,7 +292,15 @@
                     </div>
                     <div id="slider-output" class="mt-6 p-6 bg-gray-100 rounded-lg text-center">
                         <h4 id="slider-title" class="text-xl font-bold text-gray-800">Balanced Approach</h4>
-                        <p id="slider-desc" class="text-gray-600 mt-2">Hybrid forms like strategic alliances and joint ventures try to get the best of both worlds, but can be complex to manage.</p>
+                        <p id="slider-desc" class="text-gray-600 mt-2">Hybrid forms like strategic alliances and joint ventures try to get the best of both worlds—combining some market incentives with closer coordination. However, they can be complex to manage due to shared control and potential conflicts.</p>
+                    </div>
+                     <div class="mt-8 text-gray-700">
+                        <h4 class="text-xl font-semibold mb-2">Implications for Managing Internally Integrated Units:</h4>
+                        <ul class="list-disc list-inside space-y-2">
+                            <li><strong>Replicating Market Incentives:</strong> Even in vertically integrated or diversified firms, managers can implement structures to mimic market pressures. For example, PepsiCo might give its internal bottling plant managers commissions based on regional profits to encourage market responsiveness.</li>
+                            <li><strong>Ensuring Coordination:</strong> If the integration is for shared resources (e.g., a common brand or technology platform), tight operational control and active coordination are needed across units to realize synergies and maintain consistency. <br> <em>Example: Amazon's integration of its IT systems with Whole Foods Market for online grocery delivery requires significant coordination.</em></li>
+                            <li><strong>Allowing Autonomy for Resource Redeployment:</strong> If synergies come primarily from transferring discrete resources (like cash or talent), units can often operate with more autonomy, managed largely through financial controls. <br> <em>Example: GE's practice of developing and and redeploying managerial talent across its diverse units allows individual units significant operational freedom while leveraging a central resource pool.</em></li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -417,9 +435,9 @@
                 }]
             };
             const divDetailsText = [
-                'Focused firms serve as a baseline for performance.',
-                'Firms with related diversification, leveraging synergies, tend to outperform. This is the "diversification premium."',
-                'Firms with unrelated diversification often underperform due to complexity and lack of synergies. This is the "diversification discount."'
+                'Focused firms serve as a baseline for performance. They concentrate on a single industry, aiming for deep competitive advantage.',
+                'Firms with related diversification, leveraging synergies (like shared resources or capabilities), tend to outperform. This is often called the "diversification premium," as the whole becomes greater than the sum of its parts.',
+                'Firms with unrelated diversification often underperform due to increased complexity, lack of meaningful synergies, and inefficient capital allocation. This is known as the "diversification discount."'
             ];
             
             new Chart(divCtx, {
@@ -457,91 +475,109 @@
             const prevResultButton = document.getElementById('prev-result');
             const nextResultButton = document.getElementById('next-result');
 
-            let highlightedElements = [];
-            let currentHighlightIndex = -1;
+            let searchHighlightedElements = [];
+            let currentSearchHighlightIndex = -1;
 
-            function removeAllHighlights() {
-                const allHighlights = mainContent.querySelectorAll('.highlight, .current-highlight');
+            function removeSearchHighlights() {
+                const allHighlights = mainContent.querySelectorAll('.search-highlight, .current-search-highlight');
                 allHighlights.forEach(span => {
                     const parent = span.parentNode;
-                    parent.replaceChild(document.createTextNode(span.textContent), span);
-                    parent.normalize();
+                    // Replace the highlight span with its text content
+                    if (span.textContent !== undefined) {
+                        parent.replaceChild(document.createTextNode(span.textContent), span);
+                    } else {
+                        // Fallback for cases where textContent might be empty or problematic
+                        parent.removeChild(span);
+                    }
+                    parent.normalize(); // Merges adjacent text nodes
                 });
-                highlightedElements = [];
-                currentHighlightIndex = -1;
+                searchHighlightedElements = [];
+                currentSearchHighlightIndex = -1;
                 searchCountSpan.textContent = '';
                 searchNavDiv.classList.add('hidden');
             }
 
-            function highlightText(element, searchTerm) {
-                removeAllHighlights(); 
+            function applySearchHighlights(element, searchTerm) {
+                removeSearchHighlights(); 
 
                 if (!searchTerm) return;
 
                 const lowerCaseSearchTerm = searchTerm.toLowerCase();
-                const textNodes = [];
-
-                // Collect all text nodes
+                
+                // Use a TreeWalker to get all text nodes, excluding script, style, and chart containers
                 const walker = document.createTreeWalker(
                     element,
                     NodeFilter.SHOW_TEXT,
-                    null,
+                    {
+                        acceptNode: function(node) {
+                            if (node.nodeValue.trim().length === 0) return NodeFilter.FILTER_REJECT;
+                            if (node.parentNode.tagName === 'SCRIPT' || node.parentNode.tagName === 'STYLE') {
+                                return NodeFilter.FILTER_REJECT;
+                            }
+                            // Check if parent or any ancestor has chart-container class
+                            let currentNode = node.parentNode;
+                            while (currentNode) {
+                                if (currentNode.classList && currentNode.classList.contains('chart-container')) {
+                                    return NodeFilter.FILTER_REJECT;
+                                }
+                                currentNode = currentNode.parentNode;
+                            }
+                            return NodeFilter.FILTER_ACCEPT;
+                        }
+                    },
                     false
                 );
+
                 let node;
                 while ((node = walker.nextNode())) {
-                    if (node.nodeValue.trim().length > 0 && node.parentNode.tagName !== 'SCRIPT' && node.parentNode.tagName !== 'STYLE') {
-                         textNodes.push(node);
-                    }
-                }
-
-                textNodes.forEach(node => {
                     const text = node.nodeValue;
                     const lowerCaseText = text.toLowerCase();
                     let lastIndex = 0;
                     const fragment = document.createDocumentFragment();
 
+                    let foundInNode = false;
                     while (lastIndex < text.length) {
                         const index = lowerCaseText.indexOf(lowerCaseSearchTerm, lastIndex);
                         if (index === -1) {
                             fragment.appendChild(document.createTextNode(text.substring(lastIndex)));
                             break;
                         } else {
+                            foundInNode = true;
                             fragment.appendChild(document.createTextNode(text.substring(lastIndex, index)));
                             const highlightSpan = document.createElement('span');
-                            highlightSpan.className = 'highlight';
+                            highlightSpan.className = 'search-highlight';
                             highlightSpan.textContent = text.substring(index, index + searchTerm.length);
                             fragment.appendChild(highlightSpan);
-                            highlightedElements.push(highlightSpan); 
+                            searchHighlightedElements.push(highlightSpan); 
                             lastIndex = index + searchTerm.length;
                         }
                     }
-                    if (fragment.childNodes.length > 0) {
+                    if (foundInNode && fragment.childNodes.length > 0) {
                         node.parentNode.replaceChild(fragment, node);
                     }
-                });
+                }
 
-                if (highlightedElements.length > 0) {
-                    currentHighlightIndex = 0;
-                    updateHighlightDisplay();
+                if (searchHighlightedElements.length > 0) {
+                    currentSearchHighlightIndex = 0;
+                    updateSearchHighlightDisplay();
                     searchNavDiv.classList.remove('hidden');
                 } else {
                     searchNavDiv.classList.add('hidden');
                 }
             }
 
-            function updateHighlightDisplay() {
-                highlightedElements.forEach((el, index) => {
-                    el.classList.remove('current-highlight');
-                    el.classList.add('highlight');
+            function updateSearchHighlightDisplay() {
+                searchHighlightedElements.forEach((el) => {
+                    el.classList.remove('current-search-highlight');
+                    el.classList.add('search-highlight');
                 });
 
-                if (highlightedElements.length > 0 && currentHighlightIndex !== -1) {
-                    const currentEl = highlightedElements[currentHighlightIndex];
-                    currentEl.classList.remove('highlight');
-                    currentEl.classList.add('current-highlight');
+                if (searchHighlightedElements.length > 0 && currentSearchHighlightIndex !== -1) {
+                    const currentEl = searchHighlightedElements[currentSearchHighlightIndex];
+                    currentEl.classList.remove('search-highlight');
+                    currentEl.classList.add('current-search-highlight');
                     currentEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    searchCountSpan.textContent = `${currentHighlightIndex + 1} of ${highlightedElements.length}`;
+                    searchCountSpan.textContent = `${currentSearchHighlightIndex + 1} of ${searchHighlightedElements.length}`;
                 } else {
                     searchCountSpan.textContent = '';
                 }
@@ -549,30 +585,122 @@
 
             searchInput.addEventListener('keydown', (event) => {
                 if (event.key === 'Enter') {
-                    event.preventDefault(); // Prevent form submission if input is in a form
-                    highlightText(mainContent, searchInput.value);
+                    event.preventDefault(); // Prevent form submission
+                    applySearchHighlights(mainContent, searchInput.value);
                 }
             });
 
             prevResultButton.addEventListener('click', () => {
-                if (highlightedElements.length === 0) return;
-                currentHighlightIndex = (currentHighlightIndex - 1 + highlightedElements.length) % highlightedElements.length;
-                updateHighlightDisplay();
+                if (searchHighlightedElements.length === 0) return;
+                currentSearchHighlightIndex = (currentSearchHighlightIndex - 1 + searchHighlightedElements.length) % searchHighlightedElements.length;
+                updateSearchHighlightDisplay();
             });
 
             nextResultButton.addEventListener('click', () => {
-                if (highlightedElements.length === 0) return;
-                currentHighlightIndex = (currentHighlightIndex + 1) % highlightedElements.length;
-                updateHighlightDisplay();
+                if (searchHighlightedElements.length === 0) return;
+                currentSearchHighlightIndex = (currentSearchHighlightIndex + 1) % searchHighlightedElements.length;
+                updateSearchHighlightDisplay();
             });
 
             // Back Button functionality
             const backButton = document.getElementById('back-button');
             backButton.addEventListener('click', () => {
                 document.getElementById('intro').scrollIntoView({ behavior: 'smooth' });
-                removeAllHighlights(); // Clear highlights when going back to intro
+                removeSearchHighlights(); // Clear search highlights when navigating away
                 searchInput.value = ''; // Clear search input
             });
+
+            // BCG Quadrant Hover Details
+            const bcgCells = document.querySelectorAll('.bcg-cell');
+            const bcgDetailPanel = document.getElementById('bcg-detail-panel');
+
+            const bcgDescriptions = {
+                'star': 'High market growth, high market share. These are the future leaders and require significant investment to maintain growth. Cashflow tends to be neutral.',
+                'question-mark': 'High market growth, low market share. Their future is uncertain; a firm must decide whether to invest heavily to turn them into stars or divest if the outlook is poor. They are cash negative.',
+                'cash-cow': 'Low market growth, high market share. These are mature, established businesses that generate more cash than they need. This surplus cash can be "milked" to fund other SBUs.',
+                'dog': 'Low market growth, low market share. These businesses are often divested because they neither generate significant cash nor have growth potential. Cashflow tends to be neutral or negative.'
+            };
+
+            bcgCells.forEach(cell => {
+                cell.addEventListener('mouseover', () => {
+                    const quadrant = cell.dataset.quadrant;
+                    if (bcgDescriptions[quadrant]) {
+                        bcgDetailPanel.textContent = bcgDescriptions[quadrant];
+                    }
+                });
+                cell.addEventListener('mouseout', () => {
+                    bcgDetailPanel.textContent = 'Hover over a BCG quadrant (Star, Question Mark, Cash Cow, or Dog) to see its detailed description here.';
+                });
+            });
+
+            // Persistent Key Phrase Highlighting Function
+            const keyPhrases = [
+                "Mergers and acquisitions",
+                "Winner's curse",
+                "Stretching and leveraging",
+                "Divestitures, spin offs, carve-outs",
+                "Strategic alliances",
+                "Relational governance"
+            ];
+
+            function applyKeyPhraseHighlights() {
+                keyPhrases.forEach(phrase => {
+                    const walker = document.createTreeWalker(
+                        mainContent,
+                        NodeFilter.SHOW_TEXT,
+                        {
+                            acceptNode: function(node) {
+                                // Exclude script, style, chart containers, and already highlighted key phrases
+                                if (node.nodeValue.trim().length === 0) return NodeFilter.FILTER_REJECT;
+                                if (node.parentNode.tagName === 'SCRIPT' || node.parentNode.tagName === 'STYLE') {
+                                    return NodeFilter.FILTER_REJECT;
+                                }
+                                let currentNode = node.parentNode;
+                                while (currentNode) {
+                                    if (currentNode.classList && (currentNode.classList.contains('chart-container') || currentNode.classList.contains('key-phrase-highlight'))) {
+                                        return NodeFilter.FILTER_REJECT;
+                                    }
+                                    currentNode = currentNode.parentNode;
+                                }
+                                return NodeFilter.FILTER_ACCEPT;
+                            }
+                        },
+                        false
+                    );
+
+                    let node;
+                    while ((node = walker.nextNode())) {
+                        const text = node.nodeValue;
+                        const lowerCaseText = text.toLowerCase();
+                        const lowerCasePhrase = phrase.toLowerCase();
+                        let lastIndex = 0;
+                        const fragment = document.createDocumentFragment();
+                        let foundInNode = false;
+
+                        while (lastIndex < text.length) {
+                            const index = lowerCaseText.indexOf(lowerCasePhrase, lastIndex);
+                            if (index === -1) {
+                                fragment.appendChild(document.createTextNode(text.substring(lastIndex)));
+                                break;
+                            } else {
+                                foundInNode = true;
+                                fragment.appendChild(document.createTextNode(text.substring(lastIndex, index)));
+                                const highlightSpan = document.createElement('span');
+                                highlightSpan.className = 'key-phrase-highlight';
+                                highlightSpan.textContent = text.substring(index, index + phrase.length);
+                                fragment.appendChild(highlightSpan);
+                                lastIndex = index + phrase.length;
+                            }
+                        }
+                        if (foundInNode && fragment.childNodes.length > 0) {
+                            node.parentNode.replaceChild(fragment, node);
+                        }
+                    }
+                });
+            }
+
+            // Apply persistent key phrase highlights on page load
+            applyKeyPhraseHighlights();
         });
     </script>
 </body>
