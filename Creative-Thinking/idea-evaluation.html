@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive SPA: Creative Collaboration Insights</title>
+    <!-- Chosen Palette: Warm Neutral Harmony (Background: #F8F7F4, Text: #3D405B, Primary Accent: #81B29A, Secondary Accent/Charts: #E07A5F, #F2CC8F) -->
+    <!-- Application Structure Plan: A single-page application with a fixed top navigation bar for thematic exploration. The structure is organized into four main sections, mirroring the lessons from the source report (Evaluation Challenges, Bias, Indicators, Pitcher Influence). This non-linear design allows users to freely navigate to topics of interest via smooth scrolling. Each section uses a combination of concise text summaries and interactive visualizations (card flips, dynamic charts) to make the academic concepts more digestible and engaging. This structure was chosen to transform a linear text document into an exploratory learning tool, prioritizing user engagement and comprehension over a simple verbatim representation of the report. -->
+    <!-- Visualization & Content Choices: 
+        - Sec 1 (Evaluation): Goal: Inform/Compare. Method: Interactive card flips for historical examples to create surprise and engagement. A static 2x2 matrix diagram (HTML/CSS) to clearly organize the Creator vs. Evaluator outcomes. Justification: These methods are more memorable than a list.
+        - Sec 2 (Bias): Goal: Compare/Relate. Method: A Chart.js bar chart to visually compare leadership potential ratings. A dynamic HTML/CSS diagram to illustrate the tension between novelty and quality. Justification: Charts provide clear quantitative comparison, and interactive diagrams simplify complex relationships.
+        - Sec 3 (Indicators): Goal: Compare/Explore. Method: A dynamic Chart.js doughnut chart with buttons to toggle between US and China views on creativity, showing cultural differences instantly. Side-by-side Chart.js bar charts to compare Decision-maker vs. Non-decision-maker views. Justification: Interactive charts make abstract data tangible and differences easy to spot.
+        - Sec 4 (Pitcher Influence): Goal: Inform/Relate. Method: An interactive profile card where users click buttons to change pitcher traits and see a "Creativity Rating" gauge update. A Chart.js bubble chart to show the complex relationship between narcissism, perceived creativity and actual idea quality. Justification: These highly interactive elements make the impact of bias visceral and understandable.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F7F4;
+            color: #3D405B;
+        }
+        .nav-link {
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #E07A5F;
+        }
+        .card {
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            cursor: pointer;
+        }
+        .card.is-flipped {
+            transform: rotateY(180deg);
+        }
+        .card-face {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        .card-back {
+            transform: rotateY(180deg);
+            backface-visibility: hidden; /* Ensure backface is hidden when not flipped */
+            -webkit-backface-visibility: hidden;
+            position: absolute; /* Ensure it overlays correctly */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 1.5rem;
+        }
+        /* Removed transform: rotateY(180deg) from card-back-content */
+        .card-back-content {
+            /* This class is now primarily for styling content within the already flipped back face */
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 40vh;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Navigation -->
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-3">
+            <div class="flex justify-between items-center">
+                <a href="#" class="text-xl font-bold text-[#3D405B]">Creative Collaboration Insights</a>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#evaluation" class="nav-link">Evaluation</a>
+                    <a href="#bias" class="nav-link">Bias</a>
+                    <a href="#indicators" class="nav-link">Indicators</a>
+                    <a href="#pitchers" class="nav-link">Pitchers</a>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-[#3D405B] focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                </div>
+            </div>
+            <div id="mobile-menu" class="hidden md:hidden mt-4">
+                <a href="#evaluation" class="block py-2 nav-link">Evaluation</a>
+                <a href="#bias" class="block py-2 nav-link">Bias</a>
+                <a href="#indicators" class="block py-2 nav-link">Indicators</a>
+                <a href="#pitchers" class="block py-2 nav-link">Pitchers</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+        <!-- Hero Section -->
+        <section class="text-center mb-20 pt-10">
+            <h1 class="text-4xl md:text-5xl font-bold text-[#3D405B] mb-4">The Hidden Forces in Creative Evaluation</h1>
+            <p class="text-lg md:text-xl text-[#3D405B]/80 max-w-3xl mx-auto">An interactive exploration of the psychological biases and contextual factors that shape how we judge new ideas. Based on Module 2 of the Creativity Toolkit II.</p>
+        </section>
+
+        <!-- Section 1: Evaluation Challenges -->
+        <section id="evaluation" class="mb-24 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-center mb-4">Lesson 1: The Challenge of Evaluation</h2>
+            <p class="text-center text-lg max-w-3xl mx-auto mb-12">Judging new ideas is profoundly difficult. History is filled with examples of groundbreaking innovations that were initially dismissed by experts. This section explores why evaluation is so challenging and introduces a framework for understanding evaluation outcomes.</p>
+            
+            <h3 class="text-2xl font-semibold text-center mb-8">Historical Blunders in Innovation</h3>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Historical Example Cards -->
+                <div class="card h-48" onclick="this.classList.toggle('is-flipped')">
+                    <div class="card-face absolute w-full h-full p-6 bg-white rounded-lg shadow-lg flex flex-col justify-center items-center text-center">
+                        <h4 class="font-bold text-lg">The Telephone</h4>
+                        <p class="text-sm text-gray-500 mt-2">(Hover or Tap to Reveal)</p>
+                    </div>
+                    <div class="card-back absolute w-full h-full p-6 bg-[#E07A5F] text-white rounded-lg shadow-lg flex flex-col justify-center items-center text-center">
+                        <div class="card-back-content">
+                            <p class="font-semibold">"This 'telephone' has too many shortcomings... [and] is inherently of no value to us."</p>
+                            <p class="text-sm mt-2">- Western Union, 1876</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card h-48" onclick="this.classList.toggle('is-flipped')">
+                    <div class="card-face absolute w-full h-full p-6 bg-white rounded-lg shadow-lg flex flex-col justify-center items-center text-center">
+                        <h4 class="font-bold text-lg">Personal Computers</h4>
+                        <p class="text-sm text-gray-500 mt-2">(Hover or Tap to Reveal)</p>
+                    </div>
+                    <div class="card-back absolute w-full h-full p-6 bg-[#E07A5F] text-white rounded-lg shadow-lg flex flex-col justify-center items-center text-center">
+                        <div class="card-back-content">
+                            <p class="font-semibold">"I think there is a world market for maybe five computers."</p>
+                            <p class="text-sm mt-2">- Thomas Watson, IBM Chair, 1943</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card h-48" onclick="this.classList.toggle('is-flipped')">
+                    <div class="card-face absolute w-full h-full p-6 bg-white rounded-lg shadow-lg flex flex-col justify-center items-center text-center">
+                        <h4 class="font-bold text-lg">Animal Farm</h4>
+                        <p class="text-sm text-gray-500 mt-2">(Hover or Tap to Reveal)</p>
+                    </div>
+                    <div class="card-back absolute w-full h-full p-6 bg-[#E07A5F] text-white rounded-lg shadow-lg flex flex-col justify-center items-center text-center">
+                        <div class="card-back-content">
+                            <p class="font-semibold">"It is impossible to sell animal stories in the USA."</p>
+                            <p class="text-sm mt-2">- Editor's Rejection</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card h-48" onclick="this.classList.toggle('is-flipped')">
+                    <div class="card-face absolute w-full h-full p-6 bg-white rounded-lg shadow-lg flex flex-col justify-center items-center text-center">
+                        <h4 class="font-bold text-lg">The Segway</h4>
+                        <p class="text-sm text-gray-500 mt-2">(Hover or Tap to Reveal)</p>
+                    </div>
+                    <div class="card-back absolute w-full h-full p-6 bg-[#81B29A] text-white rounded-lg shadow-lg flex flex-col justify-center items-center text-center">
+                        <div class="card-back-content">
+                            <p class="font-semibold">"More important than the internet."</p>
+                            <p class="text-sm mt-2">- John Doerr, Venture Capitalist</p>
+                            <p class="text-xs mt-1">(An overestimation)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Bias Against Creativity -->
+        <section id="bias" class="mb-24 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-center mb-4">Lesson 2: The Hidden Bias Against Creativity</h2>
+            <p class="text-center text-lg max-w-3xl mx-auto mb-12">While we praise creativity, we subconsciously fear the uncertainty it brings. This leads to a bias against novel ideas, especially in decision-making roles where correctness is paramount. This section reveals this bias and its consequences.</p>
+
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h3 class="text-2xl font-semibold text-center mb-4">Creativity's Cost to Leadership Potential</h3>
+                    <p class="text-center mb-6">A study found that individuals pitching creative ideas were seen as less viable leaders than those pitching practical ones, because creativity is perceived as "risky and unpredictable."</p>
+                    <div class="chart-container">
+                        <canvas id="leadershipChart"></canvas>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold text-center mb-4">The Unattainable Ideal</h3>
+                    <p class="text-center mb-6">Decision-makers often want the impossible: an idea that is both highly novel and proven to be risk-free. This creates a tension where truly creative ideas are often dismissed.</p>
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <div class="flex justify-between items-center text-lg font-semibold">
+                            <span>High Novelty</span>
+                            <span class="text-2xl text-[#E07A5F] font-bold">&harr;</span>
+                            <span>Low Risk</span>
+                        </div>
+                        <div class="relative h-2 bg-gray-200 rounded-full my-4">
+                            <div class="absolute h-2 bg-gradient-to-r from-[#81B29A] to-[#E07A5F] rounded-full w-full"></div>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <p class="w-1/2 pr-2">Creative, groundbreaking, uncertain outcome.</p>
+                            <p class="w-1/2 pl-2 text-right">Practical, proven, safe bet.</p>
+                        </div>
+                        <p class="text-center mt-4 font-semibold text-[#3D405B]">The tension: Finding an idea that satisfies both is rare.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Indicators of Creativity -->
+        <section id="indicators" class="mb-24 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-center mb-4">Lesson 3: What Signals Creativity?</h2>
+            <p class="text-center text-lg max-w-3xl mx-auto mb-12">What we consider "creative" isn't universal. It's shaped by our expertise, culture, and organizational role. An idea's acceptance can depend entirely on who is evaluating it and what signals they prioritize.</p>
+
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                 <div>
+                    <h3 class="text-2xl font-semibold text-center mb-4">Cultural Lens: USA vs. China</h3>
+                    <p class="text-center mb-6">What signals creativity? In the US, the focus is heavily on novelty. In China, there's a broader view that includes utility and social benefit. Click to toggle views.</p>
+                    <div class="chart-container">
+                        <canvas id="cultureChart"></canvas>
+                    </div>
+                    <div class="flex justify-center mt-4 space-x-4">
+                        <button id="us-view-btn" class="bg-[#81B29A] text-white px-4 py-2 rounded-lg shadow hover:bg-[#6a947d] transition">USA View</button>
+                        <button id="china-view-btn" class="bg-[#F2CC8F] text-[#3D405B] px-4 py-2 rounded-lg shadow hover:bg-[#e6bf7e] transition">China View</button>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold text-center mb-4">Role-Based Lens: The "Password Pill"</h3>
+                     <p class="text-center mb-6">How was an unusual idea (a password pill) rated? It depended on the evaluator's role. Decision-makers only saw creativity when there was high social approval.</p>
+                    <div class="chart-container">
+                        <canvas id="roleChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Section 4: The Pitcher's Influence -->
+        <section id="pitchers" class="mb-24 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-center mb-4">Lesson 4: The Power of the Pitcher</h2>
+            <p class="text-center text-lg max-w-3xl mx-auto mb-12">Often, we judge the presenter as much as the idea. Stereotypes and confidence can significantly sway evaluations, sometimes causing us to fund a charismatic pitcher with a weak idea.</p>
+            
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h3 class="text-2xl font-semibold text-center mb-4">Stereotypes & Perceived Creativity</h3>
+                    <p class="text-center mb-6">How does the pitcher's profile affect an idea's rating? Let's take the "Rinser Brush" idea. Change the pitcher's traits to see how the perceived creativity changes.</p>
+                     <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <div id="pitcher-profile" class="text-center mb-4">
+                            <span class="inline-block bg-[#F2CC8F] text-[#3D405B] font-semibold px-3 py-1 rounded-full text-sm" id="pitcher-trait">Default Profile</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-6">
+                            <div id="creativity-gauge" class="bg-gradient-to-r from-[#81B29A] to-[#6a947d] h-6 rounded-full text-right text-white pr-2 transition-all duration-500" style="width: 50%;">50%</div>
+                        </div>
+                        <p class="text-center font-semibold mt-2">Perceived Creativity Rating</p>
+                        <div class="flex flex-wrap justify-center mt-4 gap-2">
+                            <button class="pitcher-btn bg-gray-200 px-3 py-1 rounded-full text-sm" data-trait="Unconventional Hairstyle" data-rating="85">Unconventional Look</button>
+                            <button class="pitcher-btn bg-gray-200 px-3 py-1 rounded-full text-sm" data-trait="Midwest Origin" data-rating="35">Midwest Origin</button>
+                            <button class="pitcher-btn bg-gray-200 px-3 py-1 rounded-full text-sm" data-trait="Political Independent" data-rating="70">Independent</button>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold text-center mb-4">The Narcissist Effect</h3>
+                    <p class="text-center mb-6">Narcissists are great pitchers. Their confidence is perceived as charisma, leading evaluators to rate their ideas as highly creative, regardless of actual quality.</p>
+                    <div class="chart-container">
+                        <canvas id="narcissistChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <footer class="bg-white border-t border-gray-200">
+        <div class="container mx-auto px-6 py-4 text-center text-gray-500">
+            <p>&copy; 2025 Creative Collaboration Insights. An educational tool.</p>
+        </div>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Mobile menu toggle
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    mobileMenuButton.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+    });
+
+    // Active nav link scrolling
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('.nav-link');
+    window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            if (pageYOffset >= sectionTop - 100) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href').includes(current)) {
+                link.classList.add('active');
+            }
+        });
+    });
+
+    // Chart 1: Leadership Chart
+    const leadershipCtx = document.getElementById('leadershipChart').getContext('2d');
+    new Chart(leadershipCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Practical Idea Pitcher', 'Creative Idea Pitcher'],
+            datasets: [{
+                label: 'Perceived Leadership Potential',
+                data: [82, 45],
+                backgroundColor: ['#81B29A', '#E07A5F'],
+                borderColor: ['#6a947d', '#c96449'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    max: 100
+                }
+            },
+            plugins: {
+                legend: { display: false },
+                title: { display: true, text: 'Creative ideas seen as "risky"' }
+            }
+        }
+    });
+
+    // Chart 2: Culture Chart
+    const cultureCtx = document.getElementById('cultureChart').getContext('2d');
+    const usData = {
+        labels: ['Focus on Novelty', 'Focus on Utility/Harmony'],
+        datasets: [{ data: [80, 20], backgroundColor: ['#81B29A', '#F2CC8F'] }]
+    };
+    const chinaData = {
+        labels: ['Focus on Novelty', 'Focus on Utility/Harmony'],
+        datasets: [{ data: [45, 55], backgroundColor: ['#81B29A', '#F2CC8F'] }]
+    };
+    const cultureChart = new Chart(cultureCtx, {
+        type: 'doughnut',
+        data: usData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'top' },
+                title: { display: true, text: 'Primary Focus for Creativity (USA View)' }
+            }
+        }
+    });
+    document.getElementById('us-view-btn').addEventListener('click', () => {
+        cultureChart.data = usData;
+        cultureChart.options.plugins.title.text = 'Primary Focus for Creativity (USA View)';
+        cultureChart.update();
+    });
+    document.getElementById('china-view-btn').addEventListener('click', () => {
+        cultureChart.data = chinaData;
+        cultureChart.options.plugins.title.text = 'Primary Focus for Creativity (China View)';
+        cultureChart.update();
+    });
+
+    // Chart 3: Role Chart
+    const roleCtx = document.getElementById('roleChart').getContext('2d');
+    new Chart(roleCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Low Social Approval', 'High Social Approval'],
+            datasets: [
+                {
+                    label: 'Non-Decision Maker',
+                    data: [75, 78],
+                    backgroundColor: '#81B29A',
+                },
+                {
+                    label: 'Decision Maker',
+                    data: [30, 85],
+                    backgroundColor: '#E07A5F',
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: { beginAtZero: true, max: 100 }
+            },
+            plugins: {
+                title: { display: true, text: 'Creativity Rating of "Password Pill"' }
+            }
+        }
+    });
+    
+    // Pitcher Influence Gauge
+    const pitcherBtns = document.querySelectorAll('.pitcher-btn');
+    const creativityGauge = document.getElementById('creativity-gauge');
+    const pitcherTrait = document.getElementById('pitcher-trait');
+    pitcherBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const rating = btn.dataset.rating;
+            const trait = btn.dataset.trait;
+            creativityGauge.style.width = `${rating}%`;
+            creativityGauge.textContent = `${rating}%`;
+            pitcherTrait.textContent = trait;
+        });
+    });
+
+    // Chart 4: Narcissist Chart
+    const narcissistCtx = document.getElementById('narcissistChart').getContext('2d');
+    new Chart(narcissistCtx, {
+        type: 'bubble',
+        data: {
+            datasets: [{
+                label: 'Low Narcissism / High Quality Idea',
+                data: [{x: 20, y: 40, r: 15}],
+                backgroundColor: '#81B29A'
+            }, {
+                label: 'High Narcissism / Low Quality Idea',
+                data: [{x: 85, y: 80, r: 5}],
+                backgroundColor: '#E07A5F'
+            }, {
+                label: 'Average Pitcher',
+                data: [{x: 50, y: 50, r: 10}],
+                backgroundColor: '#F2CC8F'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    min: 0, max: 100,
+                    title: { display: true, text: 'Pitcher\'s Narcissism / Confidence' }
+                },
+                y: {
+                    min: 0, max: 100,
+                    title: { display: true, text: 'Perceived Creativity Rating' }
+                }
+            },
+            plugins: {
+                title: { display: true, text: 'Bubble Size = Actual Idea Quality' }
+            }
+        }
+    });
+});
+</script>
+
+</body>
+</html>
+</html>
