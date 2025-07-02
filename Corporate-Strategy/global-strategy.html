@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Guide to Global Strategy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals & Slate -->
+    <!-- Application Structure Plan: The application is designed as a narrative journey through global strategy, starting with the "Why," moving to the "How," exploring the "Where" (competitive advantage), and concluding with the "What" (MNE strategies). This thematic flow is more intuitive for learning than a linear chapter structure. Key interactions include clickable cards for motivations, a dynamic slider for entry modes, an interactive diagram for Porter's Diamond, and a clickable 2x2 matrix for MNE strategies. This structure facilitates exploration and comparison, enhancing user understanding. -->
+    <!-- Visualization & Content Choices: 
+        - Motivations (Why Go Global?): Goal: Inform/Organize. Method: Interactive cards (HTML/JS). Justification: Engages users to explore each motivation individually.
+        - Entry Modes (How to Enter?): Goal: Compare. Method: Interactive slider (HTML/JS). Justification: Visually represents the spectrum of risk vs. control, making the trade-offs clear.
+        - Porter's Diamond (Where to Win?): Goal: Organize/Inform. Method: Interactive diagram (HTML/JS). Justification: Transforms a static framework into an explorable tool.
+        - MNE Strategies (What to Play?): Goal: Compare/Analyze. Method: Interactive 2x2 matrix (HTML/JS/Chart.js). Justification: Directly maps the core tension (cost vs. responsiveness) to the four strategies, providing a clear comparative visualization. Library: Chart.js is used for the matrix visualization.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F7F4;
+            color: #334155;
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #D97706; 
+            border-bottom-color: #D97706;
+        }
+        .section-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            border: 1px solid #E2E8F0;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.1);
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.75);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        .modal-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background-color: #F8F7F4;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            max-width: 90%;
+            width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.95);
+            transition: transform 0.3s;
+        }
+        .modal-overlay.visible .modal-content {
+            transform: scale(1);
+        }
+        .chart-container { 
+            position: relative; 
+            width: 100%; 
+            max-width: 700px; 
+            margin-left: auto; 
+            margin-right: auto; 
+            height: 400px;
+            max-height: 50vh; 
+        }
+        @media (min-width: 768px) { .chart-container { height: 500px; } }
+        .highlight {
+            background-color: #FACC15; /* Tailwind yellow-400 */
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Navigation -->
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-40 border-b border-slate-200">
+        <nav class="container mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center mb-2 md:mb-0">
+                <a href="corporate-strategy-hub.html" class="flex items-center text-slate-600 hover:text-amber-700 transition mr-4">
+                    <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    <span class="text-sm">Back</span>
+                </a>
+                <h1 class="text-xl font-bold text-slate-800">Global Strategy Explorer</h1>
+            </div>
+            <div class="flex items-center space-x-4 md:space-x-8">
+                <div class="hidden md:flex space-x-8">
+                    <a href="#why-go-global" class="nav-link border-b-2 border-transparent pb-1">Why Go Global?</a>
+                    <a href="#how-to-enter" class="nav-link border-b-2 border-transparent pb-1">How to Enter?</a>
+                    <a href="#where-to-win" class="nav-link border-b-2 border-transparent pb-1">Where to Win?</a>
+                    <a href="#what-to-play" class="nav-link border-b-2 border-transparent pb-1">What to Play?</a>
+                </div>
+                <div class="relative flex items-center">
+                    <input type="text" id="search-input" placeholder="Search..." class="px-3 py-1 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm w-32 md:w-48">
+                    <button id="search-button" class="ml-2 px-3 py-1 bg-amber-600 text-white rounded-md hover:bg-amber-700 transition text-sm">Search</button>
+                </div>
+                <button id="mobile-menu-button" class="md:hidden focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden">
+            <a href="#why-go-global" class="block py-2 px-6 text-sm hover:bg-slate-100">Why Go Global?</a>
+            <a href="#how-to-enter" class="block py-2 px-6 text-sm hover:bg-slate-100">How to Enter?</a>
+            <a href="#where-to-win" class="block py-2 px-6 text-sm hover:bg-slate-100">Where to Win?</a>
+            <a href="#what-to-play" class="block py-2 px-6 text-sm hover:bg-slate-100">What to Play?</a>
+        </div>
+    </header>
+
+    <main id="main-content" class="container mx-auto px-6 py-8 md:py-12">
+
+        <!-- Hero Section -->
+        <section class="text-center mb-16 md:mb-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-slate-900 mb-4">The World is Your Market</h2>
+            <p class="text-lg md:text-xl max-w-3xl mx-auto text-slate-600">
+                This guide translates the core principles of Global Corporate Strategy into an interactive experience. Explore the critical decisions companies face when expanding beyond their domestic borders, from initial motivations to complex multinational strategies.
+            </p>
+        </section>
+
+        <!-- Section 1: Why Go Global? -->
+        <section id="why-go-global" class="mb-16 md:mb-24 scroll-mt-20">
+            <h3 class="text-3xl font-bold text-center mb-4 text-slate-800">1. Why Go Global?</h3>
+            <p class="text-center text-slate-600 max-w-2xl mx-auto mb-12">Companies venture abroad for a multitude of strategic reasons, each presenting unique opportunities and challenges. This section explores the primary motivations driving international expansion. Click on a card to learn more about each driver.</p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Motivation Cards -->
+                <div class="section-card p-6 cursor-pointer" onclick="showModal('motivation-market')">
+                    <h4 class="font-bold text-xl mb-2 text-amber-700">Access Larger Markets</h4>
+                    <p class="text-slate-600">Expand customer base and revenue streams by tapping into new geographic regions.</p>
+                </div>
+                <div class="section-card p-6 cursor-pointer" onclick="showModal('motivation-factors')">
+                    <h4 class="font-bold text-xl mb-2 text-amber-700">Access Lower-Cost Factors</h4>
+                    <p class="text-slate-600">Gain efficiencies by accessing cheaper labor, raw materials, or technology abroad.</p>
+                </div>
+                <div class="section-card p-6 cursor-pointer" onclick="showModal('motivation-risk')">
+                    <h4 class="font-bold text-xl mb-2 text-amber-700">Reduce Business Risk</h4>
+                    <p class="text-slate-600">Diversify operations across multiple countries to mitigate domestic market volatility.</p>
+                </div>
+                <div class="section-card p-6 cursor-pointer" onclick="showModal('motivation-leverage')">
+                    <h4 class="font-bold text-xl mb-2 text-amber-700">Leverage Core Capabilities</h4>
+                    <p class="text-slate-600">Apply existing strengths, like brand or operational expertise, to new international contexts.</p>
+                </div>
+                <div class="section-card p-6 cursor-pointer" onclick="showModal('motivation-develop')">
+                    <h4 class="font-bold text-xl mb-2 text-amber-700">Develop New Capabilities</h4>
+                    <p class="text-slate-600">Learn from foreign operations and gain location-specific advantages, like technical talent.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: How to Enter Foreign Markets? -->
+        <section id="how-to-enter" class="mb-16 md:mb-24 scroll-mt-20">
+            <h3 class="text-3xl font-bold text-center mb-4 text-slate-800">2. How to Enter Foreign Markets?</h3>
+            <p class="text-center text-slate-600 max-w-2xl mx-auto mb-12">Choosing an entry mode is a critical strategic decision involving a trade-off between control and commitment. Lower commitment reduces risk but also limits control and potential returns. Use the slider to explore the spectrum of entry modes.</p>
+            <div class="section-card p-8">
+                <div class="mb-8">
+                    <label for="entry-mode-slider" class="block mb-2 font-medium text-slate-700">Investment & Control Level:</label>
+                    <input type="range" id="entry-mode-slider" min="0" max="4" value="0" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                    <div class="w-full flex justify-between text-xs mt-2 text-slate-500">
+                        <span>Low</span>
+                        <span>Medium-Low</span>
+                        <span>Medium</span>
+                        <span>Medium-High</span>
+                        <span>High</span>
+                    </div>
+                </div>
+                <div id="entry-mode-details" class="bg-amber-50 p-6 rounded-lg border border-amber-200">
+                    <!-- Details will be populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Where to Win? Porter's Diamond -->
+        <section id="where-to-win" class="mb-16 md:mb-24 scroll-mt-20">
+            <h3 class="text-3xl font-bold text-center mb-4 text-slate-800">3. Where to Win?</h3>
+            <p class="text-center text-slate-600 max-w-2xl mx-auto mb-12">A nation's competitive advantage in a specific industry is not random. Michael Porter's Diamond Model explains how four key attributes of a home market create an environment that can foster or hinder global competitiveness. Click each point of the diamond to explore.</p>
+            <div class="section-card p-8 flex flex-col lg:flex-row items-center gap-8">
+                <div class="w-full lg:w-1/2 flex justify-center items-center">
+                    <div class="relative w-64 h-64 md:w-80 md:h-80">
+                        <!-- Central background diamond (smaller) -->
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-32 h-32 md:w-48 md:h-48 bg-slate-100 transform rotate-45 rounded-2xl border border-slate-300 z-5"></div>
+                        </div>
+                        <!-- Central text -->
+                        <div class="absolute inset-0 flex items-center justify-center text-slate-700 font-semibold text-center p-4 z-15">National<br>Competitive<br>Advantage</div>
+
+                        <!-- Connecting lines (from center towards outer labels) -->
+                        <!-- Top line -->
+                        <div class="absolute w-0.5 h-[calc(50%-2.5rem)] bg-slate-400 top-1/2 left-1/2 -translate-x-1/2 -translate-y-full z-10"></div>
+                        <!-- Right line -->
+                        <div class="absolute h-0.5 w-[calc(50%-2.5rem)] bg-slate-400 top-1/2 left-1/2 -translate-y-1/2 translate-x-full z-10"></div>
+                        <!-- Bottom line -->
+                        <div class="absolute w-0.5 h-[calc(50%-2.5rem)] bg-slate-400 top-1/2 left-1/2 -translate-x-1/2 translate-y-0 z-10"></div>
+                        <!-- Left line -->
+                        <div class="absolute h-0.5 w-[calc(50%-2.5rem)] bg-slate-400 top-1/2 left-1/2 -translate-y-1/2 -translate-x-full z-10"></div>
+
+                        <!-- Diamond points (labels) -->
+                        <div id="diamond-factor" class="diamond-point absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20" onclick="showDiamondDetail('factor')">Factor Conditions</div>
+                        <div id="diamond-demand" class="diamond-point absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 z-20" onclick="showDiamondDetail('demand')">Demand Conditions</div>
+                        <div id="diamond-related" class="diamond-point absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 z-20" onclick="showDiamondDetail('related')">Related Industries</div>
+                        <div id="diamond-intensity" class="diamond-point absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 z-20" onclick="showDiamondDetail('intensity')">Competitive Intensity</div>
+                    </div>
+                </div>
+                <div id="diamond-details-pane" class="w-full lg:w-1/2 min-h-[250px] bg-slate-50 p-6 rounded-lg border border-slate-200">
+                     <!-- Details will be populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: What to Play? MNE Strategies -->
+        <section id="what-to-play" class="scroll-mt-20">
+            <h3 class="text-3xl font-bold text-center mb-4 text-slate-800">4. What to Play?</h3>
+            <p class="text-center text-slate-600 max-w-2xl mx-auto mb-12">Multinational Enterprises (MNEs) must balance two fundamental pressures: the need to reduce costs and the need to be locally responsive. The interplay of these pressures defines four primary global strategies. Click on any quadrant of the chart to see details.</p>
+            <div class="section-card p-4 md:p-8">
+                <div class="chart-container">
+                    <canvas id="mne-strategy-chart"></canvas>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal Structure -->
+    <div id="modal-container" class="modal-overlay" onclick="closeAllModals()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div id="modal-body"></div>
+            <button onclick="closeAllModals()" class="mt-6 w-full bg-amber-600 text-white py-2 px-4 rounded-lg hover:bg-amber-700 transition">Close</button>
+        </div>
+    </div>
+    
+    <div id="modal-templates" class="hidden">
+        <!-- Motivation Modals -->
+        <div id="motivation-market-content">
+            <h3 class="text-2xl font-bold mb-4 text-amber-800">Access Larger Markets</h3>
+            <p class="text-slate-700 mb-2">The most common driver for internationalization is the pursuit of growth. By entering new countries, firms can significantly expand their potential customer base beyond the confines of their domestic market.</p>
+            <p class="text-slate-600 text-sm"><strong>Examples:</strong> Companies target economically developed regions like OECD countries or high-growth emerging markets like China and India, where a rising middle class creates new demand. For instance, China now accounts for a massive share of global luxury brand sales.</p>
+        </div>
+        <div id="motivation-factors-content">
+            <h3 class="text-2xl font-bold mb-4 text-amber-800">Access Better or Lower-Cost Factors of Production</h3>
+            <p class="text-slate-700 mb-2">Firms often go abroad to find more efficient or cheaper inputs for their production processes. This can provide a significant cost advantage.</p>
+            <p class="text-slate-600 text-sm"><strong>Examples:</strong> This includes cheaper **labor** (e.g., iRobot manufacturing in China), access to **natural resources** (e.g., the oil industry), or specialized **technology and talent** (e.g., setting up an IT development center in India).</p>
+        </div>
+        <div id="motivation-risk-content">
+            <h3 class="text-2xl font-bold mb-4 text-amber-800">Reduce Overall Business Risk</h3>
+            <p class="text-slate-700 mb-2">By diversifying operations geographically, companies can insulate themselves from the economic downturns, political instability, or market saturation in any single country.</p>
+            <p class="text-slate-600 text-sm"><strong>Concept:</strong> This is a classic diversification strategy applied to geography. If the home market struggles, strong performance in other regions can stabilize the company's overall financial health.</p>
+        </div>
+        <div id="motivation-leverage-content">
+            <h3 class="text-2xl font-bold mb-4 text-amber-800">Leverage Core Capabilities</h3>
+            <p class="text-slate-700 mb-2">International expansion allows firms to get more mileage out of their existing strengths and proprietary assets.</p>
+            <p class="text-slate-600 text-sm"><strong>Examples:</strong> Companies with strong brands, patented technology, or efficient operational models (like McDonald's or Yum! Brands' franchise systems) can deploy these capabilities in new markets to create value.</p>
+        </div>
+        <div id="motivation-develop-content">
+            <h3 class="text-2xl font-bold mb-4 text-amber-800">Develop New Capabilities</h3>
+            <p class="text-slate-700 mb-2">Operating abroad is a powerful learning opportunity. Firms can gain new skills and insights that can enhance their global competitiveness.</p>
+            <p class="text-slate-600 text-sm"><strong>Examples:</strong> A firm might develop expertise in managing complex supply chains by operating in Southeast Asia, or it could learn about new consumer trends from a sophisticated market like Japan. John Deere's expansion into India forces it to learn how to compete in a market dominated by smaller tractors, developing new product capabilities.</p>
+        </div>
+         <!-- MNE Strategy Modals -->
+        <div id="strategy-international-content">
+            <h3 class="text-2xl font-bold mb-4 text-slate-800">International Strategy</h3>
+            <p class="text-slate-700 mb-2"><strong>Position:</strong> Low pressure for cost reduction, low pressure for local responsiveness.</p>
+            <p class="text-slate-700 mb-4">This strategy involves taking products first produced for the domestic market and selling them internationally with only minimal local customization. It's often the first step for companies venturing abroad.</p>
+            <div class="space-y-3">
+                <p><strong class="text-emerald-700">Benefits:</strong> Leverages existing core competencies, relatively simple to implement, can use low-risk entry modes like exporting.</p>
+                <p><strong class="text-red-700">Risks:</strong> Limited local responsiveness can lead to missed market opportunities, vulnerability to exchange rates, and risk of IP theft.</p>
+                <p class="text-sm"><strong>Examples:</strong> Rolex, Harley-Davidson, Starbucks (initially).</p>
+            </div>
+        </div>
+        <div id="strategy-localization-content">
+            <h3 class="text-2xl font-bold mb-4 text-slate-800">Localization (Multidomestic) Strategy</h3>
+            <p class="text-slate-700 mb-2"><strong>Position:</strong> Low pressure for cost reduction, high pressure for local responsiveness.</p>
+            <p class="text-slate-700 mb-4">This strategy prioritizes tailoring products and services to fit local consumer preferences and host-country requirements. The goal is to act like a domestic company in each market.</p>
+             <div class="space-y-3">
+                <p><strong class="text-emerald-700">Benefits:</strong> Maximizes local relevance and market share, reduces exchange rate exposure.</p>
+                <p><strong class="text-red-700">Risks:</strong> High cost due to duplication of business functions, forfeits economies of scale, can have limited learning across different country divisions.</p>
+                <p class="text-sm"><strong>Examples:</strong> Nestlé, which customizes its food products extensively for different markets.</p>
+            </div>
+        </div>
+        <div id="strategy-global-content">
+            <h3 class="text-2xl font-bold mb-4 text-slate-800">Global-Standardization Strategy</h3>
+            <p class="text-slate-700 mb-2"><strong>Position:</strong> High pressure for cost reduction, low pressure for local responsiveness.</p>
+            <p class="text-slate-700 mb-4">This strategy focuses on reaping cost reductions from economies of scale, learning effects, and location economies. The MNE offers a standardized product worldwide.</p>
+             <div class="space-y-3">
+                <p><strong class="text-emerald-700">Benefits:</strong> Achieves low-cost position through global-scale efficiencies and division of labor.</p>
+                <p><strong class="text-red-700">Risks:</strong> Lack of local responsiveness, little product differentiation, potential for a "race to the bottom" on wages and standards.</p>
+                <p class="text-sm"><strong>Examples:</strong> Lenovo, Infosys, and Tesla with its Gigafactories aimed at standardized global production.</p>
+            </div>
+        </div>
+        <div id="strategy-transnational-content">
+            <h3 class="text-2xl font-bold mb-4 text-slate-800">Transnational Strategy</h3>
+            <p class="text-slate-700 mb-2"><strong>Position:</strong> High pressure for cost reduction, high pressure for local responsiveness.</p>
+            <p class="text-slate-700 mb-4">The most complex strategy, it attempts to achieve both low costs through global-scale efficiency and high local responsiveness. It requires fostering a global learning environment where knowledge and best practices flow between headquarters and subsidiaries.</p>
+             <div class="space-y-3">
+                <p><strong class="text-emerald-700">Benefits:</strong> "Best of both worlds" – combines global efficiencies with local adaptation, fosters global learning.</p>
+                <p><strong class="text-red-700">Risks:</strong> Very difficult to implement, complex and costly matrix structures can lead to internal confusion and conflicting goals.</p>
+                <p class="text-sm"><strong>Examples:</strong> P&G, John Deere, Haier, which standardizes internal components but customizes appliance designs for different markets.</p>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Mobile Menu
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // Entry Mode Slider
+            const slider = document.getElementById('entry-mode-slider');
+            const detailsPane = document.getElementById('entry-mode-details');
+            const entryModes = [
+                {
+                    name: 'Exporting',
+                    desc: 'Producing goods in one country and selling them in another. This is the least complex and lowest-risk entry strategy, often done directly or indirectly via local agents.',
+                    pros: 'Low cost, low risk, leverages home-based production.',
+                    cons: 'Lower control over foreign marketing/distribution, potential tariffs, transport costs, limited local market knowledge.'
+                },
+                {
+                    name: 'Licensing & Franchising',
+                    desc: 'A foreign company is granted the right to use intangibles (e.g., patented technology, know-how, brands) to produce and/or sell the firm’s product in return for a royalty fee. Requires monitoring local partner performance.',
+                    pros: 'Low financial risk, avoids development costs, can overcome trade barriers.',
+                    cons: 'Lack of control over technology and quality, limited ability to realize location and scale economies, potential for licensee to become a competitor.'
+                },
+                {
+                    name: 'Strategic Alliance',
+                    desc: 'A cooperative agreement between potential or actual competitors, involving more active coordination and a broader scope of joint activities (e.g., R&D, marketing) than licensing.',
+                    pros: 'Facilitates entry into new markets, shares costs and risks, brings together complementary skills and resources, allows for learning from partners.',
+                    cons: 'Can provide competitors with access to your technology and market, potential for goal misalignment and conflict.',
+                    example: 'WL Gore and Associates had a strategic alliance with a Japanese partner that started with marketing Gore\'s products, then expanded to improving manufacturing processes.'
+                },
+                {
+                    name: 'Joint Venture',
+                    desc: 'A firm that is jointly owned by two or more otherwise independent firms, creating a separate legal entity. Both companies contribute resources and manage jointly, sharing profits. Often combines foreign firm\'s technology/capabilities with local firm\'s home market capabilities (e.g., local reputation, political knowledge, marketing/distribution, manufacturing).',
+                    pros: 'Benefit from local partner’s knowledge, shared costs and risks, politically more acceptable, can be legally required in some countries.',
+                    cons: 'Risk of losing control over technology, does not give tight control for realizing scale economies, potential for conflict and partner becoming a future competitor.',
+                    example: 'Starbucks\' joint venture in India with the Tata Group. China has long had a joint venture rule requiring multinational companies to create JVs with local companies in many high-value industries.'
+                },
+                {
+                    name: 'Wholly-Owned Subsidiary',
+                    desc: 'The firm owns 100 percent of the stock. This provides full control. Can be a greenfield venture (building from scratch), a brownfield venture (purchasing and repurposing existing assets), or an acquisition (buying a local company).',
+                    pros: 'Full control over technology and operations, ability to realize location and scale economies, protects intellectual property.',
+                    cons: 'High costs and risks, requires significant resource commitment, faces "liability of foreignness" (unfamiliarity, cultural differences, political biases).'
+                }
+            ];
+
+            function updateEntryMode(index) {
+                const mode = entryModes[index];
+                detailsPane.innerHTML = `
+                    <h5 class="font-bold text-xl mb-2 text-slate-800">${mode.name}</h5>
+                    <p class="text-slate-700 mb-3">${mode.desc}</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div class="bg-emerald-100 p-3 rounded-md border border-emerald-200">
+                            <strong class="text-emerald-800">Pros:</strong>
+                            <p class="text-emerald-700">${mode.pros}</p>
+                        </div>
+                        <div class="bg-red-100 p-3 rounded-md border border-red-200">
+                            <strong class="text-red-800">Cons:</strong>
+                            <p class="text-red-700">${mode.cons}</p>
+                        </div>
+                    </div>
+                    ${mode.example ? `<p class="text-slate-600 text-sm mt-3"><strong>Example:</strong> ${mode.example}</p>` : ''}
+                `;
+            }
+
+            slider.addEventListener('input', (e) => updateEntryMode(e.target.value));
+            updateEntryMode(0);
+
+            // Porter's Diamond
+            const diamondDetails = {
+                factor: {
+                    title: 'Factor Conditions',
+                    desc: 'A nation\'s position in factors of production, such as skilled labor, infrastructure, or natural resources, necessary to compete in a given industry. These can be inherited (e.g., natural resources) or created (e.g., specialized skills, research institutions).',
+                    example: 'Germany\'s strong engineering education and apprenticeship programs contribute to its competitive advantage in automotive and machinery industries.'
+                },
+                demand: {
+                    title: 'Demand Conditions',
+                    desc: 'The nature of home-market demand for the industry’s product or service. Sophisticated and demanding domestic customers pressure firms to be highly innovative and produce high-quality products.',
+                    example: 'The high expectations of Japanese consumers for miniaturization and quality in electronics pushed companies like Sony and Panasonic to excel globally.'
+                },
+                related: {
+                    title: 'Related and Supporting Industries',
+                    desc: 'The presence or absence in the nation of internationally competitive supplier industries and related industries. A strong national cluster of related industries provides cost-effective and innovative inputs, fostering a supportive ecosystem.',
+                    example: 'Switzerland\'s historical strength in chemicals provided a strong foundation and innovative inputs for its world-leading pharmaceutical industry, which in turn fostered a robust healthcare industry.'
+                },
+                intensity: {
+                    title: 'Competitive Intensity',
+                    desc: 'The nature of domestic rivalry and the conditions in the nation governing how companies are created, organized, and managed. Fierce domestic competition pushes firms to improve and innovate continuously, preparing them for global competition.',
+                    example: 'The intense rivalry between German automakers like Volkswagen, BMW, and Daimler in their home market drives their continuous innovation and global success.'
+                }
+            };
+            const diamondPane = document.getElementById('diamond-details-pane');
+            const diamondPoints = document.querySelectorAll('.diamond-point');
+            
+            window.showDiamondDetail = function(detailKey) {
+                const detail = diamondDetails[detailKey];
+                diamondPane.innerHTML = `
+                    <h5 class="font-bold text-xl mb-2 text-slate-800">${detail.title}</h5>
+                    <p class="text-slate-700 mb-2">${detail.desc}</p>
+                    <p class="text-slate-600 text-sm italic"><strong>Example:</strong> ${detail.example}</p>
+                `;
+                diamondPoints.forEach(p => p.style.fontWeight = 'normal');
+                document.getElementById('diamond-' + detailKey).style.fontWeight = 'bold';
+            }
+            showDiamondDetail('factor'); // Initialize with first detail
+
+             // Style for diamond points
+            diamondPoints.forEach(point => {
+                point.classList.add('bg-white', 'p-3', 'rounded-lg', 'shadow-md', 'border', 'border-slate-300', 'cursor-pointer', 'text-center', 'text-xs', 'md:text-sm', 'hover:bg-amber-100', 'hover:border-amber-400', 'transition');
+            });
+
+            // MNE Strategy Chart
+            const ctx = document.getElementById('mne-strategy-chart').getContext('2d');
+            const mneChart = new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'International',
+                        data: [{x: -5, y: -5}],
+                        pointRadius: 20,
+                        pointHoverRadius: 25,
+                        backgroundColor: 'rgba(52, 211, 153, 0.7)'
+                    }, {
+                        label: 'Localization',
+                        data: [{x: 5, y: -5}],
+                        pointRadius: 20,
+                        pointHoverRadius: 25,
+                        backgroundColor: 'rgba(251, 146, 60, 0.7)'
+                    }, {
+                        label: 'Global-Standardization',
+                        data: [{x: -5, y: 5}],
+                        pointRadius: 20,
+                        pointHoverRadius: 25,
+                        backgroundColor: 'rgba(59, 130, 246, 0.7)'
+                    }, {
+                        label: 'Transnational',
+                        data: [{x: 5, y: 5}],
+                        pointRadius: 20,
+                        pointHoverRadius: 25,
+                        backgroundColor: 'rgba(168, 85, 247, 0.7)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    onClick: function(evt) {
+                        const points = this.getElementsAtEventForMode(evt, 'point', this.options);
+                        if (points.length) {
+                            const strategy = points[0].datasetIndex;
+                            if (strategy === 0) showModal('strategy-international');
+                            if (strategy === 1) showModal('strategy-localization');
+                            if (strategy === 2) showModal('strategy-global');
+                            if (strategy === 3) showModal('strategy-transnational');
+                        }
+                    },
+                    scales: {
+                        x: {
+                            min: -10,
+                            max: 10,
+                            title: {
+                                display: true,
+                                text: 'Pressure for Local Responsiveness →',
+                                font: { size: 14 }
+                            },
+                            ticks: { display: false },
+                            grid: {
+                                drawBorder: false,
+                                drawOnChartArea: true,
+                                color: '#e2e8f0',
+                                z: -1
+                            }
+                        },
+                        y: {
+                            min: -10,
+                            max: 10,
+                            title: {
+                                display: true,
+                                text: 'Pressure for Cost Reduction →',
+                                font: { size: 14 }
+                            },
+                            ticks: { display: false },
+                             grid: {
+                                drawBorder: false,
+                                drawOnChartArea: true,
+                                color: '#e2e8f0',
+                                z: -1
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { enabled: false },
+                        annotation: {
+                            annotations: {
+                                label1: { type: 'label', xValue: -5, yValue: -5, content: 'International', font: {size: 12, weight: 'bold'}, color: 'black'},
+                                label2: { type: 'label', xValue: 5, yValue: -5, content: 'Localization', font: {size: 12, weight: 'bold'}, color: 'black'},
+                                label3: { type: 'label', xValue: -5, yValue: 5, content: 'Global-Std.', font: {size: 12, weight: 'bold'}, color: 'black'},
+                                label4: { type: 'label', xValue: 5, yValue: 5, content: 'Transnational', font: {size: 12, weight: 'bold'}, color: 'black'}
+                            }
+                        }
+                    },
+                    layout: {
+                        padding: 20
+                    }
+                },
+                plugins: [{
+                    id: 'customCanvasBackgroundColor',
+                    beforeDraw: (chart, args, options) => {
+                      const {ctx} = chart;
+                      ctx.save();
+                      ctx.globalCompositeOperation = 'destination-over';
+                      ctx.fillStyle = options.color || '#F8F7F4';
+                      ctx.fillRect(0, 0, chart.width, chart.height);
+                      ctx.restore();
+                    }
+                }]
+            });
+
+
+            // Modal Logic
+            const modalContainer = document.getElementById('modal-container');
+            const modalBody = document.getElementById('modal-body');
+            
+            window.showModal = function(contentId) {
+                const content = document.getElementById(contentId + '-content').innerHTML;
+                modalBody.innerHTML = content;
+                modalContainer.classList.add('visible');
+            }
+            
+            window.closeAllModals = function() {
+                modalContainer.classList.remove('visible');
+            }
+
+            // Search Functionality
+            const searchInput = document.getElementById('search-input');
+            const searchButton = document.getElementById('search-button');
+            const mainContent = document.getElementById('main-content');
+            const modalTemplates = document.getElementById('modal-templates');
+            let originalContents = {}; // Store original HTML content
+
+            function storeOriginalContents() {
+                originalContents['main'] = mainContent.innerHTML;
+                originalContents['modal'] = modalTemplates.innerHTML;
+            }
+
+            function clearHighlights() {
+                if (originalContents['main']) {
+                    mainContent.innerHTML = originalContents['main'];
+                }
+                if (originalContents['modal']) {
+                    modalTemplates.innerHTML = modalTemplates.innerHTML; // Re-fetch from original template
+                }
+            }
+
+            function highlightText(query) {
+                clearHighlights(); // Clear previous highlights first
+                if (!query) return;
+
+                const regex = new RegExp(`(${query})`, 'gi');
+                let foundCount = 0;
+
+                // Function to process a single element's text content
+                function processNode(node) {
+                    if (node.nodeType === Node.TEXT_NODE) {
+                        const replacedText = node.nodeValue.replace(regex, (match) => {
+                            foundCount++;
+                            return `<span class="highlight">${match}</span>`;
+                        });
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = replacedText;
+                        while (tempDiv.firstChild) {
+                            node.parentNode.insertBefore(tempDiv.firstChild, node);
+                        }
+                        node.parentNode.removeChild(node);
+                    } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName !== 'SCRIPT' && node.tagName !== 'STYLE' && !node.classList.contains('chart-container')) {
+                        Array.from(node.childNodes).forEach(processNode);
+                    }
+                }
+
+                // Store original content before modifying
+                storeOriginalContents();
+
+                // Process main content
+                Array.from(mainContent.childNodes).forEach(processNode);
+
+                // Process modal content (hidden templates)
+                Array.from(modalTemplates.childNodes).forEach(processNode);
+                
+                // Provide feedback to the user
+                if (foundCount > 0) {
+                    alert(`Found ${foundCount} instance(s) of "${query}".`);
+                    // Optionally scroll to the first highlight
+                    const firstHighlight = document.querySelector('.highlight');
+                    if (firstHighlight) {
+                        firstHighlight.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                } else {
+                    alert(`No instances of "${query}" found.`);
+                }
+            }
+
+            searchButton.addEventListener('click', () => highlightText(searchInput.value));
+            searchInput.addEventListener('keyup', (event) => {
+                if (event.key === 'Enter') {
+                    highlightText(searchInput.value);
+                }
+            });
+            searchInput.addEventListener('input', () => {
+                if (searchInput.value === '') {
+                    clearHighlights();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
