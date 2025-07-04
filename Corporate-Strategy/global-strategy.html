@@ -193,37 +193,29 @@
             <h3 class="text-3xl font-bold text-center mb-4 text-slate-800">3. Where to Win?</h3>
             <p class="text-center text-slate-600 max-w-2xl mx-auto mb-12">A nation's competitive advantage in a specific industry is not random. Michael Porter's Diamond Model explains how four key attributes of a home market create an environment that can foster or hinder global competitiveness. Click each point of the diamond to explore.</p>
             <div class="section-card p-8 flex flex-col lg:flex-row items-center gap-8">
-                <div class="w-full lg:w-1/2 flex justify-center items-center">
-                    <div class="relative w-64 h-64 md:w-80 md:h-80">
-                        <!-- Central background diamond (smaller) -->
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <div class="w-32 h-32 md:w-48 md:h-48 bg-slate-100 transform rotate-45 rounded-2xl border border-slate-300 z-5"></div>
-                        </div>
-                        <!-- Central text -->
-                        <div class="absolute inset-0 flex items-center justify-center text-slate-700 font-semibold text-center p-4 z-15">National<br>Competitive<br>Advantage</div>
+            <div class="w-full lg:w-1/2 flex justify-center items-center">
+            <div class="relative w-64 h-64 md:w-80 md:h-80">
+            <!-- Central background diamond (smaller) -->
+            <div class="absolute inset-0 flex items-center justify-center">
+                <div class="w-32 h-32 md:w-48 md:h-48 bg-slate-100 transform rotate-45 rounded-2xl border border-slate-300 z-5"></div>
+            </div>
+            <!-- Central text -->
+            <div class="absolute inset-0 flex items-center justify-center text-slate-700 font-semibold text-center p-4 z-15">National<br>Competitive<br>Advantage</div>
 
-                        <!-- Connecting lines (from center towards outer labels) -->
-                        <!-- Top line -->
-                        <div class="absolute w-0.5 h-[calc(50%-2.5rem)] bg-slate-400 top-1/2 left-1/2 -translate-x-1/2 -translate-y-full z-10"></div>
-                        <!-- Right line -->
-                        <div class="absolute h-0.5 w-[calc(50%-2.5rem)] bg-slate-400 top-1/2 left-1/2 -translate-y-1/2 translate-x-full z-10"></div>
-                        <!-- Bottom line -->
-                        <div class="absolute w-0.5 h-[calc(50%-2.5rem)] bg-slate-400 top-1/2 left-1/2 -translate-x-1/2 translate-y-0 z-10"></div>
-                        <!-- Left line -->
-                        <div class="absolute h-0.5 w-[calc(50%-2.5rem)] bg-slate-400 top-1/2 left-1/2 -translate-y-1/2 -translate-x-full z-10"></div>
-
-                        <!-- Diamond points (labels) -->
-                        <div id="diamond-factor" class="diamond-point absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20" onclick="showDiamondDetail('factor')">Factor Conditions</div>
-                        <div id="diamond-demand" class="diamond-point absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 z-20" onclick="showDiamondDetail('demand')">Demand Conditions</div>
-                        <div id="diamond-related" class="diamond-point absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 z-20" onclick="showDiamondDetail('related')">Related Industries</div>
-                        <div id="diamond-intensity" class="diamond-point absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 z-20" onclick="showDiamondDetail('intensity')">Competitive Intensity</div>
-                    </div>
-                </div>
-                <div id="diamond-details-pane" class="w-full lg:w-1/2 min-h-[250px] bg-slate-50 p-6 rounded-lg border border-slate-200">
-                     <!-- Details will be populated by JS -->
-                </div>
+            <!-- Diamond points (labels) -->
+            <div id="diamond-factor" class="diamond-point absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20" onclick="showDiamondDetail('factor')" style="border-color:#f59e42;">Factor Conditions</div>
+            <div id="diamond-demand" class="diamond-point absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 z-20" onclick="showDiamondDetail('demand')" style="border-color:#38bdf8;">Demand Conditions</div>
+            <div id="diamond-related" class="diamond-point absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 z-20" onclick="showDiamondDetail('related')" style="border-color:#34d399;">Related Industries</div>
+            <div id="diamond-intensity" class="diamond-point absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 z-20" onclick="showDiamondDetail('intensity')" style="border-color:#f43f5e;">Competitive Intensity</div>
+            </div>
+            </div>
+            <div id="diamond-details-pane" class="w-full lg:w-1/2 min-h-[250px] bg-slate-50 p-6 rounded-lg border border-slate-200 transition-colors duration-300">
+             <!-- Details will be populated by JS -->
+            </div>
             </div>
         </section>
+        <script>
+        </script>
 
         <!-- Section 4: What to Play? MNE Strategies -->
         <section id="what-to-play" class="scroll-mt-20">
@@ -256,7 +248,7 @@
         <div id="motivation-factors-content">
             <h3 class="text-2xl font-bold mb-4 text-amber-800">Access Better or Lower-Cost Factors of Production</h3>
             <p class="text-slate-700 mb-2">Firms often go abroad to find more efficient or cheaper inputs for their production processes. This can provide a significant cost advantage.</p>
-            <p class="text-slate-600 text-sm"><strong>Examples:</strong> This includes cheaper **labor** (e.g., iRobot manufacturing in China), access to **natural resources** (e.g., the oil industry), or specialized **technology and talent** (e.g., setting up an IT development center in India).</p>
+            <p class="text-slate-600 text-sm"><strong>Examples:</strong> This includes cheaper <strong>labor</strong> (e.g., iRobot manufacturing in China), access to <strong>natural resources</strong> (e.g., the oil industry), or specialized <strong>technology and talent</strong> (e.g., setting up an IT development center in India).</p>
         </div>
         <div id="motivation-risk-content">
             <h3 class="text-2xl font-bold mb-4 text-amber-800">Reduce Overall Business Risk</h3>
@@ -358,7 +350,16 @@
                 },
                 {
                     name: 'Wholly-Owned Subsidiary',
-                    desc: 'The firm owns 100 percent of the stock. This provides full control. Can be a greenfield venture (building from scratch), a brownfield venture (purchasing and repurposing existing assets), or an acquisition (buying a local company).',
+                    desc: `<ul class="list-disc pl-5">
+                        <li>The firm owns 100 percent of the stock, providing full control.</li>
+                        <li>Can be established via:
+                            <ul class="list-disc pl-5">
+                                <li><strong>Greenfield venture</strong>: Building operations from scratch.</li>
+                                <li><strong>Brownfield venture</strong>: Purchasing and repurposing existing assets.</li>
+                                <li><strong>Acquisition</strong>: Buying a local company.</li>
+                            </ul>
+                        </li>
+                    </ul>Note:</strong> This is the most expensive and risky entry mode, but it provides the highest level of control and potential returns.`,
                     pros: 'Full control over technology and operations, ability to realize location and scale economies, protects intellectual property.',
                     cons: 'High costs and risks, requires significant resource commitment, faces "liability of foreignness" (unfamiliarity, cultural differences, political biases).'
                 }
@@ -391,22 +392,30 @@
                 factor: {
                     title: 'Factor Conditions',
                     desc: 'A nation\'s position in factors of production, such as skilled labor, infrastructure, or natural resources, necessary to compete in a given industry. These can be inherited (e.g., natural resources) or created (e.g., specialized skills, research institutions).',
-                    example: 'Germany\'s strong engineering education and apprenticeship programs contribute to its competitive advantage in automotive and machinery industries.'
+                    example: 'Germany\'s strong engineering education and apprenticeship programs contribute to its competitive advantage in automotive and machinery industries.',
+                    bg: 'bg-orange-50',
+                    border: 'border-orange-400'
                 },
                 demand: {
                     title: 'Demand Conditions',
                     desc: 'The nature of home-market demand for the industry’s product or service. Sophisticated and demanding domestic customers pressure firms to be highly innovative and produce high-quality products.',
-                    example: 'The high expectations of Japanese consumers for miniaturization and quality in electronics pushed companies like Sony and Panasonic to excel globally.'
+                    example: 'The high expectations of Japanese consumers for miniaturization and quality in electronics pushed companies like Sony and Panasonic to excel globally.',
+                    bg: 'bg-sky-50',
+                    border: 'border-sky-400'
                 },
                 related: {
                     title: 'Related and Supporting Industries',
                     desc: 'The presence or absence in the nation of internationally competitive supplier industries and related industries. A strong national cluster of related industries provides cost-effective and innovative inputs, fostering a supportive ecosystem.',
-                    example: 'Switzerland\'s historical strength in chemicals provided a strong foundation and innovative inputs for its world-leading pharmaceutical industry, which in turn fostered a robust healthcare industry.'
+                    example: 'Switzerland\'s historical strength in chemicals provided a strong foundation and innovative inputs for its world-leading pharmaceutical industry, which in turn fostered a robust healthcare industry.',
+                    bg: 'bg-emerald-50',
+                    border: 'border-emerald-400'
                 },
                 intensity: {
                     title: 'Competitive Intensity',
                     desc: 'The nature of domestic rivalry and the conditions in the nation governing how companies are created, organized, and managed. Fierce domestic competition pushes firms to improve and innovate continuously, preparing them for global competition.',
-                    example: 'The intense rivalry between German automakers like Volkswagen, BMW, and Daimler in their home market drives their continuous innovation and global success.'
+                    example: 'The intense rivalry between German automakers like Volkswagen, BMW, and Daimler in their home market drives their continuous innovation and global success.',
+                    bg: 'bg-rose-50',
+                    border: 'border-rose-400'
                 }
             };
             const diamondPane = document.getElementById('diamond-details-pane');
@@ -419,12 +428,17 @@
                     <p class="text-slate-700 mb-2">${detail.desc}</p>
                     <p class="text-slate-600 text-sm italic"><strong>Example:</strong> ${detail.example}</p>
                 `;
+                // Remove all possible bg-* and border-* classes first
+                diamondPane.className = 'w-full lg:w-1/2 min-h-[250px] p-6 rounded-lg transition-colors duration-300';
+                diamondPane.classList.add(detail.bg || 'bg-slate-50');
+                diamondPane.classList.add('border');
+                diamondPane.classList.add(detail.border || 'border-slate-200');
                 diamondPoints.forEach(p => p.style.fontWeight = 'normal');
                 document.getElementById('diamond-' + detailKey).style.fontWeight = 'bold';
             }
             showDiamondDetail('factor'); // Initialize with first detail
 
-             // Style for diamond points
+            // Style for diamond points
             diamondPoints.forEach(point => {
                 point.classList.add('bg-white', 'p-3', 'rounded-lg', 'shadow-md', 'border', 'border-slate-300', 'cursor-pointer', 'text-center', 'text-xs', 'md:text-sm', 'hover:bg-amber-100', 'hover:border-amber-400', 'transition');
             });
