@@ -8,13 +8,13 @@
             "type": "chrome",
             "request": "launch",
             "name": "Corporate Strategy Hub",
-            "file": "${workspaceFolder}/Corporate-strategy/corporate-strategy-hub.html"
+            "file": "${workspaceFolder}/corporate-strategy/corporate-strategy-hub.html"
         },
         {
-            "type": "msedge",
+            "type": "chrome",
             "request": "launch",
-            "name": "Creative Thinking hub",
-            "file": "${workspaceFolder}/Creative-Thinking/creative-thinking-hub.html"
+            "name": "Creative Thinking Hub",
+            "file": "${workspaceFolder}/creative-thinking/creative-thinking-hub.html"
         }
     ]
 }
