@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creativity Toolkit II: Creative Collaboration Notes</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Light gray background */
+            color: #374151; /* Dark gray text */
+            padding: 2rem;
+            padding-top: 6rem; /* Space for fixed header elements */
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background-color: #ffffff;
+            border-radius: 0.75rem; /* rounded-xl */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
+        }
+        .section-title {
+            font-size: 2.25rem; /* text-4xl */
+            font-weight: 700; /* font-bold */
+            color: #1f2937; /* Darker gray for titles */
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .module-heading {
+            font-size: 1.875rem; /* text-3xl */
+            font-weight: 600; /* font-semibold */
+            color: #3b82f6; /* Blue for module headings */
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #bfdbfe; /* Light blue border */
+        }
+        .sub-heading {
+            font-size: 1.5rem; /* text-2xl */
+            font-weight: 600; /* font-semibold */
+            color: #4b5563; /* Medium gray for subheadings */
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .concept-highlight {
+            background-color: #fde68a; /* Light yellow for highlights */
+            padding: 0.1rem 0.4rem;
+            border-radius: 0.25rem;
+            font-weight: 500; /* font-medium */
+            color: #92400e; /* Darker yellow/orange for text */
+        }
+        .dissent-highlight { /* New highlight for dissent section */
+            background-color: #bae6fd; /* Light blue */
+            padding: 0.1rem 0.4rem;
+            border-radius: 0.25rem;
+            font-weight: 500;
+            color: #0c4a6e; /* Darker blue for text */
+        }
+        .example-label {
+            font-weight: 600;
+            color: #10b981; /* Green for example label */
+        }
+        details {
+            background-color: #ffffff;
+            border-radius: 0.75rem; /* rounded-xl */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+        summary {
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #e0f2fe; /* Light blue for summary background */
+            color: #1e40af; /* Dark blue for summary text */
+            border-bottom: 1px solid #bfdbfe;
+            border-radius: 0.75rem 0.75rem 0 0; /* rounded-xl top corners */
+        }
+        details[open] summary {
+            border-bottom: 1px solid #bfdbfe;
+            border-radius: 0.75rem 0.75rem 0 0;
+        }
+        details summary::-webkit-details-marker {
+            display: none;
+        }
+        details summary::after {
+            content: '+';
+            font-size: 1.5rem;
+            transition: transform 0.2s;
+        }
+        details[open] summary::after {
+            content: '-';
+            transform: rotate(0deg);
+        }
+        .content-body {
+            padding: 1rem 1.5rem 1.5rem;
+            line-height: 1.6;
+        }
+        ul {
+            list-style-type: disc;
+            margin-left: 1.5rem;
+            padding-left: 0.5rem;
+        }
+        ol {
+            list-style-type: decimal;
+            margin-left: 1.5rem;
+            padding-left: 0.5rem;
+        }
+        li {
+            margin-bottom: 0.5rem;
+        }
+        /* Styles for fixed search and back to top */
+        .fixed-header-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+            gap: 1rem; /* Space between elements when wrapped */
+        }
+        .search-container {
+            display: flex;
+            gap: 0.5rem;
+            flex-grow: 1; /* Allows search bar to take available space */
+            justify-content: flex-end; /* Pushes search to the right */
+            max-width: 400px; /* Limit search bar width */
+        }
+        .search-input {
+            flex-grow: 1;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem; /* rounded-md */
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .search-input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+        .search-button, .back-to-top-button {
+            background-color: #3b82f6;
+            color: #ffffff;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem; /* rounded-md */
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+            white-space: nowrap; /* Prevent text wrapping */
+        }
+        .search-button:hover, .back-to-top-button:hover {
+            background-color: #2563eb;
+        }
+        .search-button:active, .back-to-top-button:active {
+            transform: scale(0.98);
+        }
+        .highlight {
+            background-color: #ffeb3b; /* Bright yellow for highlights */
+            padding: 1px 3px;
+            border-radius: 3px;
+            transition: background-color 0.3s;
+        }
+        .current-highlight {
+            background-color: #ffd700; /* Slightly darker yellow for current highlight */
+            outline: 2px solid #ffbf00; /* A border to make it pop more */
+        }
+        .message-box {
+            background-color: #fff3cd; /* yellow-100 */
+            color: #664d03; /* yellow-800 */
+            border: 1px solid #ffecb5; /* yellow-200 */
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        /* Responsive adjustments for fixed header */
+        @media (max-width: 640px) {
+            .fixed-header-container {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 1rem;
+            }
+            .search-container {
+                width: 100%;
+                max-width: none;
+                justify-content: flex-start;
+            }
+            .search-input, .search-button {
+                width: auto; /* Revert to auto width for better flex behavior */
+                flex-grow: 1;
+            }
+            .back-to-top-button {
+                margin-bottom: 0.5rem; /* Space between button and search on small screens */
+            }
+            body {
+                padding-top: 8rem; /* Adjust padding for smaller screens */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="fixed-header-container">
+        <button id="backToTopButton" class="back-to-top-button">Back</button>
+        <div class="search-container">
+            <input type="text" id="searchText" class="search-input" placeholder="Search notes...">
+            <button id="searchButton" class="search-button">Search</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1 class="section-title">Creativity Toolkit II: Creative Collaboration Notes</h1>
+
+        <p class="mb-6 text-center text-gray-600">
+            This module focuses on how to foster creativity within teams, challenging common assumptions about what makes a team effective. It covers team composition, the impact of different personality types, the role of individualism versus collectivism, the importance of dissent, the benefits of competition, and how culture influences creative outcomes.
+        </p>
+
+        <div id="messageDisplay" class="message-box hidden"></div>
+
+        <!-- Module 4: Creative Collaboration -->
+        <h2 class="module-heading">Module 4: Creative Collaboration</h2>
+
+        <!-- 4-1 Leveraging Social Influence -->
+        <details open data-original-content-id="section-1">
+            <summary>4-1 Leveraging Social Influence</summary>
+            <div class="content-body">
+                <p class="mb-2"><span class="concept-highlight">Problem with Team Creativity</span>: Teams often establish norms that work against creativity, leading to blind conformity, obedience, silence, and overconfidence.</p>
+                <p class="mb-2"><span class="concept-highlight">Solution</span>: Norms can be flipped to facilitate the creative process.</p>
+                <p class="mb-2"><span class="concept-highlight">Key Concept: Team Composition</span>: The mix of personalities within a team is crucial for creative output. It's not always ideal to have only highly creative people.</p>
+                <ul class="list-disc ml-6 mb-2">
+                    <li><span class="font-semibold">Creative Personalities</span>: Tend to be rebellious, non-conforming, and unpredictable. While good for generating ideas, they may need to be "reigned in" for other aspects of the creative process.</li>
+                    <li><span class="font-semibold">Conformist Personalities</span>: People willing to adopt the group's point of view, ignoring their own.</li>
+                    <li><span class="font-semibold">Attention to Detail Personalities</span>: People who focus narrowly on tiny details and strive for perfection.</li>
+                </ul>
+                <p class="mb-2"><span class="concept-highlight">Ideal Personality Mix</span>: Primarily creative people, but with one or two conformists.</p>
+                <ul class="list-disc ml-6 mb-2">
+                    <li><span class="font-semibold">Creatives' Role</span>: Enhance conflict and integrate diverse perspectives.</li>
+                    <li><span class="font-semibold">Conformists' Role</span>: Provide structure and efficient execution, acting as the "glue" for the team.</li>
+                </ul>
+                <p class="mb-2"><span class="concept-highlight">Important Concept: Diminishing Creativity</span>: Excessive focus on tiny details to the exclusion of the big picture can diminish creativity. Having too many detail-focused individuals can be counterproductive.</p>
+                <p class="mb-2"><span class="example-label">Example (Google)</span>: A former Google designer noted that teams of engineers would obsess over minute details like the shade of blue for a logo (considering 41 shades) or border width (four or five pixels). This obsessive attention to detail was paralyzing, preventing the team from taking risks and exploring creative directions.</p>
+                <p class="mb-2"><span class="concept-highlight">Surprising Trait: Narcissism</span>: While often seen negatively (self-aggrandizing, self-absorbed, overconfident, aggressive to criticism), having one or two narcissists on a team can actually boost creativity.</p>
+                <ul class="list-disc ml-6 mb-2">
+                    <li><span class="font-semibold">Evidence (Goncalo, Flynn, & Kim, 2010 study)</span>:
+                        <ul class="list-circle ml-6 mt-1">
+                            <li>Teams with zero narcissists were efficient but produced boring, uninteresting ideas, agreeing too quickly.</li>
+                            <li>Teams with all narcissists was a complete disaster because they couldn't even agree on which idea to pursue.</li>
+                            <li><span class="concept-highlight">Sweet Spot</span>: Teams with a 50-50 mix of narcissists were the most creative.</li>
+                            <li><span class="font-semibold">Reason</span>: Narcissists try to stand out by suggesting outlandish ideas, breaking the team's fear of risk-taking and controversial ideas, and inspiring others to take more risks.</li>
+                        </ul>
+                    </li>
+                </ul>
+                <p class="mb-2"><span class="concept-highlight">Key Concept: Membership Change</span>: Even with the right personality mix, teams can get stale. Rotating members introduces new knowledge and challenges existing norms/habits, boosting creativity.</p>
+            </div>
+        </details>
+
+        <!-- 4-2 Individualism -->
+        <details data-original-content-id="section-2">
+            <summary>4-2 Individualism</summary>
+            <div class="content-body">
+                <p class="mb-2"><span class="concept-highlight">Key Concept: Norms</span>: Habits that groups develop over time, shaping behavior and defining what's appropriate. They can constrain creativity by making everyone behave similarly.</p>
+                <p class="mb-2"><span class="concept-highlight">Norms that Foster Creativity</span>: Specific norms, like those encouraging individualism, can facilitate idea expression.</p>
+                <p class="mb-2"><span class="concept-highlight">Individualism vs. Collectivism (Cultural Context)</span>:</p>
+                <ul class="list-disc ml-6 mb-2">
+                    <li><span class="font-semibold">Individualistic Cultures</span> (e.g., US): Encourage uniqueness, pursuit of personal goals (even if at odds with team goals), and expression of personal points of view (even if it leads to conflict).</li>
+                    <li><span class="font-semibold">Collectivistic Cultures</span> (e.g., China): Encourage focusing on commonalities, pursuing group goals (even if it means setting aside personal interests), and maintaining harmony (suppressing conflict).</li>
+                </ul>
+                <p class="mb-2"><span class="concept-highlight">Danger of Collectivism</span>: While efficient and harmonious, it can "stamp out some of the behavior in teams necessary for creativity."</p>
+                <p class="mb-2"><span class="font-semibold">Study on Individualism and Team Creativity</span>: Researchers primed people to think as individualists or collectivists before a brainstorming task about repurposing a vacant campus restaurant space.</p>
+                <ul class="list-disc ml-6 mb-2">
+                    <li><span class="font-semibold">Individualist Prime</span>: Asked to think about what makes them unique, describe themselves, and why standing out is beneficial.</li>
+                    <li><span class="font-semibold">Collectivist Prime</span>: Asked to think about commonalities, groups they belong to, and why blending in is advantageous.</li>
+                    <li><span class="font-semibold">Results</span>:
+                        <ul class="list-circle ml-6 mt-1">
+                            <li><span class="font-semibold">Collectivists</span>: Converged quickly on the least controversial, often more mundane idea (e.g., another restaurant), to avoid conflict and maintain harmony.</li>
+                            <li><span class="font-semibold">Individualists</span>: More likely to argue and integrate ideas, wanting their own ideas reflected in the final product. This led to more intriguing, unusual, and creative ideas (<span class="example-label">Example</span>: a museum of communist history with a cafe and a library).</li>
+                        </ul>
+                    </li>
+                </ul>
+                <p class="mb-2"><span class="concept-highlight">Highlight</span>: Individualism promoted a "second round of creativity" during the idea selection process that collectivistic groups didn't experience.</p>
+                <p class="mb-2"><span class="font-semibold">Process Difference</span>: Individualists were more likely to "one-up each other," breaking from common thought and pursuing different lines of thinking. Collectivists had trouble breaking from their initial narrow focus.</p>
+                <p class="mb-2"><span class="concept-highlight">Important Concept</span>: The process leading to creativity may not always feel pleasant or cooperative. Individualistic teams might feel less "happy" but produce more creative outcomes.</p>
+                <p class="mb-2"><span class="concept-highlight">Conclusion</span>: While the world values "team players" (collectivism), for creativity, individualism is necessary as it encourages people to stand out, be different, assert uniqueness, engage in conflict, argue, and rebel – breaking barriers to creative expression.</p>
+            </div>
+        </details>
+
+        <!-- 4-3 Norms that Permit Dissent -->
+        <details data-original-content-id="section-3">
+            <summary>4-3 Norms that Permit Dissent</summary>
+            <div class="content-body">
+                <p class="mb-2"><span class="dissent-highlight">Problem</span>: People tend to conform and ignore their own perspectives, even when the majority is wrong, due to fear of not being liked or rocking the boat. This hinders creativity by withholding novel ideas.</p>
+                <p class="mb-2"><span class="dissent-highlight">Solution: Authentic Dissent</span>: When expressed confidently and consistently, dissent can break conformity and bring more perspectives to the table.</p>
+                <p class="mb-2"><span class="font-semibold">Evidence (Supreme Court Study by Deborah Gruenfeld)</span>:</p>
+                <ul class="list-disc ml-6 mb-2">
+                    <li>Studied decision-making processes of Supreme Court justices over 20 years.</li>
+                    <li>Challenged the idea that liberals were inherently more creative than conservatives, recognizing that conservatives were often in the minority.</li>
+                    <li><span class="font-semibold">Finding</span>: The <span class="dissent-highlight">status</span> of being in the minority (dissenting) was more predictive of creative thinking than political ideology. When a justice was in the minority, regardless of liberal or conservative views, they engaged in more complex, flexible, and original thinking, leading to more creative solutions.</li>
+                </ul>
+                <p class="mb-2"><span class="dissent-highlight">Highlight</span>: Dissent sharpens thinking, makes people curious, and "wakes us up." It breaks false consensus and stimulates more people to think.</p>
+                <p class="mb-2"><span class="dissent-highlight">Important Note</span>: Dissent must be authentic; people must truly endorse their point of view for the majority to pay attention.</p>
+                <p class="mb-2"><span class="example-label">Historical Example: "The Devil's Advocate"</span>: Dating back to Pope Sixtus V in 1587, the "Promotor of the Faith" was tasked with creating reasons <span class="font-semibold">against</span> a person's sainthood to uncover flaws or misinterpretations of evidence. This institutionalized dissent to ensure thorough review.</p>
+            </div>
+        </details>
+
+        <!-- 4-4 Norms that Permit Competition -->
+        <details data-original-content-id="section-4">
+            <summary>4-4 Norms that Permit Competition</summary>
+            <div class="content-body">
+                <p class="mb-2"><span class="concept-highlight">Challenge to Traditional Management</span>: While cooperation is usually valued, competition can be advantageous for creativity.</p>
+                <p class="mb-2"><span class="concept-highlight">Problem with Teams: Social Loafing</span>: People can get lazy in teams, comparing themselves to the least productive and adjusting their effort downward, leading to less effort and fewer ideas.</p>
+                <p class="mb-2"><span class="concept-highlight">Solution: Incentives to Compete</span>: Encouraging competition can counteract social loafing.</p>
+                <p class="mb-2"><span class="concept-highlight">Key Concept: Reward Distribution Rules</span>:</p>
+                <ul class="list-disc ml-6 mb-2">
+                    <li><span class="font-semibold">Equality Rule</span>: Everyone receives the same portion of the reward regardless of individual contribution.</li>
+                    <li><span class="font-semibold">Equity Rule</span>: Rewards are proportionate to contributions (people who work harder get more).</li>
+                </ul>
+                <p class="mb-2"><span class="font-semibold">Study on Equity vs. Equality Rule</span>:</p>
+                <ul class="list-disc ml-6 mb-2">
+                    <li>Teams assigned to the equity rule behaved more competitively, cutting each other off and trying to outdo each other.</li>
+                    <li>These competitive behaviors led to more creative output, as people tried to "one-up each other" by sharing more ideas and more creative ideas.</li>
+                </ul>
+                <p class="mb-2"><span class="concept-highlight">Highlight</span>: Competition, though not always pleasant or "pretty," can drive the exchange of creative ideas and full participation.</p>
+                <p class="mb-2"><span class="concept-highlight">Important Fit</span>: The effectiveness of competition (e.g., equity rule) depends on the team's composition.</p>
+                <ul class="list-disc ml-6 mb-2">
+                    <li><span class="font-semibold">Individualists</span>: See competition as an opportunity to stand out and are motivated by it.</li>
+                    <li><span class="font-semibold">Collectivists</span>: May find competition scary as they prefer social connections and harmony (<span class="example-label">Example</span>: "the nail that sticks out gets hammered down"). This approach is likely to backfire with them.</li>
+                </ul>
+                <p class="mb-2"><span class="concept-highlight">Conclusion</span>: There's a "fit" between the norm (e.g., equity rule) and the team's personality composition.</p>
+            </div>
+        </details>
+
+        <!-- 4-5 The Strong Culture Debate -->
+        <details data-original-content-id="section-5">
+            <summary>4-5 The Strong Culture Debate</summary>
+            <div class="content-body">
+                <p class="mb-2"><span class="concept-highlight">Debate</span>: Should a team aiming for creativity have an "anarchy" where people feel free to do whatever they want, or a "strong culture" that enforces norms like individualism, dissent, and competition?</p>
+                <p class="mb-2"><span class="concept-highlight">Answer</span>: It depends on the <span class="font-semibold">composition of the group</span>.</p>
+                <ul class="list-disc ml-6 mb-2">
+                    <li><span class="font-semibold">Highly Creative People</span>:
+                        <ul class="list-circle ml-6 mt-1">
+                            <li>Naturally rebellious, questioning, competitive, and inclined to stand out.</li>
+                            <li><span class="concept-highlight">No need for strong norms</span>: They will naturally behave in ways appropriate for creativity.</li>
+                            <li><span class="concept-highlight">Forcing norms can backfire</span>: Strong norms can make them react against expectations or do nothing.</li>
+                        </ul>
+                    </li>
+                    <li><span class="font-semibold">Less Creative Personalities</span>:
+                        <ul class="list-circle ml-6 mt-1">
+                            <li>Tend to shy away from behaviors needed in a creative team (reluctant to stand out or question things, more cooperative and obedient).</li>
+                            <li><span class="concept-highlight">Strong norms can be leveraged</span>: By specifying expectations (e.g., individualism) and applying social sanctions, less creative people can be encouraged toward more creative behavior.</li>
+                        </ul>
+                    </li>
+                </ul>
+                <p class="mb-2"><span class="concept-highlight">Highlight</span>: Creativity can be achieved even with "relatively ordinary people" by using social control and culture as a tool.</p>
+                <p class="mb-2"><span class="concept-highlight">Overall</span>: A contingent approach to managing creativity is needed, based on who is on your team.</p>
+            </div>
+        </details>
+
+        <!-- 4-6 Breaking Barriers and Being Creative in Teams -->
+        <details data-original-content-id="section-6">
+            <summary>4-6 Breaking Barriers and Being Creative in Teams</summary>
+            <div class="content-body">
+                <p class="mb-2"><span class="concept-highlight">Review of Barriers to Team Creativity</span>: Fear, silence, and overconfidence.</p>
+                <p class="mb-2"><span class="concept-highlight">Addressing Fear (of social rejection)</span>:</p>
+                <ul class="list-disc ml-6 mb-2">
+                    <li><span class="font-semibold">Culture of Individualism</span>: Emboldens people to stand out, be different, be unique, and engage in conflict if it moves the discussion forward. This lessens the tendency to conform and increases willingness to challenge the majority.</li>
+                    <li><span class="concept-highlight">Highlight</span>: Individualism can act as a buffer against social rejection concerns; individualists may even become <span class="font-semibold">more</span> creative after being rejected, reframing it as simply being "different" and "not understood."</li>
+                </ul>
+                <p class="mb-2"><span class="concept-highlight">Addressing Silence</span>:</p>
+                <ul class="list-disc ml-6 mb-2">
+                    <li><span class="font-semibold">Dissent</span>: When someone confidently expresses disagreement, it can embolden others to speak up, minimizing silence.</li>
+                    <li><span class="font-semibold">Membership Change</span>: Newcomers, not yet socialized to existing norms, can question established practices, signaling to the group that change is possible and encouraging others to speak.</li>
+                </ul>
+                <p class="mb-2"><span class="concept-highlight">Addressing Overconfidence</span>:</p>
+                <ul class="list-disc ml-6 mb-2">
+                    <li><span class="font-semibold">Dissent</span>: A confident dissenter forces the majority to re-examine their assumptions, encouraging reflection and a deeper understanding of their own positions.</li>
+                    <li><span class="font-semibold">Conflict</span>: Sharpens thought and focuses on complexity, replacing superficial agreement with confidence based on sound reasoning and information.</li>
+                </ul>
+            </div>
+        </details>
+
+        <!-- 4-7 Course Wrap-up -->
+        <details data-original-content-id="section-7">
+            <summary>4-7 Course Wrap-up</summary>
+            <div class="content-body">
+                <p class="mb-2"><span class="concept-highlight">Big Picture</span>: Creativity does not occur in a vacuum. It happens in a social context. Traditional team advice (e.g., "team player," cooperation, harmony) often works against creativity.</p>
+                <p class="mb-2"><span class="concept-highlight">Key Takeaways for Fostering Creativity</span>:</p>
+                <ul class="list-disc ml-6 mb-2">
+                    <li><span class="font-semibold">Embrace Individualism, Competition, and Dissent</span>: These norms, though sometimes unpleasant, encourage people to stand out, be different, assert uniqueness, and challenge ideas.</li>
+                    <li><span class="font-semibold">Challenge Social Niceties and Coordination Focus</span>: Instead of just getting in line and moving smoothly, focus on putting different viewpoints together and pushing each other.</li>
+                    <li><span class="font-semibold">Value the "Filtered Out" Individuals</span>: Rebels, deviants, rejects, and defiant people are often necessary to slow down superficial processes and force deeper thinking.</li>
+                    <li><span class="font-semibold">Strategic Pause</span>: Teams need to pause and challenge existing perspectives rather than immediately taking action. This "holding up" is crucial for finding different ways of doing things.</li>
+                    <li><span class="font-semibold">Active Culture Creation</span>: Norms that support creativity don't arise naturally; they require hard work to specify and influence people to adopt them.</li>
+                    <li><span class="font-semibold">Navigate Idea Selection and Evaluation</span>: Avoid picking ideas based on who suggested them or comfort. Separate the person from the idea, define clear criteria, and be open to changing criteria to make the most of new ideas.</li>
+                    <li><span class="font-semibold">Master Social Influence</span>: Creative ideas, being unique, often generate uncertainty and negative initial reactions. Pitching effectively requires crafting communication to encourage perspective change and value new ideas.</li>
+                </ul>
+            </div>
+        </details>
+
+    </div>
+
+    <script>
+        const searchText = document.getElementById('searchText');
+        const searchButton = document.getElementById('searchButton');
+        const messageDisplay = document.getElementById('messageDisplay');
+        const backToTopButton = document.getElementById('backToTopButton');
+        const detailElements = document.querySelectorAll('details');
+        const container = document.querySelector('.container');
+
+        // Store original content of the entire container to restore after search
+        let originalContainerHtml = container.innerHTML;
+        let highlightedElements = [];
+        let currentHighlightIndex = -1;
+
+        function showMessage(message, type = 'info') {
+            messageDisplay.textContent = message;
+            messageDisplay.className = `message-box ${type === 'error' ? 'bg-red-100 text-red-800 border-red-200' : 'bg-yellow-100 text-yellow-800 border-yellow-200'} block`;
+        }
+
+        function hideMessage() {
+            messageDisplay.classList.add('hidden');
+        }
+
+        function clearHighlights() {
+            highlightedElements.forEach(el => {
+                el.classList.remove('current-highlight');
+                // Restore original background if it was changed by current-highlight
+                el.style.backgroundColor = '';
+                el.style.outline = '';
+            });
+            highlightedElements = [];
+            currentHighlightIndex = -1;
+            // Restore the entire container's original HTML
+            container.innerHTML = originalContainerHtml;
+            // Re-select detail elements as their content might have been re-rendered
+            // This is important for the `details.open = true` to work correctly on subsequent searches
+            document.querySelectorAll('details').forEach(detail => {
+                const id = detail.dataset.originalContentId;
+                if (id && originalContents[id]) {
+                    detail.querySelector('.content-body').innerHTML = originalContents[id];
+                }
+            });
+        }
+
+        function performSearch() {
+            const query = searchText.value.trim();
+            hideMessage();
+
+            if (!query) {
+                clearHighlights(); // Clear highlights if search query is empty
+                showMessage("Please enter text to search for.", "info");
+                return;
+            }
+
+            // If a new search query or no highlights, perform a fresh search
+            if (highlightedElements.length === 0 || searchText.dataset.lastQuery !== query) {
+                clearHighlights(); // Clear any existing highlights from previous search
+                searchText.dataset.lastQuery = query; // Store the current query
+
+                const regex = new RegExp(`(${query})`, 'gi'); // 'g' for global, 'i' for case-insensitive, capture group for replacement
+
+                let tempHighlighted = [];
+
+                detailElements.forEach(detail => {
+                    const contentBody = detail.querySelector('.content-body');
+                    // Use a temporary div to parse and re-serialize HTML to avoid issues with nested spans
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = originalContents[detail.dataset.originalContentId]; // Use original content for re-highlighting
+
+                    // Traverse text nodes to avoid re-highlighting existing spans
+                    const walk = document.createTreeWalker(tempDiv, NodeFilter.SHOW_TEXT, null, false);
+                    let node;
+                    let nodesToReplace = [];
+
+                    while ((node = walk.nextNode())) {
+                        if (node.parentNode.tagName !== 'SPAN' || !node.parentNode.classList.contains('highlight')) {
+                            const text = node.nodeValue;
+                            if (regex.test(text)) {
+                                nodesToReplace.push(node);
+                            }
+                        }
+                    }
+
+                    nodesToReplace.forEach(node => {
+                        const newHtml = node.nodeValue.replace(regex, `<span class="highlight">$1</span>`);
+                        const tempSpan = document.createElement('span');
+                        tempSpan.innerHTML = newHtml;
+
+                        while (tempSpan.firstChild) {
+                            node.parentNode.insertBefore(tempSpan.firstChild, node);
+                        }
+                        node.parentNode.removeChild(node);
+                    });
+
+                    contentBody.innerHTML = tempDiv.innerHTML; // Update the actual content body
+
+                    // Collect the newly created highlight spans
+                    contentBody.querySelectorAll('.highlight').forEach(span => {
+                        tempHighlighted.push(span);
+                    });
+                });
+
+                highlightedElements = tempHighlighted;
+                currentHighlightIndex = -1; // Reset index for new search
+            }
+
+            if (highlightedElements.length > 0) {
+                // Remove previous current highlight
+                if (currentHighlightIndex !== -1) {
+                    highlightedElements[currentHighlightIndex].classList.remove('current-highlight');
+                }
+
+                // Move to the next highlight
+                currentHighlightIndex = (currentHighlightIndex + 1) % highlightedElements.length;
+                const currentElement = highlightedElements[currentHighlightIndex];
+
+                // Add current highlight class
+                currentElement.classList.add('current-highlight');
+
+                // Ensure the parent <details> is open
+                let parentDetails = currentElement.closest('details');
+                if (parentDetails) {
+                    parentDetails.open = true;
+                }
+
+                // Scroll to the current highlight
+                currentElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                showMessage(`Found ${highlightedElements.length} occurrence(s). Showing ${currentHighlightIndex + 1} of ${highlightedElements.length}.`);
+            } else {
+                showMessage("No occurrences found.", "info");
+            }
+        }
+
+        // Event Listeners
+        searchButton.addEventListener('click', performSearch);
+        searchText.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+
+        backToTopButton.addEventListener('click', () => {
+            window.location.href = 'creative-thinking-hub.html';
+        });
+
+        // Clear highlights when search input is cleared manually
+        searchText.addEventListener('input', () => {
+            if (searchText.value.trim() === '') {
+                clearHighlights();
+                hideMessage();
+                searchText.dataset.lastQuery = ''; // Clear last query
+            }
+        });
+
+        // Initial setup for original content storage
+        document.addEventListener('DOMContentLoaded', () => {
+            originalContainerHtml = container.innerHTML; // Store initial full HTML
+            detailElements.forEach(detail => {
+                detail.dataset.originalContentId = detail.dataset.originalContentId || `section-${Math.random().toString(36).substr(2, 9)}`;
+                originalContents[detail.dataset.originalContentId] = detail.querySelector('.content-body').innerHTML;
+            });
+        });
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
