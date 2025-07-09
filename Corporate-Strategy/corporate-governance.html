@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Report: Corporate Strategy, Stakeholders & Governance</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals (Slate, Zinc, Stone) -->
+    <!-- Application Structure Plan: A single-page dashboard design with a sticky navigation header for easy scrolling between thematic sections. The core content is organized into a responsive grid of interactive "cards," each focusing on a key concept (e.g., Stakeholders, CSR Pyramid, Governance Mechanisms). This non-linear, modular structure is chosen over a simple text document to enhance user engagement and comprehension. It allows users to explore topics in any order, catering to different learning paths and making the complex information feel more accessible and less overwhelming. Interactions like hovers, clicks for modals, and toggles encourage active learning. -->
+    <!-- Visualization & Content Choices: 
+        - Stakeholder Universe: (Goal: Organize) An HTML/CSS flexbox layout is used to clearly separate internal/external groups. Justification: Simple, clean, and effective without graphics.
+        - CSR Pyramid: (Goal: Organize/Inform) An HTML/CSS-based pyramid diagram with hover interactions. Justification: Visually represents the hierarchy and provides details on demand. Library: Custom HTML/Tailwind.
+        - Global CSR Attitudes Chart: (Goal: Compare) An interactive bar chart. Justification: Best method for comparing quantitative data across categories. Library: Chart.js.
+        - Agency Problem Toggles: (Goal: Inform) JS-powered toggles to show/hide definitions. Justification: Presents paired concepts cleanly. Library: Vanilla JS.
+        - Governance Mechanisms Grid/Modals: (Goal: Explore/Inform) A grid of clickable cards that запускает modals. Justification: Provides deep-dive information without losing context on the main page. Library: Vanilla JS.
+        - Ecosystem Trend Chart: (Goal: Show Change) A line chart. Justification: Standard and effective for time-series data. Library: Chart.js.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        /* Chart container styling for responsiveness and controlled dimensions */
+        .chart-container { 
+            position: relative; 
+            width: 100%; 
+            max-width: 800px; /* Limit max width for readability */
+            margin-left: auto; 
+            margin-right: auto; 
+            height: 400px; /* Base height */
+            max-height: 50vh; /* Max height relative to viewport */
+        }
+        /* Adjust chart container height for smaller screens */
+        @media (max-width: 767px) {
+            .chart-container {
+                height: 300px; /* Smaller height on mobile */
+                max-height: 40vh;
+            }
+        }
+
+        .modal-backdrop { transition: opacity 0.3s ease; }
+        .modal-content { transition: transform 0.3s ease; }
+        .nav-link { transition: color 0.2s; }
+        .nav-link:hover { color: #4f46e5; }
+        .group:hover .group-hover\:block { display: block; }
+        .group:hover .group-hover\:bg-indigo-700 { background-color: #4338ca; }
+        .highlight { background-color: #fde047; /* Tailwind yellow-300 */ }
+    </style>
+</head>
+<body class="text-slate-700">
+
+    <!-- Header & Navigation -->
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-40 border-b border-slate-200">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-screen-xl lg:max-w-screen-2xl">
+            <div class="flex items-center justify-between h-16">
+                <!-- Back Button -->
+                <a href="corporate-strategy-hub.html" class="flex items-center text-slate-600 hover:text-slate-800 text-sm font-semibold pr-4">
+                    <span class="mr-1">&#x2190;</span> Back to Index
+                </a>
+                <h1 class="text-lg font-bold text-slate-800 flex-grow text-center md:text-left">Corporate Strategy & Governance</h1>
+                <nav class="flex items-center space-x-4 sm:space-x-6 text-sm font-semibold">
+                    <a href="#intro" class="nav-link text-slate-600 hidden md:block">Introduction</a>
+                    <a href="#frameworks" class="nav-link text-slate-600 hidden md:block">Frameworks</a>
+                    <a href="#governance" class="nav-link text-slate-600 hidden md:block">Governance</a>
+                    <a href="#trends" class="nav-link text-slate-600 hidden md:block">Modern Trends</a>
+                    <a href="#" id="backToTopBtn" class="nav-link text-slate-600">Back to Top</a>
+                    <input type="text" id="searchInput" placeholder="Search..." class="w-24 sm:w-32 md:w-40 p-1.5 text-sm rounded-md border border-slate-300 focus:ring-indigo-500 focus:border-indigo-500">
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div id="mainContent">
+        <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 max-w-screen-xl lg:max-w-screen-2xl">
+
+            <!-- Section 1: Introduction -->
+            <section id="intro" class="text-center mb-16 md:mb-24 scroll-mt-16">
+                <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-slate-900 mb-4">Navigating the World of Corporate Governance</h2>
+                <p class="max-w-3xl mx-auto text-lg text-slate-600">
+                    This interactive report explores the crucial relationship between a corporation, its stakeholders, and the governance structures that guide its path. We will move beyond static text to explore the dynamic forces shaping modern business, from shareholder value to social responsibility.
+                </p>
+            </section>
+
+            <!-- Section 2: Core Frameworks -->
+            <section id="frameworks" class="mb-16 md:mb-24 scroll-mt-16">
+                <div class="text-center mb-12">
+                    <h3 class="text-2xl md:text-3xl font-bold text-slate-900">Core Frameworks</h3>
+                    <p class="mt-2 text-md text-slate-500">Understanding the foundational concepts of stakeholders and social responsibility.</p>
+                </div>
+                <div class="flex flex-col gap-8 items-stretch">
+                    
+                    <!-- Stakeholder Universe -->
+                    <div class="bg-white p-6 rounded-xl shadow-md border border-slate-100 flex flex-col">
+                        <h4 class="font-bold text-xl text-slate-800 mb-4">The Stakeholder Universe</h4>
+                        <p class="text-sm text-slate-500 mb-6 flex-grow">A company's success depends on balancing the diverse interests of its internal and external stakeholders. Shareholder primacy, a recent trend, argues for prioritizing investor returns, but this view is increasingly being challenged.</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <h5 class="font-semibold text-slate-700 mb-2 flex items-center">
+                                    <span class="w-3 h-3 rounded-full bg-indigo-500 mr-2"></span>
+                                    Internal
+                                </h5>
+                                <ul class="text-sm space-y-1 text-slate-600 list-disc list-inside">
+                                    <li><strong>Managers:</strong> Individuals responsible for the day-to-day operations and strategic direction.</li>
+                                    <li><strong>Shareholders:</strong> Owners of the company's stock, seeking financial returns.</li>
+                                    <li><strong>Employees:</strong> Individuals who work for the company, contributing labor and expertise.</li>
+                                    <li><strong>Board Members:</strong> Individuals elected to oversee the company's management and represent stakeholder interests.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h5 class="font-semibold text-slate-700 mb-2 flex items-center">
+                                    <span class="w-3 h-3 rounded-full bg-sky-500 mr-2"></span>
+                                    External
+                                <h5>
+                                <ul class="text-sm space-y-1 text-slate-600 list-disc list-inside">
+                                    <li><strong>Customers:</strong> Individuals or organizations who purchase the company's products or services.</li>
+                                    <li><strong>Suppliers:</strong> Organizations that provide raw materials, components, or services to the company.</li>
+                                    <li><strong>Governments:</strong> Regulatory bodies that set laws and policies affecting the company.</li>
+                                    <li><strong>Communities:</strong> Local populations and environments affected by the company's operations.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CSR Pyramid -->
+                    <div class="bg-white p-6 rounded-xl shadow-md border border-slate-100 flex flex-col md:col-span-2 lg:col-span-1">
+                        <h4 class="font-bold text-xl text-slate-800 mb-4">The CSR Pyramid</h4>
+                        <p class="text-sm text-slate-500 mb-6 flex-grow">Corporate Social Responsibility (CSR) structures a company's obligations into four levels. While Milton Friedman argued for focusing only on the bottom two, modern strategy often finds competitive advantage in embracing all four. Hover over each layer to learn more.</p>
+                        
+                        <div class="flex flex-col md:flex-row gap-6 flex-grow">
+                            <!-- Pyramid Graphic -->
+                            <div class="relative w-full md:w-1/2 h-64 flex flex-col items-center justify-end">
+                                <!-- Philanthropic -->
+                                <div onmouseover="displayCsrDetails('philanthropic')" class="relative group w-1/4 h-1/4 bg-amber-300 flex items-center justify-center text-center cursor-pointer" style="clip-path: polygon(50% 0%, 100% 100%, 0% 100%);">
+                                    <span class="text-xs font-bold text-amber-800">Philanthropic</span>
+                                </div>
+                                <!-- Ethical -->
+                                <div onmouseover="displayCsrDetails('ethical')" class="relative group w-1/2 h-1/4 bg-orange-400 flex items-center justify-center text-center cursor-pointer -mt-1" style="clip-path: polygon(25% 0, 75% 0, 100% 100%, 0% 100%);">
+                                    <span class="text-sm font-bold text-orange-800">Ethical</span>
+                                </div>
+                                <!-- Legal -->
+                                <div onmouseover="displayCsrDetails('legal')" class="relative group w-3/4 h-1/4 bg-red-400 flex items-center justify-center text-center cursor-pointer -mt-1" style="clip-path: polygon(16.66% 0, 83.33% 0, 100% 100%, 0% 100%);">
+                                    <span class="font-bold text-red-800">Legal</span>
+                                </div>
+                                <!-- Economic -->
+                                <div onmouseover="displayCsrDetails('economic')" class="relative group w-full h-1/4 bg-rose-500 flex items-center justify-center text-center cursor-pointer -mt-1">
+                                    <span class="font-bold text-white">Economic</span>
+                                </div>
+                            </div>
+
+                            <!-- Details Display -->
+                            <div id="csrDetailsDisplay" class="w-full md:w-1/2 p-4 bg-slate-50 rounded-lg border border-slate-200 flex flex-col justify-center">
+                                <h5 id="csrDetailTitle" class="font-semibold text-slate-700 mb-2"></h5>
+                                <p id="csrDetailDefinition" class="text-sm text-slate-600 mb-2"></p>
+                                <p id="csrDetailExample" class="text-xs text-slate-500 italic"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Global Attitudes -->
+                    <div class="bg-white p-6 rounded-xl shadow-md border border-slate-100 md:col-span-2 flex flex-col">
+                        <h4 class="font-bold text-xl text-slate-800 mb-2">Global Perspectives on CSR</h4>
+                         <p class="text-sm text-slate-500 mb-6 flex-grow">The view that a business's only social responsibility is to increase profits varies significantly across the globe. This chart shows the percentage of managers in various countries who at least somewhat agree with this profit-centric view.</p>
+                        <div class="chart-container">
+                            <canvas id="csrChart"></canvas>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Section 3: Governance & Agency -->
+            <section id="governance" class="mb-16 md:mb-24 scroll-mt-16">
+                <div class="text-center mb-12">
+                    <h3 class="text-2xl md:text-3xl font-bold text-slate-900">Governance in Action</h3>
+                    <p class="mt-2 text-md text-slate-500">Exploring the mechanisms that direct and control a firm, and the challenges that arise.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 items-stretch">
+                    <!-- Agency Dilemma -->
+                    <div class="bg-white p-6 rounded-xl shadow-md border border-slate-100 flex flex-col">
+                        <h4 class="font-bold text-xl text-slate-800 mb-4">The Agency Dilemma</h4>
+                        <p class="text-sm text-slate-500 mb-6 flex-grow">Agency Theory examines the problems that arise when one party (the agent, e.g., a manager) is expected to act in the best interests of another (the principal, e.g., a shareholder). This separation of ownership and control can lead to two key issues due to information asymmetry.</p>
+                        <div class="space-y-4">
+                            <div>
+                                <button onclick="openModal('adverseSelection')" class="w-full text-left font-semibold p-3 bg-slate-50 hover:bg-slate-100 rounded-lg">
+                                    Adverse Selection
+                                </button>
+                            </div>
+                            <div>
+                                <button onclick="openModal('moralHazard')" class="w-full text-left font-semibold p-3 bg-slate-50 hover:bg-slate-100 rounded-lg">
+                                    Moral Hazard
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                     <!-- Board Functions -->
+                    <div class="bg-white p-6 rounded-xl shadow-md border border-slate-100 flex flex-col">
+                        <h4 class="font-bold text-xl text-slate-800 mb-4">The Role of the Board</h4>
+                        <p class="text-sm text-slate-500 mb-6 flex-grow">The Board of Directors is the centerpiece of corporate governance, tasked with general oversight and a range of critical duties to ensure the company is run effectively and ethically.</p>
+                        <ul class="space-y-2 text-sm">
+                            <li class="flex items-start"><span class="text-indigo-500 mr-2 mt-1">&#10003;</span><span>Select, evaluate, and compensate the CEO.</span></li>
+                            <li class="flex items-start"><span class="text-indigo-500 mr-2 mt-1">&#10003;</span><span>Oversee CEO succession planning.</span></li>
+                            <li class="flex items-start"><span class="text-indigo-500 mr-2 mt-1">&#10003;</span><span>Approve major strategic initiatives.</span></li>
+                            <li class="flex items-start"><span class="text-indigo-500 mr-2 mt-1">&#10003;</span><span>Conduct risk assessment and mitigation.</span></li>
+                            <li class="flex items-start"><span class="text-indigo-500 mr-2 mt-1">&#10003;</span><span>Ensure financial statement accuracy and legal compliance.</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- Mechanisms of Governance -->
+                    <div class="bg-white p-6 rounded-xl shadow-md border border-slate-100 md:row-span-2 flex flex-col">
+                        <h4 class="font-bold text-xl text-slate-800 mb-2">Mechanisms to Align Interests</h4>
+                        <p class="text-sm text-slate-500 mb-6 flex-grow">Capitalism has developed several institutions to lessen the agency problem and ensure managers act in shareholders' interests. Click on each mechanism to learn more.</p>
+                        <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-2 gap-4">
+                            <button onclick="openModal('m1')" class="p-4 bg-indigo-50 hover:bg-indigo-100 rounded-lg text-indigo-800 font-semibold text-sm text-center">Takeovers</button>
+                            <button onclick="openModal('m2')" class="p-4 bg-indigo-50 hover:bg-indigo-100 rounded-lg text-indigo-800 font-semibold text-sm text-center">External Recruitment</button>
+                            <button onclick="openModal('m3')" class="p-4 bg-indigo-50 hover:bg-indigo-100 rounded-lg text-indigo-800 font-semibold text-sm text-center">Board Monitoring</button>
+                            <button onclick="openModal('m4')" class="p-4 bg-indigo-50 hover:bg-indigo-100 rounded-lg text-indigo-800 font-semibold text-sm text-center">Stock Options</button>
+                            <button onclick="openModal('m5')" class="p-4 bg-indigo-50 hover:bg-indigo-100 rounded-lg text-indigo-800 font-semibold text-sm text-center">Institutional Investors</button>
+                            <button onclick="openModal('m6')" class="p-4 bg-indigo-50 hover:bg-indigo-100 rounded-lg text-indigo-800 font-semibold text-sm text-center">Debt</button>
+                            <button onclick="openModal('m7')" class="p-4 bg-indigo-50 hover:bg-indigo-100 rounded-lg text-indigo-800 font-semibold text-sm text-center">Separate CEO/Chair</button>
+                            <button onclick="openModal('m8')" class="p-4 bg-indigo-50 hover:bg-indigo-100 rounded-lg text-indigo-800 font-semibold text-sm text-center">Internal Controls</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 4: Modern Trends -->
+            <section id="trends" class="scroll-mt-16">
+                <div class="text-center mb-12">
+                    <h3 class="text-2xl md:text-3xl font-bold text-slate-900">Modern Trends & Challenges</h3>
+                    <p class="mt-2 text-md text-slate-500">How corporations are adapting to new pressures and opportunities.</p>
+                </div>
+                <div class="grid md:grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+                    
+                    <!-- Ecosystem Strategies -->
+                    <div class="bg-white p-6 rounded-xl shadow-md border border-slate-100 lg:col-span-2 flex flex-col">
+                        <h4 class="font-bold text-xl text-slate-800 mb-2">The Rise of "Ecosystem" Strategies</h4>
+                        <p class="text-sm text-slate-500 mb-6 flex-grow">The term "ecosystem" is increasingly used to describe modern business environments. This shift from an industry view to a community view (including suppliers, customers, and complementors) emphasizes cooperation and is particularly vital for platform-based businesses like Apple, Amazon, and Coursera.</p>
+                        <div class="chart-container h-72 max-h-[40vh]">
+                            <canvas id="ecosystemChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Protection from Shareholders -->
+                    <div class="bg-white p-6 rounded-xl shadow-md border border-slate-100 flex flex-col">
+                        <h4 class="font-bold text-xl text-slate-800 mb-4">Shielding from Market Pressure</h4>
+                        <p class="text-sm text-slate-500 mb-6 flex-grow">To counter short-term market pressures, companies use various tactics to protect their long-term vision. However, these methods carry their own risks.</p>
+                        <div id="accordion-container" class="space-y-2">
+                            <!-- Accordion Item 1 -->
+                            <div>
+                                <button onclick="toggleAccordion(this)" class="accordion-button w-full flex justify-between items-center text-left font-semibold p-3 bg-slate-50 hover:bg-slate-100 rounded-lg">
+                                    <span>Poison Pills</span>
+                                    <span class="accordion-icon transform transition-transform">&#9662;</span>
+                                </button>
+                                <div class="accordion-content hidden mt-2 p-3 text-sm bg-slate-50 rounded-lg">A defense tactic making a hostile takeover prohibitively expensive. Example: In 2012, Netflix's board adopted a poison pill to thwart pressure from activist investor Carl Icahn.</div>
+                            </div>
+                             <!-- Accordion Item 2 -->
+                            <div>
+                                <button onclick="toggleAccordion(this)" class="accordion-button w-full flex justify-between items-center text-left font-semibold p-3 bg-slate-50 hover:bg-slate-100 rounded-lg">
+                                    <span>Going Private & Unicorns</span>
+                                    <span class="accordion-icon transform transition-transform">&#9662;</span>
+                                </button>
+                                <div class="accordion-content hidden mt-2 p-3 text-sm bg-slate-50 rounded-lg">Taking a company private or remaining a private "Unicorn" (startup valued >$1B) shields it from public market scrutiny, leading to a boom in private equity.</div>
+                            </div>
+                             <!-- Accordion Item 3 -->
+                            <div>
+                                <button onclick="toggleAccordion(this)" class="accordion-button w-full flex justify-between items-center text-left font-semibold p-3 bg-slate-50 hover:bg-slate-100 rounded-lg">
+                                    <span>Dual Class Shares</span>
+                                     <span class="accordion-icon transform transition-transform">&#9662;</span>
+                                </button>
+                                <div class="accordion-content hidden mt-2 p-3 text-sm bg-slate-50 rounded-lg">Founders retain superior voting rights to protect long-term vision. Cautionary Tale: WeWork's founder, Adam Neumann, held such shares, leading to a massive buyout by investor SoftBank after the company's spectacular collapse, highlighting the risks of unchecked founder control.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Broadening the Mission -->
+                    <div class="bg-white p-6 rounded-xl shadow-md border border-slate-100 flex flex-col">
+                        <h4 class="font-bold text-xl text-slate-800 mb-4">Broadening the Mission</h4>
+                        <p class="text-sm text-slate-500 mb-6 flex-grow">Companies are adopting tools like the Balanced Scorecard to create a more holistic view of performance beyond short-term financials, incorporating customer, operational, and organizational metrics.</p>
+                        <div class="grid grid-cols-2 gap-4 text-sm">
+                            <div class="bg-blue-50 p-3 rounded-lg"><strong class="text-blue-800">Financial:</strong> Profitability, growth</div>
+                            <div class="bg-green-50 p-3 rounded-lg"><strong class="text-green-800">Customer:</strong> Differentiation, cost</div>
+                            <div class="bg-yellow-50 p-3 rounded-lg"><strong class="text-yellow-800">Operations:</strong> Products, fulfillment</div>
+                            <div class="bg-purple-50 p-3 rounded-lg"><strong class="text-purple-800">Organizational:</strong> Learning, leadership</div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+        </main>
+    </div> <!-- End of mainContent -->
+
+    <!-- Modal Structure -->
+    <div id="modalBackdrop" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden modal-backdrop" onclick="closeModal()">
+        <div id="modalContent" class="bg-white rounded-lg shadow-xl w-11/12 max-w-md mx-auto mt-20 p-6 relative modal-content" onclick="event.stopPropagation()">
+            <button onclick="closeModal()" class="absolute top-3 right-3 text-slate-500 hover:text-slate-800">&times;</button>
+            <h5 id="modalTitle" class="text-xl font-bold text-slate-800 mb-4"></h5>
+            <p id="modalText" class="text-slate-600"></p>
+            <div id="modalContext" class="mt-4 p-3 bg-slate-50 rounded-lg text-sm text-slate-500"></div>
+        </div>
+    </div>
+    
+    <footer class="text-center py-8 border-t border-slate-200">
+        <p class="text-sm text-slate-500">Interactive Report based on "Module 4: Stakeholders and Governance"</p>
+    </footer>
+
+    <script>
+        // Data for Modals
+        const modalData = {
+            m1: { title: 'Takeovers (Market for Corporate Control)', text: 'The threat that a poorly performing company will be acquired by another firm. This incentivizes managers to maintain a healthy stock price to avoid a takeover.', context: 'Context: Effective in transparent markets but can lead to short-term thinking to boost immediate stock performance.' },
+            m2: { title: 'Recruitment of External Executives', text: 'A robust market for managerial talent means successful executives are often recruited by other firms for higher pay. This motivates managers to build a strong performance record.', context: 'Context: Relies on the ability of the market to accurately assess a manager\'s true contribution, which can be difficult.' },
+            m3: { title: 'Monitoring by Boards of Directors', text: 'The board\'s primary role is to oversee, evaluate, and guide the top management team on behalf of shareholders. An active, independent board is a key defense against poor management.', context: 'Context: Effectiveness depends heavily on the independence and expertise of board members. A CEO who also chairs the board can weaken this mechanism.' },
+            m4: { title: 'Compensation (Stock Options)', text: 'Tying a large portion of a manager\'s compensation to stock options directly aligns their financial interests with those of the shareholders.', context: 'Context: A "Goldilocks" approach is needed. Too little, and it\'s ineffective. Too much, and it can incentivize risky behavior or accounting manipulation to artificially inflate stock prices (e.g., Enron).' },
+            m5: { title: 'Monitoring by Institutional Investors', text: 'Large investors like pension funds or mutual funds have the resources and incentive to closely monitor management and exert pressure for change if they are displeased.', context: 'Context: Can be a powerful force, but these large investors may also prioritize short-term returns over long-term stability.' },
+            m6: { title: 'Debt', text: 'Using debt financing minimizes the "free cash flow" available to managers, forcing efficiency and reducing the potential for wasteful spending on perks or ill-conceived projects.', context: 'Context: Highly effective for mature, stable businesses (e.g., grocery). Can be detrimental to high-tech or growth firms that need cash for innovation and R&D.' },
+            m7: { title: 'Separate Chairperson and CEO', text: 'Splitting the roles of CEO (runs the company) and Chairperson (runs the board) creates a clearer structure of oversight and accountability, as the board chair\'s primary duty is to monitor the CEO.', context: 'Context: Promotes better governance but may slow down decision-making in fast-moving industries where a single, unified leader is an advantage.' },
+            m8: { title: 'Internal Controls (Multidivisional)', text: 'In large, diversified firms, corporate headquarters can act as a "miniature capital market," allocating capital to the best-performing divisions. This creates competition and incentivizes divisional managers to focus on profitability.', context: 'Context: Effective for managing large, complex organizations but can lead to internal politics and short-term focus within divisions.' },
+            adverseSelection: { title: 'Adverse Selection', text: 'A pre-contractual problem where the agent misrepresents their abilities.', context: 'Example: A job candidate claiming expertise they don\'t possess.' },
+            moralHazard: { title: 'Moral Hazard', text: 'A post-contractual problem where the agent lacks incentive to work as hard as the principal expects.', context: 'Example: An employee shirking responsibilities once hired.' }
+        };
+
+        // CSR Pyramid Layer Data
+        const csrLayerData = {
+            economic: {
+                title: 'Economic Responsibilities',
+                definition: 'At the base of the pyramid, a company\'s primary responsibility is to be profitable. This provides the foundation for all other responsibilities.',
+                example: 'A company efficiently producing goods or services at a profit, creating jobs and wealth.'
+            },
+            legal: {
+                title: 'Legal Responsibilities',
+                definition: 'Companies must obey all laws and regulations. These are society\'s codified ethics and represent the minimum acceptable standard of behavior.',
+                example: 'A business adhering to environmental protection laws, labor laws, and consumer safety regulations.'
+            },
+            ethical: {
+                title: 'Ethical Responsibilities',
+                definition: 'Beyond legal requirements, businesses are expected to do what is right, just, and fair. This involves acting with integrity and considering societal norms not yet codified into law.',
+                example: 'A company voluntarily adopting fair trade practices or ensuring ethical sourcing of materials, even if not legally mandated.'
+            },
+            philanthropic: {
+                title: 'Philanthropic Responsibilities',
+                definition: 'At the top of the pyramid, this involves corporate citizenship – contributing resources to the community and improving the quality of life for others, beyond direct business interests.',
+                example: 'A corporation donating a percentage of its profits to charity, sponsoring community development programs, or encouraging employee volunteering.'
+            }
+        };
+
+        // Modal Functions
+        function openModal(id) {
+            const data = modalData[id];
+            document.getElementById('modalTitle').innerText = data.title;
+            document.getElementById('modalText').innerText = data.text;
+            document.getElementById('modalContext').innerText = data.context;
+            const modalBackdrop = document.getElementById('modalBackdrop');
+            modalBackdrop.classList.remove('hidden');
+            setTimeout(() => modalBackdrop.style.opacity = '1', 10);
+            const modalContent = document.getElementById('modalContent');
+            modalContent.style.transform = 'translateY(0)';
+        }
+
+        function closeModal() {
+            const modalBackdrop = document.getElementById('modalBackdrop');
+            modalBackdrop.style.opacity = '0';
+             const modalContent = document.getElementById('modalContent');
+            modalContent.style.transform = 'translateY(-20px)';
+            setTimeout(() => modalBackdrop.classList.add('hidden'), 300);
+        }
+
+        // Toggle Visibility Function
+        function toggleVisibility(id) {
+            document.getElementById(id).classList.toggle('hidden');
+        }
+
+        // Accordion Function
+        function toggleAccordion(button) {
+            const content = button.nextElementSibling;
+            const icon = button.querySelector('.accordion-icon');
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                content.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+        
+        // CSR Pyramid Details Display Function
+        function displayCsrDetails(layerKey) {
+            const data = csrLayerData[layerKey];
+            document.getElementById('csrDetailTitle').innerText = data.title;
+            document.getElementById('csrDetailDefinition').innerText = data.definition;
+            document.getElementById('csrDetailExample').innerText = `Example: ${data.example}`;
+        }
+
+        // Search Functionality
+        const searchInput = document.getElementById('searchInput');
+        const mainContent = document.getElementById('mainContent');
+        let originalContent = mainContent.innerHTML; // Store original content
+
+        function removeHighlights() {
+            const highlightedSpans = mainContent.querySelectorAll('.highlight');
+            highlightedSpans.forEach(span => {
+                const parent = span.parentNode;
+                // Replace the span with its text content
+                parent.replaceChild(document.createTextNode(span.textContent), span);
+                // Normalize the parent to merge adjacent text nodes
+                parent.normalize(); 
+            });
+        }
+
+        function performSearch() {
+            removeHighlights(); // Always remove existing highlights first
+
+            const query = searchInput.value.trim();
+            if (query === '') {
+                // If query is empty, restore original content and do nothing else
+                mainContent.innerHTML = originalContent; // Restore original content
+                return;
+            }
+
+            const regex = new RegExp(`(${query})`, 'gi'); // Case-insensitive global search
+
+            // Traverse all text nodes and replace matches with highlighted spans
+            function highlightNode(node) {
+                if (node.nodeType === Node.TEXT_NODE) {
+                    const text = node.nodeValue;
+                    if (text.toLowerCase().includes(query.toLowerCase())) {
+                        const fragment = document.createDocumentFragment();
+                        let lastIndex = 0;
+                        let match;
+                        while ((match = regex.exec(text)) !== null) {
+                            fragment.appendChild(document.createTextNode(text.substring(lastIndex, match.index)));
+                            const span = document.createElement('span');
+                            span.className = 'highlight';
+                            span.textContent = match[0];
+                            fragment.appendChild(span);
+                            lastIndex = regex.lastIndex;
+                        }
+                        fragment.appendChild(document.createTextNode(text.substring(lastIndex)));
+                        node.parentNode.replaceChild(fragment, node);
+                    }
+                } else if (node.nodeType === Node.ELEMENT_NODE && !['SCRIPT', 'STYLE', 'INPUT', 'TEXTAREA'].includes(node.tagName)) {
+                    // Recursively call for child nodes, excluding script, style, and input elements
+                    Array.from(node.childNodes).forEach(highlightNode);
+                }
+            }
+            
+            // Re-initialize originalContent to ensure it reflects the current DOM state before highlighting
+            // This is important if the DOM structure changes due to other interactions (e.g., modals)
+            // However, for a continuous search, we need to be careful not to re-read the DOM too often.
+            // The current approach of replacing text nodes should be fine without re-reading originalContent
+            // as long as other interactions don't fundamentally alter the text structure.
+            // For safety, let's ensure originalContent is captured after initial DOM load.
+            if (!originalContent || originalContent === '') { // Capture only once or if somehow lost
+                originalContent = mainContent.innerHTML;
+            }
+
+            highlightNode(mainContent);
+        }
+
+        searchInput.addEventListener('input', performSearch);
+
+        // Back to Top Button
+        document.getElementById('backToTopBtn').addEventListener('click', (e) => {
+            e.preventDefault(); // Prevent default anchor behavior
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            searchInput.value = ''; // Clear search input
+            removeHighlights(); // Remove any highlights
+        });
+
+        // Chart.js Implementations
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set initial CSR pyramid details
+            displayCsrDetails('economic'); 
+
+            // CSR Chart
+            const csrCtx = document.getElementById('csrChart').getContext('2d');
+            new Chart(csrCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['UAE', 'Japan', 'India', 'South Korea', 'Singapore', 'USA', 'China', 'Brazil', 'Germany', 'Italy', 'Spain'],
+                    datasets: [{
+                        label: '% of Managers Agreeing Profit is Primary Social Responsibility',
+                        data: [85, 71, 69, 68, 68, 57, 40, 39, 38, 37, 35],
+                        backgroundColor: 'rgba(79, 70, 229, 0.6)',
+                        borderColor: 'rgba(79, 70, 229, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    scales: {
+                        x: { suggestedMax: 100, grid: { display: false } },
+                        y: { grid: { display: true } }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.raw}%`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Ecosystem Chart
+            const ecosystemCtx = document.getElementById('ecosystemChart').getContext('2d');
+            new Chart(ecosystemCtx, {
+                type: 'line',
+                data: {
+                    labels: ['2000', '2002', '2004', '2006', '2008', '2010', '2012', '2014', '2016', '2017'],
+                    datasets: [{
+                        label: 'Mentions of "Ecosystem" in Business News',
+                        data: [1000, 2000, 3000, 6000, 15000, 22000, 31000, 48000, 65000, 82000],
+                        fill: true,
+                        backgroundColor: 'rgba(30, 64, 175, 0.1)',
+                        borderColor: 'rgba(30, 64, 175, 1)',
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                         x: { grid: { display: false } },
+                         y: { grid: { display: true } }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
