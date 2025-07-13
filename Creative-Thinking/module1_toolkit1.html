@@ -11,7 +11,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f0f4f8;
+            background: linear-gradient(90deg, #38bdf8 0%, #34d399 100%);
             color: #333;
             line-height: 1.6;
             scroll-behavior: smooth; /* Smooth scrolling for anchor links */
@@ -20,31 +20,47 @@
             max-width: 900px;
             margin: 40px auto;
             padding: 30px;
-            background-color: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(56,189,248,0.15), 0 2px 8px rgba(52,211,153,0.10);
         }
         h1 {
-            color: #1a202c;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 20px;
+            color: #0e7490;
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 48px;
             text-align: center;
+            letter-spacing: 2px;
+            background: linear-gradient(90deg, #f59e42 0%, #38bdf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         h2 {
-            color: #2d3748;
-            font-size: 1.8rem;
-            font-weight: 600;
-            margin-top: 30px;
-            margin-bottom: 15px;
-            padding-bottom: 5px;
+            color: #be185d;
+            font-size: 3rem;
+            font-weight: 900;
+            margin-top: 56px;
+            margin-bottom: 36px;
+            padding-bottom: 14px;
+            text-align: left;
+            letter-spacing: 1.5px;
+            background: linear-gradient(90deg, #f59e42 0%, #be185d 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         h3 {
-            color: #4a5568;
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin-top: 20px;
-            margin-bottom: 10px;
+            color: #2563eb;
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-top: 40px;
+            margin-bottom: 24px;
+            letter-spacing: 1px;
+            background: linear-gradient(90deg, #38bdf8 0%, #818cf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         ul {
             list-style-type: disc;
@@ -72,9 +88,13 @@
             font-style: italic;
             color: #5f6b7d;
             border-left: 4px solid #a0aec0;
-            padding-left: 10px;
-            margin-top: 15px;
-            margin-bottom: 15px;
+            padding-left: 20px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            background-color: #f8fafc;
+            font-size: 1rem;
+            margin-left: 20px;
+            border-radius: 6px;
         }
         .back-link-top {
             display: inline-flex;
@@ -267,6 +287,7 @@
                 </div>
                 <div id="summaryError_tab1" class="mt-4 p-4 bg-red-100 text-red-700 border border-red-300 rounded-lg hidden"></div>
             </div>
+            <hr class="my-8" />
         </div>
 
         <div id="tab2" class="tab-content">
@@ -294,6 +315,7 @@
 
             <h3>2.2 Creativity is a Skill You Can Learn (Myth Busting)</h3>
             <p>Addressing common misconceptions about creativity:</p>
+            <hr class="my-8" />
 
             <h4>Myth 1: Creativity is a Magic Moment (The "Light Bulb" Moment)</h4>
             <ul>
@@ -303,6 +325,7 @@
                 </li>
                 <li><span class="highlight">"Chance favors the prepared mind."</span> We are not powerless bystanders to our own creativity.</li>
             </ul>
+            <hr class="my-8" />
 
             <h4>Myth 2: Creativity is Random</h4>
             <ul>
@@ -319,6 +342,7 @@
                     <div class="example">Initially, one might think of plants (roots growing down as the plant grows up) or carrots. However, a creative solution involves re-interpreting "down" as "feathers," leading to the answer "a goose" (grows up while growing down feathers). This shows how our initial perspective can limit us and how changing it can open new possibilities.</div>
                 </li>
             </ul>
+            <hr class="my-8" />
 
             <h4>Myth 3: Creativity Is In Your Personality</h4>
             <ul>
@@ -328,6 +352,7 @@
                 <li><strong>Reality:</strong> Creativity is a process and a skill that can be learned by anyone, regardless of their personality.</li>
                 <li><span class="highlight">It does not depend on a particular personality type.</span></li>
             </ul>
+            <hr class="my-8" />
 
             <h4>Myth 4: Creativity Is Just Being Smart</h4>
             <ul>
@@ -337,6 +362,7 @@
                 </li>
                 <li>Even smart people can get "locked into their perspectives." Creativity requires working to find alternative ways of thinking.</li>
             </ul>
+            <hr class="my-8" />
 
             <h4>Myth 5: Creativity Is About Amassing Information</h4>
             <ul>
@@ -358,6 +384,7 @@
                 </div>
                 <div id="summaryError_tab2" class="mt-4 p-4 bg-red-100 text-red-700 border border-red-300 rounded-lg hidden"></div>
             </div>
+            <hr class="my-8" />
         </div>
 
         <div id="tab3" class="tab-content">
@@ -371,10 +398,11 @@
                     <div class="example"><strong>Finding a $10 Bill:</strong> Novel and useful, but not creative because it doesn't involve a change in perspective.</div>
                 </li>
                 <li><strong>Norton Juster's "The Phantom Tollbooth" Example (Bucket of Water):</strong>
-                    <div class="example">A bucket of water can be seen as an "ocean" by an ant, a "cool drink" by an elephant, or "home" by a fish. The *thing itself* (the water) remains the same, but the *perspective* on it changes based on the observer. This illustrates how changing concepts (ant's self-concept, fish's self-concept) alters the interpretation.</div>
+                    <div class="example">A bucket of water can be seen as an "ocean" by an ant, a "cool drink" by an elephant, or "home" by a fish. The <em>thing itself</em> (the water) remains the same, but the <em>perspective</em> on it changes based on the observer. This illustrates how changing concepts (ant's self-concept, fish's self-concept) alters the interpretation.</div>
                 </li>
                 <li><strong>Jackie Torrance's "Story Lady" Example (Human Body):</strong> This story highlights how disparate parts (fingers, toes, ears) are assembled into a larger, coherent reality (the human being), akin to how our minds cast concepts into roles to form a story or perspective.</li>
             </ul>
+            <hr class="my-8" />
 
             <h3>3.2 PAGES Framework</h3>
             <p>The PAGES acronym provides a systematic way to break down and intentionally change perspectives.</p>
@@ -386,6 +414,7 @@
                 <li><strong>S - Self-Concept:</strong> Who we (the storytellers) are in the story.</li>
                 <li>To be creative, the task is to "rewrite what's on our pages" by tweaking or adjusting these five components.</li>
             </ul>
+            <hr class="my-8" />
 
             <h3>3.3 PAGES Exercise: The Nine-Dot Puzzle</h3>
             <p>This classic puzzle demonstrates the need to "think outside the box" by changing one's perspective on the problem's "parts."</p>
@@ -407,6 +436,7 @@
                 <li><span class="highlight">Creativity often requires stopping reliance on habits and usual ways of behaving.</span></li>
                 <li>The same element can be interpreted differently (e.g., "making a bed" can be an event or an action within a larger event).</li>
             </ul>
+            <hr class="my-8" />
 
             <h3>3.4 Using, Adding To, Changing, and Building Perspectives</h3>
             <ul>
@@ -425,12 +455,13 @@
                 </li>
                 <li><span class="highlight">The core of the creative process is pushing our perspectives, not just our stories.</span></li>
             </ul>
+            <hr class="my-8" />
 
             <h3>3.5 Separating Stories from Perspectives</h3>
             <ul>
                 <li><strong>Story:</strong> A series of actions or events that occur.</li>
                 <li><strong>Perspective:</strong> The way in which one thinks about those actions.</li>
-                <li><strong>Importance of Separation:</strong> This distinction is crucial because it allows us to analyze and intentionally change *how* we interpret reality, rather than just passively experiencing it.
+                <li><strong>Importance of Separation:</strong> This distinction is crucial because it allows us to analyze and intentionally change <strong>how</strong> we interpret reality, rather than just passively experiencing it.
                     <div class="example"><strong>Fishing Business Example:</strong> If fish catch is low, one might attribute it to bad luck (existing perspective, advancing the story). Alternatively, one could change perspective to investigate team performance or environmental factors, leading to different actions and potentially better solutions.</div>
                 </li>
                 <li>Our perspectives are "models" or "maps" of the territory, not the territory itself. They are necessarily incomplete.</li>
@@ -453,6 +484,7 @@
                 </div>
                 <div id="summaryError_tab3" class="mt-4 p-4 bg-red-100 text-red-700 border border-red-300 rounded-lg hidden"></div>
             </div>
+            <hr class="my-8" />
         </div>
 
         <div id="tab4" class="tab-content">
@@ -475,6 +507,7 @@
                     </ul>
                 </li>
             </ul>
+            <hr class="my-8" />
 
             <h3>4.2 The Dissatisfaction Cue</h3>
             <p>Dissatisfaction with the current story or outcome can prompt a change in perspective.</p>
@@ -491,6 +524,7 @@
                     </ul>
                 </li>
             </ul>
+            <hr class="my-8" />
 
             <h3>4.3 The Surprise Cue</h3>
             <p>Unexpected events or information can challenge existing perspectives and prompt creativity.</p>
@@ -508,6 +542,7 @@
                 </li>
                 <li>Surprise can work in conjunction with impasses or dissatisfaction.</li>
             </ul>
+            <hr class="my-8" />
 
             <h3>4.4 The Crosstalk Cue</h3>
             <p>Crosstalk involves making connections across different ideas or stories, often through casual encounters or interdisciplinary interactions.</p>
@@ -663,5 +698,3 @@
     </script>
 </body>
 </html>
-<!DOCTYPE html>
-<html lang="en">
