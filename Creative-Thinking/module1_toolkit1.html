@@ -247,14 +247,16 @@
 </head>
 <body>
     <div class="container rounded-xl">
-        <a href="creative-thinking-hub.html" class="back-link-top rounded-lg">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H16a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
-            </svg>
-            Back to Home
-        </a>
-
-        <h1 class="text-3xl lg:text-4xl">Creativity Toolkit I: Changing Perspectives - Module 1</h1>
+        <div class="flex items-center justify-between flex-wrap gap-4">
+            <a href="creative-thinking-hub.html" class="back-link-top rounded-lg flex-shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H16a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                </svg>
+                Back to Home
+            </a>
+            <h1 class="text-3xl lg:text-4xl flex-grow text-center">Creativity Toolkit I: Changing Perspectives</h1>
+        </div>
+        <br>
 
         <!-- Tab Buttons -->
         <div class="tabs" id="moduleTabs">
@@ -275,18 +277,7 @@
                 </li>
                 <li>The course aims to provide a clear, systematic understanding of creativity.</li>
             </ul>
-            <div class="ai-feature-box rounded-lg mt-6">
-                <h3 class="text-lg font-bold mb-3">✨ Summarize Tab Content</h3>
-                <button class="ai-button" onclick="summarizeContent('tab1')">
-                    Summarize Tab 1
-                    <span id="summaryLoadingSpinner_tab1" class="loading-spinner hidden"></span>
-                </button>
-                <div id="summaryOutput_tab1" class="mt-4 p-4 bg-purple-50 text-purple-800 border border-purple-200 rounded-lg hidden">
-                    <p class="font-semibold">Summary:</p>
-                    <p id="summaryText_tab1" class="mt-2"></p>
-                </div>
-                <div id="summaryError_tab1" class="mt-4 p-4 bg-red-100 text-red-700 border border-red-300 rounded-lg hidden"></div>
-            </div>
+            <!-- Summary tab content removed -->
             <hr class="my-8" />
         </div>
 
@@ -372,18 +363,7 @@
                     <span class="highlight">Creativity is about effectively re-interpreting and utilizing the information already possessed.</span>
                 </li>
             </ul>
-            <div class="ai-feature-box rounded-lg mt-6">
-                <h3 class="text-lg font-bold mb-3">✨ Summarize Tab Content</h3>
-                <button class="ai-button" onclick="summarizeContent('tab2')">
-                    Summarize Tab 2
-                    <span id="summaryLoadingSpinner_tab2" class="loading-spinner hidden"></span>
-                </button>
-                <div id="summaryOutput_tab2" class="mt-4 p-4 bg-purple-50 text-purple-800 border border-purple-200 rounded-lg hidden">
-                    <p class="font-semibold">Summary:</p>
-                    <p id="summaryText_tab2" class="mt-2"></p>
-                </div>
-                <div id="summaryError_tab2" class="mt-4 p-4 bg-red-100 text-red-700 border border-red-300 rounded-lg hidden"></div>
-            </div>
+            <!-- Summary tab content removed -->
             <hr class="my-8" />
         </div>
 
@@ -472,18 +452,7 @@
                 <li><strong>Habits of Mind:</strong> Essential for daily functioning and efficiency (e.g., not re-learning what breakfast is every day). However, they can also hinder creativity by limiting our views.</li>
                 <li>We must balance exploiting existing knowledge/perspectives with exploring new ones. We don't need to be creative all the time, only when needed.</li>
             </ul>
-            <div class="ai-feature-box rounded-lg mt-6">
-                <h3 class="text-lg font-bold mb-3">✨ Summarize Tab Content</h3>
-                <button class="ai-button" onclick="summarizeContent('tab3')">
-                    Summarize Tab 3
-                    <span id="summaryLoadingSpinner_tab3" class="loading-spinner hidden"></span>
-                </button>
-                <div id="summaryOutput_tab3" class="mt-4 p-4 bg-purple-50 text-purple-800 border border-purple-200 rounded-lg hidden">
-                    <p class="font-semibold">Summary:</p>
-                    <p id="summaryText_tab3" class="mt-2"></p>
-                </div>
-                <div id="summaryError_tab3" class="mt-4 p-4 bg-red-100 text-red-700 border border-red-300 rounded-lg hidden"></div>
-            </div>
+            <!-- Summary tab content removed -->
             <hr class="my-8" />
         </div>
 
@@ -570,18 +539,7 @@
                 <li>The better one gets at the creative process, the more confidence they gain to navigate ambiguity and uncertainty.</li>
                 <li><span class="highlight">Key Cues to seriously consider: Impasse, Dissatisfaction, Surprise, Crosstalk.</span></li>
             </ul>
-            <div class="ai-feature-box rounded-lg mt-6">
-                <h3 class="text-lg font-bold mb-3">✨ Summarize Tab Content</h3>
-                <button class="ai-button" onclick="summarizeContent('tab4')">
-                    Summarize Tab 4
-                    <span id="summaryLoadingSpinner_tab4" class="loading-spinner hidden"></span>
-                </button>
-                <div id="summaryOutput_tab4" class="mt-4 p-4 bg-purple-50 text-purple-800 border border-purple-200 rounded-lg hidden">
-                    <p class="font-semibold">Summary:</p>
-                    <p id="summaryText_tab4" class="mt-2"></p>
-                </div>
-                <div id="summaryError_tab4" class="mt-4 p-4 bg-red-100 text-red-700 border border-red-300 rounded-lg hidden"></div>
-            </div>
+            <!-- Summary tab content removed -->
         </div>
     </div>
 
@@ -639,62 +597,7 @@
             document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
         }
 
-        // LLM Summarization Function
-        async function summarizeContent(tabId) {
-            const tabContentElement = document.getElementById(tabId);
-            const summaryOutputElement = document.getElementById(`summaryOutput_${tabId}`);
-            const summaryTextElement = document.getElementById(`summaryText_${tabId}`);
-            const loadingSpinner = document.getElementById(`summaryLoadingSpinner_${tabId}`);
-            const errorDiv = document.getElementById(`summaryError_${tabId}`);
-
-            summaryOutputElement.classList.add('hidden');
-            errorDiv.classList.add('hidden');
-            loadingSpinner.classList.remove('hidden');
-
-            // Extract only the text content, ignoring HTML tags and examples
-            let contentToSummarize = tabContentElement.textContent.replace(/Example:\s*[\s\S]*?(?=(Example:|Myth \d:|Contingencies for|Solutions by Changing|The Puzzle:|The (\w+) Cue))/g, ''); // Remove examples for cleaner summary
-            contentToSummarize = contentToSummarize.replace(/\s\s+/g, ' ').trim(); // Clean up multiple spaces
-
-            // Prepare the prompt for the LLM
-            const prompt = `Please provide a concise summary of the following text, focusing on the main points and key takeaways. Keep it under 200 words:\n\n"${contentToSummarize}"`;
-
-            let chatHistory = [];
-            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
-            const payload = { contents: chatHistory };
-            const apiKey = ""; // Canvas will automatically provide the API key
-
-            try {
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                if (!response.ok) {
-                    throw new Error(`API error: ${response.status} ${response.statusText}`);
-                }
-
-                const result = await response.json();
-
-                if (result.candidates && result.candidates.length > 0 &&
-                    result.candidates[0].content && result.candidates[0].content.parts &&
-                    result.candidates[0].content.parts.length > 0) {
-                    const generatedSummary = result.candidates[0].content.parts[0].text;
-                    summaryTextElement.textContent = generatedSummary;
-                    summaryOutputElement.classList.remove('hidden');
-                } else {
-                    summaryTextElement.textContent = "Could not generate a summary. Please try again.";
-                    summaryOutputElement.classList.remove('hidden');
-                }
-            } catch (error) {
-                console.error(`Error summarizing tab ${tabId}:`, error);
-                errorDiv.textContent = `Failed to generate summary: ${error.message}. Please try again later.`;
-                errorDiv.classList.remove('hidden');
-            } finally {
-                loadingSpinner.classList.add('hidden');
-            }
-        }
+        // ...existing code...
     </script>
 </body>
 </html>
