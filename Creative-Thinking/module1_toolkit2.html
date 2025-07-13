@@ -11,43 +11,56 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #e2e8f0; /* Lighter grey for a professional background */
-            color: #2d3748; /* Darker text for readability */
-            line-height: 1.75; /* Improved line height for readability */
+            background: linear-gradient(90deg, #38bdf8 0%, #34d399 100%);
+            color: #333;
+            line-height: 1.6;
             scroll-behavior: smooth;
         }
         .container {
             max-width: 900px;
             margin: 40px auto;
             padding: 30px;
-            background-color: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); /* More pronounced shadow */
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(56,189,248,0.15), 0 2px 8px rgba(52,211,153,0.10);
         }
         h1 {
-            color: #1a202c;
-            font-size: 3.2rem; /* Increased size for main title */
-            font-weight: 800; /* Made bolder */
-            margin-bottom: 30px; /* More space below */
+            color: #0e7490;
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 48px;
             text-align: center;
-            border-bottom: 3px solid #4a5568; /* Solid underline for main title */
-            padding-bottom: 10px;
+            letter-spacing: 2px;
+            background: linear-gradient(90deg, #f59e42 0%, #38bdf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         h2 {
-            color: #2d3748;
-            font-size: 2.2rem; /* Increased size for h2 */
-            font-weight: 700; /* Made bolder */
-            margin-top: 40px; /* More space above */
-            margin-bottom: 20px; /* More space below */
-            border-bottom: 2px solid #a0aec0; /* Lighter underline for sub-sections */
-            padding-bottom: 8px; /* More padding */
+            color: #be185d;
+            font-size: 3rem;
+            font-weight: 900;
+            margin-top: 56px;
+            margin-bottom: 36px;
+            padding-bottom: 14px;
+            text-align: left;
+            letter-spacing: 1.5px;
+            background: linear-gradient(90deg, #f59e42 0%, #be185d 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         h3 {
-            color: #4a5568;
-            font-size: 1.8rem; /* Increased size for h3 */
-            font-weight: 700; /* Made bolder */
-            margin-top: 30px; /* More space above */
-            margin-bottom: 15px; /* More space below */
+            color: #2563eb;
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-top: 40px;
+            margin-bottom: 24px;
+            letter-spacing: 1px;
+            background: linear-gradient(90deg, #38bdf8 0%, #818cf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         ul {
             list-style-type: disc;
@@ -346,7 +359,7 @@
 </head>
 <body>
     <div class="container rounded-xl">
-        <a href="index.html" class="back-link-top rounded-lg">
+        <a href="creative-thinking-hub.html" class="back-link-top rounded-lg">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H16a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
             </svg>
@@ -375,10 +388,10 @@
 
         <!-- Tab Buttons -->
         <div class="tabs" id="moduleTabs">
-            <button class="tab-button active" data-tab="tab1">Lesson 1-1: Social Influence on Ideas</button>
-            <button class="tab-button" data-tab="tab2">Lesson 1-2: Pitching Ideas Effectively</button>
-            <button class="tab-button" data-tab="tab3">Lesson 1-3: Pointers of Persuasion</button>
-            <button class="tab-button" data-tab="tab4">Lesson 1-4: Storytelling for Impact</button>
+            <button class="tab-button active" data-tab="tab1">Lesson 1: Social Influence on Ideas</button>
+            <button class="tab-button" data-tab="tab2">Lesson 2: Pitching Ideas Effectively</button>
+            <button class="tab-button" data-tab="tab3">Lesson 3: Pointers of Persuasion</button>
+            <button class="tab-button" data-tab="tab4">Lesson 4: Storytelling for Impact</button>
         </div>
 
         <!-- Tab Content: Social Influence -->

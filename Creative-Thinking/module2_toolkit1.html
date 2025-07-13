@@ -11,7 +11,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f0f4f8;
+            background: linear-gradient(90deg, #38bdf8 0%, #34d399 100%);
             color: #333;
             line-height: 1.6;
             scroll-behavior: smooth;
@@ -20,31 +20,47 @@
             max-width: 900px;
             margin: 40px auto;
             padding: 30px;
-            background-color: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(56,189,248,0.15), 0 2px 8px rgba(52,211,153,0.10);
         }
         h1 {
-            color: #1a202c;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 20px;
+            color: #0e7490;
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 48px;
             text-align: center;
+            letter-spacing: 2px;
+            background: linear-gradient(90deg, #f59e42 0%, #38bdf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         h2 {
-            color: #2d3748;
-            font-size: 1.8rem;
-            font-weight: 600;
-            margin-top: 30px;
-            margin-bottom: 15px;
-            padding-bottom: 5px;
+            color: #be185d;
+            font-size: 3rem;
+            font-weight: 900;
+            margin-top: 56px;
+            margin-bottom: 36px;
+            padding-bottom: 14px;
+            text-align: left;
+            letter-spacing: 1.5px;
+            background: linear-gradient(90deg, #f59e42 0%, #be185d 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         h3 {
-            color: #4a5568;
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin-top: 20px;
-            margin-bottom: 10px;
+            color: #2563eb;
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-top: 40px;
+            margin-bottom: 24px;
+            letter-spacing: 1px;
+            background: linear-gradient(90deg, #38bdf8 0%, #818cf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         ul {
             list-style-type: disc;
@@ -72,9 +88,13 @@
             font-style: italic;
             color: #5f6b7d;
             border-left: 4px solid #a0aec0;
-            padding-left: 10px;
-            margin-top: 15px;
-            margin-bottom: 15px;
+            padding-left: 20px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            background-color: #f8fafc;
+            font-size: 1rem;
+            margin-left: 20px;
+            border-radius: 6px;
         }
         .back-link-top {
             display: inline-flex;
@@ -269,18 +289,7 @@
                 <li>Deliberate practice helps refine existing knowledge and develop new skills.</li>
                 <li>Builds tacit knowledge – knowing how to do something without explicitly thinking about it.</li>
             </ul>
-            <div class="ai-feature-box rounded-lg mt-6">
-                <h3 class="text-lg font-bold mb-3">✨ Summarize Tab Content</h3>
-                <button class="ai-button" onclick="summarizeContent('tab1')">
-                    Summarize Tab 1
-                    <span id="summaryLoadingSpinner_tab1" class="loading-spinner hidden"></span>
-                </button>
-                <div id="summaryOutput_tab1" class="mt-4 p-4 bg-purple-50 text-purple-800 border border-purple-200 rounded-lg hidden">
-                    <p class="font-semibold">Summary:</p>
-                    <p id="summaryText_tab1" class="mt-2"></p>
-                </div>
-                <div id="summaryError_tab1" class="mt-4 p-4 bg-red-100 text-red-700 border border-red-300 rounded-lg hidden"></div>
-            </div>
+            <!-- Summary tab content removed -->
         </div>
 
         <div id="tab2" class="tab-content">
@@ -332,18 +341,7 @@
                 <li>Creativity is often judged by those who receive or evaluate the idea, not just the creator.</li>
                 <li>Understanding the audience's perspective is critical when evaluating or presenting creative work.</li>
             </ul>
-            <div class="ai-feature-box rounded-lg mt-6">
-                <h3 class="text-lg font-bold mb-3">✨ Summarize Tab Content</h3>
-                <button class="ai-button" onclick="summarizeContent('tab2')">
-                    Summarize Tab 2
-                    <span id="summaryLoadingSpinner_tab2" class="loading-spinner hidden"></span>
-                </button>
-                <div id="summaryOutput_tab2" class="mt-4 p-4 bg-purple-50 text-purple-800 border border-purple-200 rounded-lg hidden">
-                    <p class="font-semibold">Summary:</p>
-                    <p id="summaryText_tab2" class="mt-2"></p>
-                </div>
-                <div id="summaryError_tab2" class="mt-4 p-4 bg-red-100 text-red-700 border border-red-300 rounded-lg hidden"></div>
-            </div>
+            <!-- Summary tab content removed -->
         </div>
     </div>
 
@@ -393,64 +391,7 @@
             document.documentElement.scrollTop = 0;
         }
 
-        // LLM Summarization Function
-        async function summarizeContent(tabId) {
-            const tabContentElement = document.getElementById(tabId);
-            const summaryOutputElement = document.getElementById(`summaryOutput_${tabId}`);
-            const summaryTextElement = document.getElementById(`summaryText_${tabId}`);
-            const loadingSpinner = document.getElementById(`summaryLoadingSpinner_${tabId}`);
-            const errorDiv = document.getElementById(`summaryError_${tabId}`);
-
-            summaryOutputElement.classList.add('hidden');
-            errorDiv.classList.add('hidden');
-            loadingSpinner.classList.remove('hidden');
-            summaryTextElement.textContent = ''; // Clear previous output
-
-            // Extract only the text content, ignoring HTML tags and examples for summary
-            let contentToSummarize = tabContentElement.cloneNode(true); // Clone to avoid modifying original DOM
-            // Remove example divs, AI feature boxes from the content to be summarized
-            contentToSummarize.querySelectorAll('.example, .ai-feature-box').forEach(el => el.remove());
-            contentToSummarize = contentToSummarize.textContent.replace(/\s\s+/g, ' ').trim();
-
-            const prompt = `Please provide a concise summary of the following text, focusing on the main points and key takeaways. Keep it under 200 words:\n\n"${contentToSummarize}"`;
-
-            let chatHistory = [];
-            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
-            const payload = { contents: chatHistory };
-            const apiKey = ""; // Canvas will automatically provide the API key
-
-            try {
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                if (!response.ok) {
-                    throw new Error(`API error: ${response.status} ${response.statusText}`);
-                }
-
-                const result = await response.json();
-
-                if (result.candidates && result.candidates.length > 0 &&
-                    result.candidates[0].content && result.candidates[0].content.parts &&
-                    result.candidates[0].content.parts.length > 0) {
-                    const generatedSummary = result.candidates[0].content.parts[0].text;
-                    summaryTextElement.textContent = generatedSummary;
-                    summaryOutputElement.classList.remove('hidden');
-                } else {
-                    summaryTextElement.textContent = "Could not generate a summary. Please try again.";
-                    summaryOutputElement.classList.remove('hidden');
-                }
-            } catch (error) {
-                console.error(`Error summarizing tab ${tabId}:`, error);
-                errorDiv.textContent = `Failed to generate summary: ${error.message}. Please try again later.`;
-                errorDiv.classList.remove('hidden');
-            } finally {
-                loadingSpinner.classList.add('hidden');
-            }
-        }
+        // ...existing code...
     </script>
 </body>
 </html>

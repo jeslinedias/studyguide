@@ -6,37 +6,151 @@
     <title>Creativity Toolkit II: Creative Collaboration Module 3</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Custom font for better aesthetics */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f0f4f8; /* Light blue-gray background */
-            color: #334155; /* Dark slate gray text */
+            background-color: #f0f4f8;
+            color: #333;
+            line-height: 1.6;
+            scroll-behavior: smooth;
         }
-        /* Highlight box for "Points to Remember" */
+        .max-w-4xl {
+            max-width: 900px !important;
+        }
+        .shadow-lg {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
+        }
+        .rounded-xl {
+            border-radius: 12px !important;
+        }
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 32px;
+            text-align: center;
+            background: linear-gradient(90deg, #4299e1 0%, #48bb78 100%);
+            color: #fff;
+            padding: 18px 0;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px rgba(66,153,225,0.08);
+            letter-spacing: 1px;
+        }
+        h2.section-heading, h2 {
+            font-size: 2.1rem;
+            font-weight: 700;
+            margin-top: 40px;
+            margin-bottom: 22px;
+            padding-bottom: 8px;
+            color: #48bb78;
+            background: linear-gradient(90deg, #f7fafc 0%, #bee3f8 100%);
+            border-radius: 10px;
+            padding-left: 12px;
+            border-bottom: none !important;
+        }
+        h3.subsection-heading, h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 28px;
+            margin-bottom: 14px;
+            color: #4299e1;
+            background: linear-gradient(90deg, #e6fffa 0%, #c3dafe 100%);
+            border-radius: 8px;
+            padding-left: 10px;
+            border-bottom: none !important;
+        }
+        ul {
+            list-style-type: disc;
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+        ol {
+            list-style-type: decimal;
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        strong {
+            color: #2b6cb0;
+            font-weight: 700;
+        }
         .highlight-box {
-            background-color: #fef3c7; /* Light yellow */
-            border-left: 4px solid #f59e0b; /* Orange border */
-            padding: 1rem;
-            margin-top: 1rem;
-            margin-bottom: 1rem;
-            border-radius: 0.5rem;
+            font-style: italic;
+            color: #5f6b7d;
+            background: linear-gradient(90deg, #f7fafc 0%, #e2e8f0 100%);
+            border-left: 4px solid #a0aec0;
+            padding: 12px 18px;
+            margin-top: 18px;
+            margin-bottom: 18px;
+            border-radius: 10px;
+            box-shadow: 0 1px 6px rgba(160,174,192,0.07);
+            margin-left: 24px;
         }
-        .section-heading {
-            border-bottom: 2px solid #cbd5e1; /* Light gray border for sections */
-            padding-bottom: 0.5rem;
-            margin-bottom: 1.5rem;
+        .back-link-top {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: #e2e8f0;
+            color: #2b6cb0;
+            font-weight: 600;
+            text-decoration: none;
+            margin-bottom: 18px;
+            transition: background 0.2s, color 0.2s;
         }
-        .subsection-heading {
-            border-bottom: 1px dashed #e2e8f0; /* Lighter dashed border for subsections */
-            padding-bottom: 0.3rem;
-            margin-bottom: 1rem;
+        .back-link-top:hover {
+            background: #bee3f8;
+            color: #2c5282;
+        }
+        hr {
+            margin: 32px 0;
+            border: none;
+            border-top: 2px solid #bee3f8;
+        }
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+                padding: 10px 0;
+            }
+            h2.section-heading, h2 {
+                font-size: 1.5rem;
+                padding-left: 6px;
+            }
+            h3.subsection-heading, h3 {
+                font-size: 1.1rem;
+                padding-left: 5px;
+            }
+            .back-link-top {
+                padding: 6px 10px;
+                font-size: 0.95rem;
+            }
+        }
+        /* Add missing Tailwind utility classes for local use */
+        .rounded-lg {
+            border-radius: 8px !important;
+        }
+        .flex-shrink-0 {
+            flex-shrink: 0 !important;
+        }
+        .h-5 {
+            height: 1.25rem !important;
+        }
+        .w-5 {
+            width: 1.25rem !important;
         }
     </style>
 </head>
 <body class="p-4 sm:p-6 md:p-8">
-    <div class="max-w-4xl mx-auto bg-white shadow-lg rounded-xl p-6 sm:p-8 md:p-10">
+    <div class="container rounded-xl">
         <header class="text-center mb-8">
+             <a href="creative-thinking-hub.html" class="back-link-top rounded-lg flex-shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H16a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                </svg>
+                Back to Home
+            </a>
             <h1 class="text-4xl sm:text-5xl font-extrabold text-blue-800 mb-4">
                 Creativity Toolkit II: Creative Collaboration
             </h1>

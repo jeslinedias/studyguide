@@ -25,26 +25,37 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
         h1 {
-            color: #1a202c;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 20px;
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 32px;
             text-align: center;
+            background: linear-gradient(90deg, #4299e1 0%, #48bb78 100%);
+            color: #fff;
+            padding: 18px 0;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px rgba(66,153,225,0.08);
+            letter-spacing: 1px;
         }
         h2 {
-            color: #2d3748;
-            font-size: 1.8rem;
-            font-weight: 600;
-            margin-top: 30px;
-            margin-bottom: 15px;
-            padding-bottom: 5px;
+            font-size: 2.1rem;
+            font-weight: 700;
+            margin-top: 40px;
+            margin-bottom: 22px;
+            padding-bottom: 8px;
+            color: #48bb78;
+            background: linear-gradient(90deg, #f7fafc 0%, #bee3f8 100%);
+            border-radius: 10px;
+            padding-left: 12px;
         }
         h3 {
-            color: #4a5568;
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin-top: 20px;
-            margin-bottom: 10px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 28px;
+            margin-bottom: 14px;
+            color: #4299e1;
+            background: linear-gradient(90deg, #e6fffa 0%, #c3dafe 100%);
+            border-radius: 8px;
+            padding-left: 10px;
         }
         ul {
             list-style-type: disc;
@@ -71,10 +82,14 @@
         .example {
             font-style: italic;
             color: #5f6b7d;
+            background: linear-gradient(90deg, #f7fafc 0%, #e2e8f0 100%);
             border-left: 4px solid #a0aec0;
-            padding-left: 10px;
-            margin-top: 15px;
-            margin-bottom: 15px;
+            padding: 12px 18px;
+            margin-top: 18px;
+            margin-bottom: 18px;
+            border-radius: 10px;
+            box-shadow: 0 1px 6px rgba(160,174,192,0.07);
+            margin-left: 24px;
         }
         .back-link-top {
             display: inline-flex;
@@ -154,46 +169,7 @@
             background-color: #3182ce;
             transform: translateY(-3px);
         }
-        .ai-feature-box {
-            background-color: #f7fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 20px;
-            margin-top: 20px;
-            margin-bottom: 20px;
-            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
-        }
-        .ai-button {
-            background-color: #48bb78;
-            color: white;
-            padding: 8px 15px;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: background-color 0.3s ease;
-            cursor: pointer;
-            border: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .ai-button:hover {
-            background-color: #38a169;
-        }
-        .loading-spinner {
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-top: 3px solid #fff;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-            display: inline-block;
-            vertical-align: middle;
-            margin-left: 8px;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        /* Removed AI feature box and button styles */
         @media (max-width: 768px) {
             .tabs {
                 flex-direction: column;
@@ -225,7 +201,7 @@
             Back to Home
         </a>
 
-        <h1 class="text-3xl lg:text-4xl">Creativity Toolkit I: Changing Perspectives - Module 4</h1>
+        <h1 class="text-3xl lg:text-4xl">Changing Perspectives - Module 4</h1>
 
         <!-- Tab Buttons -->
         <div class="tabs" id="moduleTabs">
@@ -236,14 +212,15 @@
 
         <!-- Tab Content -->
         <div id="tab1" class="tab-content active">
-            <h2>1. Lesson 4-1: Organizational Culture to Support Creativity</h2>
+            <h2>Lesson 4-1: Organizational Culture to Support Creativity</h2>
+            <hr class="my-8 border-t-2 border-blue-200">
             <h3>1.1 Introduction: Module 4 Introduction & Lesson Introduction</h3>
             <ul>
                 <li>This module explores how organizational factors influence creativity.</li>
                 <li>Creativity isn't just an individual trait; it's heavily shaped by the environment.</li>
                 <li>Leaders play a crucial role in shaping a culture that fosters creativity.</li>
             </ul>
-
+            <hr class="my-8 border-t border-blue-100">
             <h3>1.2 Cultural Factors Impacting Creativity</h3>
             <ul>
                 <li><strong>Freedom and Autonomy:</strong> Employees need control over their work and how they achieve goals.
@@ -255,7 +232,7 @@
                 <li><strong>Organizational Encouragement:</strong> Culture that values and rewards creativity, tolerates risk-taking, and promotes collaboration.</li>
                 <li><strong>Work Group Support:</strong> Diverse teams, mutual trust, and open communication among colleagues.</li>
             </ul>
-
+            <hr class="my-8 border-t border-blue-100">
             <h3>1.3 Creating Culture for Creativity</h3>
             <ul>
                 <li><strong>Clear Vision & Strategy:</strong> Communicate why creativity is important and how it aligns with organizational goals.</li>
@@ -264,22 +241,11 @@
                 <li><strong>Open Communication:</strong> Foster an environment where ideas flow freely across departments and hierarchies.</li>
                 <li><strong>Recognition and Rewards:</strong> Acknowledge and reward creative efforts, not just successful outcomes.</li>
             </ul>
-            <div class="ai-feature-box rounded-lg mt-6">
-                <h3 class="text-lg font-bold mb-3">✨ Summarize Tab Content</h3>
-                <button class="ai-button" onclick="summarizeContent('tab1')">
-                    Summarize Tab 1
-                    <span id="summaryLoadingSpinner_tab1" class="loading-spinner hidden"></span>
-                </button>
-                <div id="summaryOutput_tab1" class="mt-4 p-4 bg-purple-50 text-purple-800 border border-purple-200 rounded-lg hidden">
-                    <p class="font-semibold">Summary:</p>
-                    <p id="summaryText_tab1" class="mt-2"></p>
-                </div>
-                <div id="summaryError_tab1" class="mt-4 p-4 bg-red-100 text-red-700 border border-red-300 rounded-lg hidden"></div>
-            </div>
         </div>
 
         <div id="tab2" class="tab-content">
-            <h2>2. Lesson 4-2: Cultivating Creativity via Feedback, Rewards, External Factors</h2>
+            <h2>2. Cultivating Creativity via Feedback, Rewards, External Factors</h2>
+            <hr class="my-8 border-t-2 border-blue-200">
             <h3>2.1 Feedback and Creativity</h3>
             <ul>
                 <li><strong>Constructive Feedback:</strong> Focuses on the idea, not the person; highlights strengths and areas for improvement.</li>
@@ -287,7 +253,7 @@
                 <li><strong>Diverse Feedback Sources:</strong> Get input from different perspectives to avoid "groupthink."</li>
                 <li><strong>Feedback Seeking Behavior:</strong> Encourage individuals to actively seek out feedback.</li>
             </ul>
-
+            <hr class="my-8 border-t border-blue-100">
             <h3>2.2 Motivation, Rewards, and Creativity</h3>
             <ul>
                 <li><strong>Intrinsic Motivation:</strong> Driven by personal interest, enjoyment, and satisfaction from the work itself. This is generally more effective for creativity.
@@ -297,7 +263,7 @@
                 <li><strong>Conditional Rewards:</strong> Rewards that are given *after* a creative outcome is achieved (e.g., bonus for a successful patent). These can support intrinsic motivation.</li>
                 <li><strong>Careful Use of Rewards:</strong> Over-reliance on extrinsic rewards can "crowd out" intrinsic motivation, especially for tasks that are inherently interesting.</li>
             </ul>
-
+            <hr class="my-8 border-t border-blue-100">
             <h3>2.3 External Factors Impacting Creativity</h3>
             <ul>
                 <li><strong>Competition:</strong> Can stimulate or hinder creativity depending on the nature of the competition. Intense, win-at-all-costs competition can stifle risk-taking.</li>
@@ -305,29 +271,18 @@
                 <li><strong>Accountability:</strong> Being accountable for results can increase effort, but too much focus on output metrics can reduce creative exploration.</li>
                 <li><strong>Intellectual Property Rights:</strong> Clear IP policies (patents, copyrights) can incentivize innovation by protecting creators.</li>
             </ul>
-
-            <h3>2.4 Lesson 4-2 Wrap Up</h3>
+            <hr class="my-8 border-t border-blue-100">
+            <h3>2.4 Wrap Up</h3>
             <ul>
                 <li>Balance feedback with autonomy.</li>
                 <li>Emphasize intrinsic motivation while strategically using conditional rewards.</li>
                 <li>Manage external pressures to create an optimal environment for creativity.</li>
             </ul>
-            <div class="ai-feature-box rounded-lg mt-6">
-                <h3 class="text-lg font-bold mb-3">✨ Summarize Tab Content</h3>
-                <button class="ai-button" onclick="summarizeContent('tab2')">
-                    Summarize Tab 2
-                    <span id="summaryLoadingSpinner_tab2" class="loading-spinner hidden"></span>
-                </button>
-                <div id="summaryOutput_tab2" class="mt-4 p-4 bg-purple-50 text-purple-800 border border-purple-200 rounded-lg hidden">
-                    <p class="font-semibold">Summary:</p>
-                    <p id="summaryText_tab2" class="mt-2"></p>
-                </div>
-                <div id="summaryError_tab2" class="mt-4 p-4 bg-red-100 text-red-700 border border-red-300 rounded-lg hidden"></div>
-            </div>
         </div>
 
         <div id="tab3" class="tab-content">
             <h2>3. Lesson 4-3: Spaces Encouraging Creativity</h2>
+            <hr class="my-8 border-t-2 border-blue-200">
             <h3>3.1 Lesson 4-3 Introduction & Atmospheric Factors Impacting Creativity</h3>
             <ul>
                 <li>The physical environment can significantly impact creative thinking.</li>
@@ -336,7 +291,7 @@
                 <li><strong>Noise:</strong> Moderate ambient noise can enhance creativity by providing a slight distraction that prompts abstract thinking. Silence or very loud noise can be detrimental.</li>
                 <li><strong>Color:</strong> Green and blue colors are often associated with creativity and openness.</li>
             </ul>
-
+            <hr class="my-8 border-t border-blue-100">
             <h3>3.2 Designing Spaces for Creativity</h3>
             <ul>
                 <li><strong>Flexible Layouts:</strong> Spaces that can be reconfigured to suit different needs (individual work, collaboration, brainstorming).</li>
@@ -347,24 +302,12 @@
                     <div class="example">Designing office layouts with central cafes or wide staircases instead of elevators can increase incidental interactions, leading to more crosstalk.</div>
                 </li>
             </ul>
-
+            <hr class="my-8 border-t border-blue-100">
             <h3>3.3 The Role of Digital Spaces</h3>
             <ul>
                 <li>Virtual collaboration tools can also be designed to foster creative interaction.</li>
                 <li>Features like shared whiteboards, breakout rooms, and anonymous idea submission can simulate aspects of creative physical spaces.</li>
             </ul>
-            <div class="ai-feature-box rounded-lg mt-6">
-                <h3 class="text-lg font-bold mb-3">✨ Summarize Tab Content</h3>
-                <button class="ai-button" onclick="summarizeContent('tab3')">
-                    Summarize Tab 3
-                    <span id="summaryLoadingSpinner_tab3" class="loading-spinner hidden"></span>
-                </button>
-                <div id="summaryOutput_tab3" class="mt-4 p-4 bg-purple-50 text-purple-800 border border-purple-200 rounded-lg hidden">
-                    <p class="font-semibold">Summary:</p>
-                    <p id="summaryText_tab3" class="mt-2"></p>
-                </div>
-                <div id="summaryError_tab3" class="mt-4 p-4 bg-red-100 text-red-700 border border-red-300 rounded-lg hidden"></div>
-            </div>
         </div>
     </div>
 
@@ -412,64 +355,6 @@
         function topFunction() {
             document.body.scrollTop = 0;
             document.documentElement.scrollTop = 0;
-        }
-
-        // LLM Summarization Function
-        async function summarizeContent(tabId) {
-            const tabContentElement = document.getElementById(tabId);
-            const summaryOutputElement = document.getElementById(`summaryOutput_${tabId}`);
-            const summaryTextElement = document.getElementById(`summaryText_${tabId}`);
-            const loadingSpinner = document.getElementById(`summaryLoadingSpinner_${tabId}`);
-            const errorDiv = document.getElementById(`summaryError_${tabId}`);
-
-            summaryOutputElement.classList.add('hidden');
-            errorDiv.classList.add('hidden');
-            loadingSpinner.classList.remove('hidden');
-            summaryTextElement.textContent = ''; // Clear previous output
-
-            // Extract only the text content, ignoring HTML tags and examples for summary
-            let contentToSummarize = tabContentElement.cloneNode(true); // Clone to avoid modifying original DOM
-            contentToSummarize.querySelectorAll('.example, .ai-feature-box').forEach(el => el.remove());
-            contentToSummarize = contentToSummarize.textContent.replace(/\s\s+/g, ' ').trim();
-
-            const prompt = `Please provide a concise summary of the following text, focusing on the main points and key takeaways. Keep it under 200 words:\n\n"${contentToSummarize}"`;
-
-            let chatHistory = [];
-            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
-            const payload = { contents: chatHistory };
-            const apiKey = ""; // Canvas will automatically provide the API key
-
-            try {
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                if (!response.ok) {
-                    throw new Error(`API error: ${response.status} ${response.statusText}`);
-                }
-
-                const result = await response.json();
-
-                if (result.candidates && result.candidates.length > 0 &&
-                    result.candidates[0].content && result.candidates[0].content.parts &&
-                    result.candidates[0].content.parts.length > 0) {
-                    const generatedSummary = result.candidates[0].content.parts[0].text;
-                    summaryTextElement.textContent = generatedSummary;
-                    summaryOutputElement.classList.remove('hidden');
-                } else {
-                    summaryTextElement.textContent = "Could not generate a summary. Please try again.";
-                    summaryOutputElement.classList.remove('hidden');
-                }
-            } catch (error) {
-                console.error(`Error summarizing tab ${tabId}:`, error);
-                errorDiv.textContent = `Failed to generate summary: ${error.message}. Please try again later.`;
-                errorDiv.classList.remove('hidden');
-            } finally {
-                loadingSpinner.classList.add('hidden');
-            }
         }
     </script>
 </body>

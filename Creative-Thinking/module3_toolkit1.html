@@ -11,7 +11,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f0f4f8;
+            background: linear-gradient(90deg, #38bdf8 0%, #34d399 100%);
             color: #333;
             line-height: 1.6;
             scroll-behavior: smooth;
@@ -20,31 +20,42 @@
             max-width: 900px;
             margin: 40px auto;
             padding: 30px;
-            background-color: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(56,189,248,0.15), 0 2px 8px rgba(52,211,153,0.10);
         }
         h1 {
-            color: #1a202c;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 20px;
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 32px;
             text-align: center;
+            background: linear-gradient(90deg, #4299e1 0%, #48bb78 100%);
+            color: #fff;
+            padding: 18px 0;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px rgba(66,153,225,0.08);
+            letter-spacing: 1px;
         }
         h2 {
-            color: #2d3748;
-            font-size: 1.8rem;
-            font-weight: 600;
-            margin-top: 30px;
-            margin-bottom: 15px;
-            padding-bottom: 5px;
+            font-size: 2.1rem;
+            font-weight: 700;
+            margin-top: 40px;
+            margin-bottom: 22px;
+            padding-bottom: 8px;
+            color: #48bb78;
+            background: linear-gradient(90deg, #f7fafc 0%, #bee3f8 100%);
+            border-radius: 10px;
+            padding-left: 12px;
         }
         h3 {
-            color: #4a5568;
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin-top: 20px;
-            margin-bottom: 10px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 28px;
+            margin-bottom: 14px;
+            color: #4299e1;
+            background: linear-gradient(90deg, #e6fffa 0%, #c3dafe 100%);
+            border-radius: 8px;
+            padding-left: 10px;
         }
         ul {
             list-style-type: disc;
@@ -218,14 +229,15 @@
 </head>
 <body>
     <div class="container rounded-xl">
-        <a href="creative-thinking-hub.html" class="back-link-top rounded-lg">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H16a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
-            </svg>
-            Back to Home
-        </a>
-
-        <h1 class="text-3xl lg:text-4xl">Creativity Toolkit I: Changing Perspectives - Module 3</h1>
+        <div class="flex items-center justify-between mb-8 gap-4">
+            <a href="creative-thinking-hub.html" class="back-link-top rounded-lg flex-shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H16a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                </svg>
+                Back to Home
+            </a>
+            <h1 class="text-3xl lg:text-4xl m-0 text-center w-full">Creativity Toolkit I: Changing Perspectives </h1>
+        </div>
 
         <!-- Tab Buttons -->
         <div class="tabs" id="moduleTabs">
@@ -263,18 +275,6 @@
                 </li>
                 <li>Maintain a sense of curiosity and playfulness throughout.</li>
             </ul>
-            <div class="ai-feature-box rounded-lg mt-6">
-                <h3 class="text-lg font-bold mb-3">✨ Summarize Tab Content</h3>
-                <button class="ai-button" onclick="summarizeContent('tab1')">
-                    Summarize Tab 1
-                    <span id="summaryLoadingSpinner_tab1" class="loading-spinner hidden"></span>
-                </button>
-                <div id="summaryOutput_tab1" class="mt-4 p-4 bg-purple-50 text-purple-800 border border-purple-200 rounded-lg hidden">
-                    <p class="font-semibold">Summary:</p>
-                    <p id="summaryText_tab1" class="mt-2"></p>
-                </div>
-                <div id="summaryError_tab1" class="mt-4 p-4 bg-red-100 text-red-700 border border-red-300 rounded-lg hidden"></div>
-            </div>
         </div>
 
         <div id="tab2" class="tab-content">
@@ -300,28 +300,16 @@
             <h3>2.3 Strategies for Handling Rejection</h3>
             <ul>
                 <li><strong>Detachment:</strong> Separate your self-worth from the idea's acceptance.</li>
-                <li><strong>Seek Feedback, Not Just Approval:</strong> Understand *why* it was rejected to improve future ideas.</li>
+                <li><strong>Seek Feedback, Not Just Approval:</strong> Understand <strong>Why</strong> it was rejected to improve future ideas.</li>
                 <li><strong>Persistence:</strong> Keep trying, adapt, and refine.
                     <div class="example">J.K. Rowling's Harry Potter manuscript was rejected by numerous publishers before finding success.</div>
                 </li>
                 <li><strong>Find New Audiences:</strong> The right idea might just need the right recipient.</li>
             </ul>
-            <div class="ai-feature-box rounded-lg mt-6">
-                <h3 class="text-lg font-bold mb-3">✨ Summarize Tab Content</h3>
-                <button class="ai-button" onclick="summarizeContent('tab2')">
-                    Summarize Tab 2
-                    <span id="summaryLoadingSpinner_tab2" class="loading-spinner hidden"></span>
-                </button>
-                <div id="summaryOutput_tab2" class="mt-4 p-4 bg-purple-50 text-purple-800 border border-purple-200 rounded-lg hidden">
-                    <p class="font-semibold">Summary:</p>
-                    <p id="summaryText_tab2" class="mt-2"></p>
-                </div>
-                <div id="summaryError_tab2" class="mt-4 p-4 bg-red-100 text-red-700 border border-red-300 rounded-lg hidden"></div>
-            </div>
         </div>
 
         <div id="tab3" class="tab-content">
-            <h2>3. Lesson 3-3: Introduction: Thinking Tools for Flexibility</h2>
+            <h2>3.Thinking Tools for Flexibility</h2>
             <h3>3.1 The Need for Mental Flexibility</h3>
             <ul>
                 <li>Creative thinking requires breaking free from habitual ways of thinking.</li>
@@ -359,22 +347,10 @@
                     </ol>
                 </li>
             </ul>
-            <div class="ai-feature-box rounded-lg mt-6">
-                <h3 class="text-lg font-bold mb-3">✨ Summarize Tab Content</h3>
-                <button class="ai-button" onclick="summarizeContent('tab3')">
-                    Summarize Tab 3
-                    <span id="summaryLoadingSpinner_tab3" class="loading-spinner hidden"></span>
-                </button>
-                <div id="summaryOutput_tab3" class="mt-4 p-4 bg-purple-50 text-purple-800 border border-purple-200 rounded-lg hidden">
-                    <p class="font-semibold">Summary:</p>
-                    <p id="summaryText_tab3" class="mt-2"></p>
-                </div>
-                <div id="summaryError_tab3" class="mt-4 p-4 bg-red-100 text-red-700 border border-red-300 rounded-lg hidden"></div>
-            </div>
         </div>
 
         <div id="tab4" class="tab-content">
-            <h2>4. Lesson 3-4: Persistence</h2>
+            <h2>4. Persistence</h2>
             <h3>4.1 The Role of Persistence in Creative Endeavors</h3>
             <ul>
                 <li>Creativity often requires sustained effort over long periods.</li>
@@ -398,18 +374,6 @@
                 <li><strong>Reframe Failure:</strong> See setbacks as data points for improvement, not ultimate defeats.</li>
                 <li><strong>Maintain Curiosity:</strong> Keep the spark of interest alive, even when faced with difficulties.</li>
             </ul>
-            <div class="ai-feature-box rounded-lg mt-6">
-                <h3 class="text-lg font-bold mb-3">✨ Summarize Tab Content</h3>
-                <button class="ai-button" onclick="summarizeContent('tab4')">
-                    Summarize Tab 4
-                    <span id="summaryLoadingSpinner_tab4" class="loading-spinner hidden"></span>
-                </button>
-                <div id="summaryOutput_tab4" class="mt-4 p-4 bg-purple-50 text-purple-800 border border-purple-200 rounded-lg hidden">
-                    <p class="font-semibold">Summary:</p>
-                    <p id="summaryText_tab4" class="mt-2"></p>
-                </div>
-                <div id="summaryError_tab4" class="mt-4 p-4 bg-red-100 text-red-700 border border-red-300 rounded-lg hidden"></div>
-            </div>
         </div>
     </div>
 

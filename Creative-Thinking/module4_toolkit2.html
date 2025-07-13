@@ -11,41 +11,56 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6; /* Light gray background */
-            color: #374151; /* Dark gray text */
-            padding: 2rem;
-            padding-top: 6rem; /* Space for fixed header elements */
+            background: linear-gradient(90deg, #38bdf8 0%, #34d399 100%);
+            color: #333;
+            line-height: 1.6;
+            scroll-behavior: smooth;
         }
         .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 2rem;
-            background-color: #ffffff;
-            border-radius: 0.75rem; /* rounded-xl */
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 30px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(56,189,248,0.15), 0 2px 8px rgba(52,211,153,0.10);
         }
-        .section-title {
-            font-size: 2.25rem; /* text-4xl */
-            font-weight: 700; /* font-bold */
-            color: #1f2937; /* Darker gray for titles */
-            margin-bottom: 1.5rem;
+        h1 {
+            color: #0e7490;
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 48px;
             text-align: center;
+            letter-spacing: 2px;
+            background: linear-gradient(90deg, #f59e42 0%, #38bdf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-        .module-heading {
-            font-size: 1.875rem; /* text-3xl */
-            font-weight: 600; /* font-semibold */
-            color: #3b82f6; /* Blue for module headings */
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid #bfdbfe; /* Light blue border */
+        h2 {
+            color: #be185d;
+            font-size: 3rem;
+            font-weight: 900;
+            margin-top: 56px;
+            margin-bottom: 36px;
+            padding-bottom: 14px;
+            text-align: left;
+            letter-spacing: 1.5px;
+            background: linear-gradient(90deg, #f59e42 0%, #be185d 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-        .sub-heading {
-            font-size: 1.5rem; /* text-2xl */
-            font-weight: 600; /* font-semibold */
-            color: #4b5563; /* Medium gray for subheadings */
-            margin-top: 1.5rem;
-            margin-bottom: 0.75rem;
+        h3 {
+            color: #2563eb;
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-top: 40px;
+            margin-bottom: 24px;
+            letter-spacing: 1px;
+            background: linear-gradient(90deg, #38bdf8 0%, #818cf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         .concept-highlight {
             background-color: #fde68a; /* Light yellow for highlights */
